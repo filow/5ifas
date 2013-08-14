@@ -1,0 +1,18 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">管理员管理</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+ <form action="__APP__/Admin/p_update" method="post">
+     <volist name="nav_data" id="li">
+         <eq name="li.pid" value="0"><br/><br/></eq>
+         <label class="checkbox">{$li.action_desc} <input type="checkbox"name="nav[]"  <eq name="li.is_enabled" value="1"> checked </eq> value="{$li.id}"/></label>
+     </volist>
+     <input name="userid" type="hidden"value="{$Think.get.id}"/>
+     <input type="submit" value="修改" />
+ </form>
+ 
+ 
+<include file="Public:footer"/>

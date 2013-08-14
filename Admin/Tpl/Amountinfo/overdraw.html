@@ -1,0 +1,67 @@
+<include file="Public:header"/>
+<style>
+form{
+    width:260px;
+    float: left;
+}
+.table_fright{
+    width:60%;
+    float: left;
+}</style>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/manage">充值管理</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+<h3>代透支</h3>
+<form action="__APP__/{$Think.MODULE_NAME}/overdrawserver" method="post">
+    <label>用户姓名</label>
+    <input type="text" name="username"  id="username" onkeyup="searchusr(this.value)">
+    <label>用户卡号</label>
+    <input type="text" name="cardn" id="cardn" >
+    <label>透支金额</label>
+    <input type="text" name="amount">
+    <label>备注</label>
+    <textarea  name="beizhu1"rows="5" cols="40"></textarea>
+    <br/>
+    <input type="submit" value="确认透支"/><input type="reset" value="重新输入"/>
+</form>
+<div class="table_fright">
+    <table class="table">
+        <thead>
+            <th>卡号</th>
+            <th>登录名</th>
+            <th>真实姓名</th>
+            <th>是否大客户</th>
+        </thead>
+        <tbody id="resultbox">
+        </tbody>
+    </table>
+</div>
+<script type="text/javascript">
+function searchusr(value){
+    if(value=="") return;
+    url=ADMINROOT+"Amountinfo/manage_searchusr?usrname="+value;
+    $.get(url,function(data){
+        var returndata=JSON.parse(data);
+        var str="";
+        for(var key in returndata){
+            str+="<tr><td class=\"cardn\">"+returndata[key].cardn+"</td><td>"+returndata[key].loginname+"</td><td class=\"username\">"+returndata[key].username+"</td>";
+            if(returndata[key].is_bigcustomer==1){
+                str+="<td>大客户</td></tr>";
+            }else{
+                str+="<td></td></tr>";
+            }
+        }
+        $('#resultbox').html(str);
+    })
+}
+    $('#resultbox > tr').live("click",function(){
+        var val=$(this).children('.username').html();
+        //console.log(val);
+        $('#username').attr('value',val);
+        $('#cardn').attr('value',$(this).children('.cardn').html());
+    });
+</script>
+<include file="Public:footer"/>

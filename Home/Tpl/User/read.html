@@ -1,0 +1,12 @@
+<include file="Public:userheader"/>
+<include file="left_bar"/>
+        <div class="span10">
+
+            <h3 style="text-align: center "> {$data.title}</h3>
+            {$data.text}
+            <div class="pull-right">
+               {$data.createtime|date="Y-m-d H:m",###}
+           </div>
+        </div>
+    </div>
+    <include file="Public:footer"/>

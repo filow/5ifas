@@ -1,0 +1,102 @@
+/************************************首页***************************************/
+.logo_big img {height: 40px;margin-top:10px;}
+.logo_small img {height:30px;}
+.clear{clear:both}
+.nav_index{height:32px;line-height: 32px;float:left;margin-top:30px;}
+.nav_index ul  li{float:left;list-style:none;}
+.nav_index ul .thisli a{color:#c00}
+.nav_index ul li a {display: block;padding-right: 10px;font-size:18px;color:#666;font-family: Microsoft yahei }
+.search{position:absolute;right:150px;}
+.header_index{border-bottom: solid 1px #e5e5e5}
+.search_index{position:absolute ;right:5px;top:10px; }
+#ts{position:absolute;right:32px;color: #8c8c8c;top:8px;}
+ 
+.order{ margin-top: 20px;word-wrap: break-word; word-break: normal; }
+.ware_a_red{color:#c00}
+/****************************消息详细页*******************************/
+.content{text-align:left;width:770px;word-wrap:break-word;}
+.desn{word-wrap:break-word;}
+/************************头部结束************************************************/
+.new_index{background: url("../images/web_03.gif") no-repeat left center;height:40px;padding-top:10px;
+           margin-bottom: 3px;}
+.new_index_title{font-size:18px;padding-left:10px;padding-top:6px;color:#666;font-family: Microsoft yahei;font-weight:bold}
+.top_gg{font-size:12px;font-weight:normal;color:#cc0000;position:absolute;padding-top:10px;}
+/****************************************商家页 ****************************************/
+.shop_list{margin-left:8px;margin-top: 10px;}
+.shop_list_li{ width:180px; height:211px;border:1px solid  #666 ;margin-top:3px;margin-left: 3px;float:left; }
+.shop_list_li :hover { }
+.shop_list_li_logo{width:150px;height:150px;margin-left:15px;margin-top:3px; }
+.shop_list_li_logo img{width:150px;height:150px;}
+.shop_list_li_action{text-align:center;margin-top:10px;margin-bottom:10px;}
+.shop_list_li_action span{border:1px solid #666;font-size:16px;}
+/***********************************************商家详细列表页***********************************************************/
+.shop_detial{color:#333}
+.shop_detial_logo img {width:100px;height:100px;}
+.shop_detial_logo span{font-size: 14px;color:#00cc00}
+/********右侧************************************/
+.news_title{border-bottom: 1px solid #666;height:40px;line-height:30px;
+            margin-bottom: 3px;font-size:18px;font-family: Microsoft yahei;font-weight:bolder;color:#c00;margin-top:14px;}
+.news_list{border-bottom: 1px solid #666;}
+.news_list ul li {list-style: none;position: relative;left:-20px;}
+.news_list ul li a {color:black;}
+.news_list ul li a:hover{color:#0088C8}
+.news_list ul  .hot a {color:#c00}
+.ad{ }
+.more{margin-left: 165px;width: 70px;}
+/*************************************尾部链接**************************************/
+.links{text-align: center;
+
+       margin-top: 25px;
+       margin-bottom: 5px;
+       line-height: 18px;
+}
+
+.links  a {color: black;text-decoration: none}
+.links  a:hover {color:#0088C8}
+.copyright{text-align: center;color:#666;}
+/*************************************评分**************************************/
+.star_rating_shop {background:url("../images/rate.gif") -80px 0 no-repeat; padding:0;margin:0; width:80px; height:16px; float:left; position:relative; }
+.star_rating_shop li {padding:0;margin:0;float:left;width:16px;height:16px;list-style-type:none}
+.star_rating_ware {background:url("../images/rate.gif") -80px 0 no-repeat; padding:0;margin:0; width:80px; height:16px; float:left; position:relative; }
+.star_rating_ware li {padding:0;margin:0;float:left;width:16px;height:16px;list-style-type:none}
+/************************************新闻标题**************************************/
+.news_title{text-align: center}
+.news_list_detial  ul li {list-style: none;position: relative;left:-25px;}
+.news_list_detial ul li a {color:#333}
+.newslist_title a {color:#333;font-size:14px;font-family: Microsoft yahei}
+/************************************商品列表页********************************/
+.ware_cat{margin-left: 10px;}
+.ware_cat a {color:#333;font-size:16px;font-family: Microsoft yahei }
+.food_list .li  {position:relative;height:250px;width: 152px;float: left;border:1px solid #f16300;padding: 3px;margin:3px;}
+.w_name{text-align: center;font-weight:bolder}
+.food_list .li  a img {height:170px}
+.w_price{height:20px;width: 40px;background-color:#F16300;color:white;text-align: center;position: absolute;right:10px; top:130px;}
+.is_tuan{height:20px;width: 70px;background-color:#F16300;color:white;text-align: center;position: absolute;right:10px; top:10px;}
+/**************************************商家列表页****************************************/
+.row_title {position: relative;left:-40px;top:35px; }
+.show_area{font-color:#66c;font-size: 15px;margin-left:40px;}
+.area_li a {margin-right:50px;margin-bottom:10px;width: 100px;height: 15px;}
+.active_area a {background-color: #66c;color:#fff;}
+.fileter{margin-left:10px;height:30px; }
+.fileter .filter-text{position:relative;top:3px;}
+/*************************************商家商品列表页**************************************/
+/**********************************商品详细列表页****************************************/
+.w_w_name{margin-top:120px;margin-bottom: 10px;font-size: 18px;font-family: Microsoft yahei;color:#333;text-align: center;}
+.w_w_pic img {height:200px;width: 200px;}
+/*************************************专题**********************************************/
+.zt_title{text-align: center;font-zize:16px;}
+/*********************************广告控制**********************/
+.ad img{width:270px;margin-top:4px;}
+.ad_small img{width:170px;margin-top:4px;}
+/*************************************团购页面**********************/
+
+.tuan_index{height: auto ;border:  3px #FA5D82 solid;padding: 10px 15px;background:white }
+.buy_icon{background:url("../images/tuan_icon.jpg") ;height:57px;width: 220px;}
+.tuan_price{float:left;display:inline;width:110px;font-size:32px;margin:0 0 0 22px;color:white;line-height:52px;font-family:Helvetica,Arial;text-shadow:1px 1px 1px #333;}
+.tuan_desn{border:1px #DDE8EE solid;border-top:none;width:204px;margin-left:15px;height:262px;background:#F1F6F9;overflow:hidden;}
+.dm_in{height:36px;text-align:center;border-left:1px white solid;border-bottom:1px white solid;line-height:18px;padding:6px 0;color:#56585C;position:relative;top:-20px;}
+.dm_in .sep{font-size:14px;}
+.dm_o{margin-top:6px;font-weight:bold;color:#5C5C5C;font-size:16px;text-align:center;}
+.dm_o strong{color:#E7390E;margin-right:8px;}
+.dm_img img{width:470px;height:285px;}
+

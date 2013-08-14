@@ -1,0 +1,65 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/billlist">进账单</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/billwasted">废弃账单列表</a> <span class="divider">/</span>
+    </li>
+</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>帐单号</th>
+            <th>客户名称</th>
+            <th>联系人</th>
+            <th>联系电话</th>
+            <th>交货日期</th>
+            <th>交货地点</th>
+            <th>结算方式</th>
+            <th>总价</th>
+            <th>实收</th>
+            <th>审核状态</th>
+            <th>操作人</th>
+            <th>发票</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    <volist  name="data" id="li">
+        <tr>
+            <td><i class="icon-asterisk"></i><a href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">{$li.orderid}</a></td>
+            <td>{$li.customer_name}</td>
+            <td>{$li.contacter}</td>
+            <td>{$li.customer_phone}</td>
+            <td>{$li.dilivery_date}</td>
+            <td>{$li.dilivery_location}</td>
+            <td><if condition="$li.settlement eq 1 ">现金结算</if><if condition="$li.settlement eq 2 ">记账客户</if></td>
+            <td>{$li.price_sum}</td>
+            <td>{$li.price_received}</td>
+            <td>
+                <if condition="$li.check_state eq 0 "><a style="color:red" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">未审核</a></if>
+                <if condition="$li.check_state eq 1 "><a style="color:#080" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">已通过</a></if>
+                <if condition="$li.check_state eq 2 "><a style="color:#eee" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">未通过</a></if>
+            </td>
+            <td>
+                <if condition="$Think.SESSION.admin_type egt 1">
+                    <a href="__APP__/{$Think.MODULE_NAME}/billwasted?operater={$li.operater}">{$li.operater}</a>
+                <else />
+                    {$li.operater}
+                </if>
+            </td>
+            <td><if condition="$li.invoice eq 0 ">--</if><if condition="$li.invoice eq 1 "><font color="red">√</font></if></td>
+            <td><a href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">查看</a>
+                <if condition="$Think.SESSION.admin_type egt 2">
+                    <a href="__APP__/{$Think.MODULE_NAME}/billrecover?id={$li.id}">恢复</a>
+                <else />
+                    <a class="muted">恢复</a>
+                </if>
+            </td>
+        </tr>
+    </volist>
+</tbody>
+</table>
+{$show}
+<include file="Public:footer"/>

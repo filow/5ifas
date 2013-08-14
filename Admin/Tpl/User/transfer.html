@@ -1,0 +1,39 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">用户管理</a> <span class="divider">/</span>
+    </li>
+    <li>
+        客户类型转换 <span class="divider">/</span>
+    </li>
+</ul>
+<form action="" method="post" class="form-inline">
+    <label>
+        要操作的用户名（组织名）:<input type="text" class="span5"  name="loginname" onkeyup="searchusr(this.value)"/>
+    </label>
+    <div>查询结果：</div>
+    <table class="table">
+        <thead><th>卡号</th><th>登录名</th><th>真实姓名</th><th>是否大客户</th><th>操作</th></thead>
+        <tbody id="resultbox"></tbody></table>
+    <input type="submit" class="btn" value="注册" style="display:none;"/>
+</form>
+<script type="text/javascript">
+    function searchusr(value){
+        if(value=="") return;
+        url=ADMINROOT+"Amountinfo/manage_searchusr?usrname="+value;
+        $.get(url,function(data){
+            var returndata=JSON.parse(data);
+            var str="";
+            for(var key in returndata){
+                str+="<tr><td class=\"cardn\">"+returndata[key].cardn+"</td><td>"+returndata[key].loginname+"</td><td class=\"username\">"+returndata[key].username+"</td>";
+                if(returndata[key].is_bigcustomer==1){
+                    str+="<td>大客户</td><td><a class=\"btn btn-warning\" href=\"__APP__/{$Think.MODULE_NAME}/transfer?cardn="+returndata[key].cardn+"&method=0"+"\">降级为普通用户</a></td></tr>";
+                }else{
+                    str+="<td></td><td><a class=\"btn btn-primary\" href=\"__APP__/{$Think.MODULE_NAME}/transfer?cardn="+returndata[key].cardn+"&method=1"+"\">升级为大客户</a></td></tr>";
+                }
+            }
+             $('#resultbox').html(str);
+        })
+    }
+</script>
+<include file="Public:footer"/>

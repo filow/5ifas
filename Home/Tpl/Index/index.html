@@ -1,0 +1,66 @@
+<include file="Public:header"/>
+
+        <div class="alert alert-info fade in" style="margin-top:8px;margin-bottom:0px">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <span class="alert-heading">
+                <present name="Think.SESSION.cardn">
+                欢迎您，{$Think.SESSION.username} <a class="btn" href="{:U('user/index')}">进入用户中心</a>
+                <a class="btn btn-primary" href="{:U('user/order')}">查看订单信息</a>
+                <else />
+                现在登录，查看您的订单信息 <a class="btn btn-primary" href="__APP__/Public/login">登录</a>
+                </present>
+            </span>
+          </div>
+        <div class="crumb_navigation"> 您现在所在的位置: <span class="current">首页</span></div>
+        <div class="left_content">
+			<include file="SideBar:newsbox"/>
+			<include file="SideBar:adbox"/>
+        </div>
+        
+        <div class="center_content">
+            <div class="center_title_bar">推荐商家</div>
+
+			 <volist name="hot_data" id="li">
+				<div class="prod_box">
+					<div class="top_prod_box"></div>
+					<div class="center_prod_box">
+					   <div class="product_title"><a href="__APP__/Shop/detial1/id/{$li.id}">{$li.shop_name}</a></div>
+					   <div class="product_img">
+					       <a href="__APP__/Shop/detial1/id/{$li.id}">
+                                <present name="$li.can_buy"><if condition="!$li.can_buy">
+                                <div class="discount"><img src="/Public/images/rest.png" /></div>
+                                </if></present>
+                                <img src="__ROOT__/Public/upload/thumb_{$li.logo_href}" alt="" />
+                            </a>
+					   </div>
+					</div>
+                <div class="bottom_prod_box"></div>
+            </div>
+
+              </volist>
+
+            <div class="center_title_bar">最新入驻商家</div>
+
+				<volist name="new_data" id="li">
+				<div class="prod_box">
+                <div class="top_prod_box"></div>
+                <div class="center_prod_box">
+                    <div class="product_title"><a href="__APP__/Shop/detial1/id/{$li.id}">{$li.shop_name}</a></div>
+                    <div class="product_img"><a href="__APP__/Shop/detial1/id/{$li.id}"><img src="__ROOT__/Public/upload/thumb_{$li.logo_href}" alt="" /></a></div>
+                </div>
+                <div class="bottom_prod_box"></div>
+
+            </div>
+
+               </volist>
+        </div>
+        <!-- 中央区定义结束 -->
+        
+        <div class="right_content">
+			<include file="SideBar:cart"/>
+			
+			<include file="SideBar:neworder"/>
+        </div>
+        
+    </div>
+<include file="Public:footer"/>

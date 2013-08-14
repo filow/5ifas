@@ -1,0 +1,140 @@
+<include file="Public:userheader"/>
+<include file="left_bar"/>
+        <div class="span10">
+            {$show}
+            <h4><a>账单列表(客户名称：{$user_loginname})</a></h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>帐单号</th>
+            <th>联系人</th>
+            <th>联系电话</th>
+            <th>交货日期</th>
+            <th>交货地点</th>
+            <th>结算方式</th>
+            <th>总价</th>
+            <th>实收</th>
+            <th>审核状态</th>
+            <th>操作人</th>
+            <th>发票</th>
+        </tr>
+    </thead>
+    <tbody>
+    <volist  name="data_bill" id="li">
+        <tr class="list_row">
+            <td><a href="#myModal" class="showdig" data-toggle="modal">{$li.orderid}</a></td>
+            <td>{$li.contacter}</td>
+            <td>{$li.customer_phone}</td>
+            <td>{$li.dilivery_date|substr=5}</td>
+            <td>{$li.dilivery_location}</td>
+            <td><if condition="$li.settlement eq 1 ">现金结算</if>
+                <if condition="$li.settlement eq 2 ">记账客户</if>
+            </td>
+            <td>{$li.price_sum}</td>
+            <td><a class="invoice" data-toggle="popover" data-placement="left" data-content="收款日期：{$li.receive_date}<br />收款备注：{$li.remark_sk}" title="实收详情">&nbsp;&nbsp;{$li.price_received}&nbsp;&nbsp;</a></td>
+            <td>
+                <if condition="$li.check_state eq 0 ">未审核</if>
+                <if condition="$li.check_state eq 1 ">已通过</if>
+                <if condition="$li.check_state eq 2 ">未通过</if>
+            </td>
+            <td>{$li.operater}</td>
+            <td>
+                <if condition="$li.invoice eq 0 ">-</if>
+                <if condition="$li.invoice eq 1 "><a class="invoice" data-toggle="popover" data-placement="left" data-content="尚未开票" title="发票详情">&nbsp;未开票&nbsp;</a>
+                </if>
+                <if condition="$li.invoice eq 2 "><a class="invoice" data-toggle="popover" data-placement="left" data-content="发票号：{$li.invoice_id}<br />开票日期：{$li.invoice_date}" title="发票详情">&nbsp;已开票&nbsp;</a></if>
+            </td>
+        </tr>
+    </volist>
+</tbody>
+</table>
+            <h4><a>订单列表</a></h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>订单号</th>
+                        <th>用户卡号</th>
+                        <th>收货人</th>
+                        <th>电话号码</th>
+                        <th>商品详情</th>
+                        <th>金额</th>
+						<th>优惠</th>
+                        <th>送货地址</th>
+                        <th>送货时间</th>
+                        <th>备注</th>
+                        <th>操作人</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <volist  name="data_order" id="li">
+                    <tr>
+                        <td>{$li.order_id}</td>
+                        <td>{$li.cardn}</td>
+                        <td>{$li.delivername}</td>
+                        <td>{$li.delivertele}</td>
+                        <td>{$li.desn}</td>
+                        <td>{$li.amount}</td>
+						<td>{$li.youhui}</td>
+                        <td>{$li.deliveraddress}</td>
+                        <td>{$li.delivertime}</td>
+                        <td>{$li.beizhu}</td>
+                        <td>{$li.operator}</td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">订单详情</h3>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+        <thead>
+            <th>#</th>
+            <th>产品名称</th>
+            <th>数量</th>
+            <th>单价</th>
+            <th>折扣</th>
+            <th>总价</th>
+            <th>备注</th>
+        </thead>
+        <tbody id="resultbox">
+
+        </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+$('.invoice').popover();
+$('.showdig').click(function(){
+    $('#resultbox').html("正在查找数据，请稍后");
+    var orderid=$(this).html()
+    $('#myModalLabel').html("订单"+orderid+"的详细情况");
+    var url="{:U('user/order_bill_detail')}?orderid="+orderid;
+    $.get(url,function(data){
+        if(data){
+            var str="";var num=1;
+            for(var key in data){
+                str+="<tr><td>"+num+"</td><td>"+data[key].product_name+"</td><td>"+data[key].number+"</td>";
+                str+="<td>"+data[key].unit_price+"</td><td>"+data[key].discount+"</td><td>"+data[key].price_sum+"</td><td>"+data[key].remark+"</td></tr>";
+                num++;
+            }
+            $('#resultbox').html(str);
+        }else{
+            $('#resultbox').html("没有找到有关该订单的记录");
+        }
+    })
+});
+</script>
+<include file="Public:footer"/>

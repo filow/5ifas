@@ -1,0 +1,41 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">销量管理</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+<table class="table  ">
+    <thead>
+        <tr>
+            <th >商品ID</th>
+            <th>商品名</th>
+            <th>销量</th>
+            <th>销售额</th>
+        </tr>
+    </thead>
+    <tbody>
+    <foreach name="data" item="li">
+        <tr>
+            <td>{$li.id}</td>
+            <td>{$li.w_name}</td>
+            <td>{$li.sum}</td>
+            <td>{$li.sum1}</td>
+
+        </tr>
+    </foreach>
+</tbody>
+</table>
+<div style="float:left">
+    <form action="__APP__/{$Think.MODULE_NAME}/index" method="GET" >
+        时间<input name="left_time" value="<php>echo date('Ymd',time())</php>0000"> - <input name="right_time" value="<php>echo date('YmdHi',time())</php>">商品名：<input type="text"class="span2" name="w_name" value="{$query.w_name}"/> 商家名：<input type="text"class="span2" name="shop_name" value="{$query.shop_name}"/>    <input type="submit" value="查询"/>
+
+    </form> 
+</div>
+<form action="__APP__/Export/index" method="POST" >
+    <input type="hidden"class="span2" name="export_data" value='{$export_data}'/>   <input type="submit" value="导出"/>
+</form>
+
+
+{$show}
+<include file="Public:footer"/>

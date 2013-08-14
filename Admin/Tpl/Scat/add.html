@@ -1,0 +1,21 @@
+<include file="Public:header_shop"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">商品分类管理</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/add">添加分类</a> <span class="divider">/</span>
+    </li>
+</ul>
+<form action="__APP__/{$Think.MODULE_NAME}/insert" method='post'>
+    <label>分类名称:</label>
+    <input type='text' name='c_name'  class="span5" />
+    <label>上级分类:</label>
+    {$select}
+    <label>分类描述:</label>
+    <input type='text' name='c_desn'  class="span5" />
+    <br/>
+    <input type="submit" value=" 确定 " />
+    <input type="reset" value=" 重置 " />
+</form>
+<include file="Public:footer_shop"/>

@@ -1,0 +1,28 @@
+<include file="Public:userheader"/>
+<include file="left_bar"/>
+        <div class="span6">
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>#</th>
+                </thead>
+                <tbody>
+                    <tr><td>用户名</td><td> {$u_data.loginname}  </td></tr>
+                    <tr><td>真实姓名</td><td> {$u_data.username}  </td></tr>
+                    <tr><td>卡号</td><td> {$u_data.cardn}  </td></tr>
+                    <tr><td>等级</td><td> {$u_data.dj}  </td></tr>
+                    <tr><td>地址</td><td>  {$u_data.address} </td></tr>
+                    <tr><td>电话号码</td><td>  {$u_data.tele} </td></tr>
+                    <tr><td>QQ号</td><td>  {$u_data.qq} </td></tr>
+                    <tr><td>积分余额</td><td> {$u_data.jf}  </td></tr>
+                    <tr><td>卡内余额</td><td> {$u_data.amount|default="0.0"} 元  </td></tr>
+                    <tr><td>共充值</td><td> {$u_data.cz|default="0.0"} 元 </td></tr>
+                    <tr><td>共返现</td><td> {$u_data.fanxian|default="0.0"} 元 </td></tr>
+                    <tr><td>共消费</td><td>  {$u_data.sum|default="0.0"} 元 </td></tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+   </div>
+<include file="Public:footer"/>

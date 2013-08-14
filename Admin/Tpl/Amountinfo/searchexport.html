@@ -1,0 +1,144 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/searchexport">订单管理</a> <span class="divider">/</span>
+    </li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;充值订单总额:<a id="price_sum">{$price_sum}</a></li>
+<!--     <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="__APP__/{$Think.MODULE_NAME}/searchexport?is_bigcustomer=1">只查看大客户</a>&nbsp;&nbsp;
+    <a href="__APP__/{$Think.MODULE_NAME}/searchexport?is_bigcustomer=0">只查看普通用户</a>&nbsp;&nbsp;
+    <?php if(count($_GET)){  ?>
+        <a href="__APP__/{$Think.MODULE_NAME}/searchexport">全部显示</a>
+    <?php }else{ ?>
+        全部显示
+    <?php   } ?>
+</li> -->
+
+</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th><input type="checkbox" id="checkbox_all" /></th>
+            <th>充值订单号</th>
+            <th>用户卡号</th>
+            <th>用户名</th>
+            <th>手机号</th>
+            <th>申请充值时间</th>
+            <th>操作人</th>
+            <th>金额</th>
+            <th width="30">状态</th>
+            <th>处理时间</th>
+            <th width="30">类型</th>
+            <th>备注</th>
+			<th>用户余额</th>
+        </tr>
+    </thead>
+    <tbody><?php $num=1; ?>
+    <volist name="data" id="li">
+        <tr class="list_row">
+            <td><input type="checkbox" class="checkbox" value="<?php echo $num++; ?>"/></td>
+            <td>{$li.orderid}</td>
+            <?php if(count($_GET)){  ?>
+                <td><a href="{$_SERVER['REQUEST_URI']}&userid={$li.userid}">{$li.userid}</a></td>
+                <td><a href="{$_SERVER['REQUEST_URI']}&username={$li.username}"><?php if($li['is_bigcustomer']==1) echo "<i class=\"icon-star\"></i>";?>{$li.username}</a></td>
+                <td>{$li.tele}</td>
+                <td>{$li.createtime}</td>
+                <td><a href="{$_SERVER['REQUEST_URI']}&operator={$li.operator}">{$li.operator}</a></td>
+                <td>{$li.amount}</td>
+                <td><a href="{$_SERVER['REQUEST_URI']}&type={$li.type1}">{$li.type}</a></td>
+            <?php }else{ ?>
+                <td><a href="{$_SERVER['PHP_SELF']}?userid={$li.userid}">{$li.userid}</a></td>
+                <td><a href="{$_SERVER['PHP_SELF']}?username={$li.username}"><?php if($li['is_bigcustomer']==1) echo "<i class=\"icon-star\"></i>";?>{$li.username}</a></td>
+                <td>{$li.tele}</td>
+                <td>{$li.createtime}</td>
+                <td><a href="{$_SERVER['PHP_SELF']}?operator={$li.operator}">{$li.operator}</a></td>
+                <td>{$li.amount}</td>
+                <td><a href="{$_SERVER['PHP_SELF']}?type={$li.type1}">{$li.type}</a></td>
+            <?php   } ?>
+            <td>{$li.suctime}</td>
+            <td>{$li.beizhu}</td>
+            <td>{$li.beizhu1}</td>
+            <td>{$li.yue}</td>
+        </tr>
+    </volist>
+</tbody>
+</table>
+<div style="float:left">
+    <form action="__APP__/{$Think.MODULE_NAME}/searchexport" method="GET" >
+        <input type="hidden" name="query_type" value="like" />
+        卡号：<input type="text"class="span2" name="userid" value="{$query.userid}"/> 真实姓名：<input class="span2"  type="text" name="username" value="{$query.username}" /> 操作人：<input class="span2"  type="text" name="operator" value="{$query.operator}" /> 
+        状态：<select name="type">
+        <option value=""></option>
+        <option value="0">0 未收费</option>
+        <option value="1">1 已收费</option>
+        <option value="2">2 返现</option>
+        <option value="4">4 未返现</option>
+        </select>
+        <input type="submit" value="查询"/>
+    </form> 
+</div>
+
+<form action="__APP__/Export/index" method="POST" >
+    <input type="hidden" class="span2" name="export_data" id="exportdatas" value='{$export_data}'/>
+    <input type="submit" class="btn" value="导出"/>
+    <a class="btn" href="__APP__/Amountinfo/export500?{$Think.SERVER.QUERY_STRING}">导出前500项筛选结果</a>
+    <a class="btn" onclick="export_selected()">导出选中项</a>
+</form>
+{$show}
+<script type="text/javascript">
+var datas=[<volist name="data" id="li">{$li.amount},</volist>];
+var statues=[<volist name="data" id="li">0,</volist>];
+$("#checkbox_all").click(function(){
+    var count=0;
+    if($(this).attr("checked")){
+        $('.checkbox').attr("checked",true);
+        statues.forEach(function(x){statues[count++]=1;});
+    }
+    else{
+        $('.checkbox').attr("checked",false);
+        statues.forEach(function(x){statues[count++]=0;});
+    };
+    sum_count();
+});
+$(".list_row").click(function (){
+    var selector=$(this).children("td").children(".checkbox");
+    if(selector.attr("checked")){
+        selector.attr("checked",false);
+        statues[selector.attr("value")-1]=0;
+    }
+    else{
+        selector.attr("checked",true);
+        statues[selector.attr("value")-1]=1;
+    }
+    sum_count();
+});
+function sum_count(){
+    var count=0,sum=0;
+    statues.forEach(function(x){
+        if(x)
+            if(undefined!=datas[count])
+                sum+=datas[count];
+        count++;
+    });
+    $('#price_sum').html(sum);
+}
+function export_selected(){
+    var count=1,innercounter=0;
+    var datas=$('#exportdatas').attr('value');
+    var data_obj=JSON.parse(datas);
+    var exportdatas=new Array();
+    exportdatas[innercounter++]=data_obj[0];
+    statues.forEach(function(x){
+        if(x!=0)    exportdatas[innercounter++]=data_obj[count];
+        count++;
+    });
+    //console.log(JSON.stringify(exportdatas));
+
+    var id = Math.random();
+    document.write('<form id="post' + id + '" name="post'+ id +'" action="__APP__/Export/index" method="post">');
+    document.write('<input type="hidden" name="export_data" value=\'' + JSON.stringify(exportdatas) + '\' />');
+    document.write('</form>');    
+    document.getElementById('post' + id).submit();
+}
+</script>
+<include file="Public:footer"/>

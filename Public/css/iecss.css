@@ -1,0 +1,20 @@
+img, div { behavior: url(iepngfix.htc) }
+.top_left{
+	
+	margin-top:10px;
+	margin-left:10px;
+}
+.order_num a.prod_details{
+	color:#06C;
+	
+	}
+.buy{
+	margin-left:-300px;}
+.buy_button{
+	margin-left:10px;}
+.discount{
+	margin-left:84px;}
+.sc_result_line{
+	text-align:left;}
+.result_title,.result_detail,.result_other{
+	margin-left:75px !important;}

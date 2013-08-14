@@ -1,0 +1,59 @@
+<include file="Public:header"/>
+
+        <div class="crumb_navigation"> 您现在所在的位置: <a href="__APP__">首页</a>--&gt;<span class="current">点餐订座</span>
+        </div>
+        <div class="left_content">
+			<include file="SideBar:newsbox"/>
+			<include file="SideBar:adbox"/>
+        </div>
+        <!-- 左边栏内容结束 -->
+     <div class="center_content">
+<div id="none" rel="__URL__"></div>
+<!--当前页面URL-->
+ <div class="center_title_bar">
+                <span><input type="checkbox" rel="canbuy" class="shop_fileter" <eq name="Think.get.canbuy" value="1">checked="checked"</eq>></span><span>正在营业</span>
+                <span><input type="checkbox" rel="tuijian" class="shop_fileter" <eq name="Think.get.tuijian" value="1">checked="checked"</eq>></span><span>推荐商家</span>
+                <span><input type="checkbox" rel="price" class="shop_fileter" <eq name="Think.get.price" value="1">checked="checked"</eq>></span><span>起送价排序</span>
+                <span><input type="checkbox" rel="rate" class="shop_fileter" <eq name="Think.get.rate" value="1">checked="checked"</eq>></span><span>好评排序</span>
+                <span><input type="checkbox" rel="gruops" class="shop_fileter" <eq name="Think.get.gruops" value="1">checked="checked"</eq>></span><span>支持聚餐</span>
+
+
+ </div>
+        <volist name="data" id="li">
+		     <div class="prod_box">
+				<div class="top_prod_box"></div>
+					<div class="center_prod_box">
+                    <div class="product_title"><a href="__APP__/Shop/detial1/id/{$li.id}">{$li.shop_name}</a></div>
+                    <div class="product_img"><a href="__APP__/Shop/detial1/id/{$li.id}">
+                             <eq name="li.can_buy" value="1">
+							<else/>
+                                <div class="discount"><img src="__ROOT__/Public/images/rest.png" /></div>
+                            </eq>
+                    <img src="__ROOT__/Public/upload/thumb_{$li.logo_href}" alt="" /></a></div>
+                </div>
+                <div class="bottom_prod_box"></div>
+                <div class="prod_details_tab">
+                <a title="收藏"><img src="__ROOT__/Public/images/favs.gif" rel="{$li.id}"class="collect_shop" /></a>            
+							<a href="__APP__/Shop/detial/id/{$li.id}" class="prod_details">详情</a> 
+							</div>
+            </div>
+        </volist>
+		<empty name="data"><div style="float:left">无相关检索结果</div></empty>
+
+ 			<div class="pages">
+            	<ul>{$show}</ul>
+            </div>
+
+    
+   
+   </div>
+        
+        <div class="right_content">
+			<include file="SideBar:cart"/>
+
+			<include file="SideBar:neworder"/>
+        </div>
+        <!-- 右边栏结束 --> 
+    </div>
+    <!-- 主内容区结束 -->
+<include file="Public:footer"/>

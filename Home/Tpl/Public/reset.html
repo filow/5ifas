@@ -1,0 +1,19 @@
+<include file="Public:header"/>
+    <div class="span4 offset4">
+	   <div class="row"> <div  class="offset1"><h4>修改密码</h4></div></div>
+        <form name="myform" action="__APP__/{$Think.MODULE_NAME}/change" method="post">
+            <label>{$loginname}
+            </label>
+            
+            <label>手机校检码
+            </label>
+            <input type="text" class="span3" autocomplete="off" name="code"/>
+			<input type="hidden" class="span3" autocomplete="off" name="verify"value="{$verify}" >
+             <input type="hidden" class="span3" autocomplete="off" name="tele"value="{$tele}" >
+			 <input type="hidden" class="span3" autocomplete="off" name="cardn"value="{$cardn}" >
+            <BR/>
+             <input type="submit" value="修改密码"class="btn btn-primary"/>  
+        </form>
+    </div>
+</div>
+<include file="Public:footer"/>

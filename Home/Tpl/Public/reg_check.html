@@ -1,0 +1,19 @@
+<include file="Public:header"/>
+ 
+<style>
+.error{color:white;}
+</style>
+
+    <form action="__APP__/{$Think.MODULE_NAME}/reg_add" method="post"   >
+        <h2 style="margin-left: 150px">用户手机号验证</h2>
+        <label>
+            手机校检码:
+        </label>
+        <input name="code"type="text" >
+        <br>
+         <input name="post_data"type="hidden" value='{$post_data}'> <input name="active_code" type="hidden"value="{$active_code}">
+        <input type="submit" id="reg" class="btn btn-primary " value="注册"/> 
+    </form>
+</div>
+
+<include file="Public:footer"/>

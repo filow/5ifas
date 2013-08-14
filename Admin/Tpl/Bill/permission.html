@@ -1,0 +1,42 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/billlist">进账单</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/permission">子管理员权限管理</a> <span class="divider">/</span>
+    </li>
+</ul>
+<table class="table">
+    <thead>
+        <th>#</th>
+        <th>管理员</th>
+        <th>描述</th>
+        <th>权限等级</th>
+        <th><if condition="$Think.Session.admin_type egt 2">权限操作<else />权限不足</if></th>
+    </thead>
+    <tbody>
+        <?php $num=0; ?>
+        <volist name="admin_list" id="li">
+        <tr>
+            <td><?php echo ++$num; ?></td>
+            <td><a href="__APP__/{$Think.MODULE_NAME}/billlist?operater={$li.username}">{$li.username}</td>
+            <td>{$li.post}</td>
+            <td>
+                <eq name="li.admin_type" value="0">子管理员</eq>
+                <eq name="li.admin_type" value="1">管理员</eq>
+                <eq name="li.admin_type" value="2">超级管理员</eq>
+            </td>
+            <td>
+                <if condition="$Think.Session.admin_type egt 2">
+                    <eq name="li.admin_type" value="0"><a class="btn btn-primary" href="__APP__/{$Think.MODULE_NAME}/permission?type=up&id={$li.id}">升级</a></eq>
+                    <eq name="li.admin_type" value="1"><a class="btn btn-info" href="__APP__/{$Think.MODULE_NAME}/permission?type=down&id={$li.id}">降级</a></eq>
+                <else />
+                    --
+                </if>
+            </td>
+        </tr>
+        </volist>
+    </tbody>
+</table>
+<include file="Public:footer"/>

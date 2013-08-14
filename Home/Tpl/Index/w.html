@@ -1,0 +1,82 @@
+<include file="Public:header"/>
+<style type="text/css">
+.product_img_big img{
+	width:200px;
+	height:200px;
+	}
+.product_title_big{
+	margin-left:20px;}
+.details_big_box{
+	margin-left:15px;
+	width:300px;}
+li.big_price{
+	font-size:20px !important;
+	color:#C33;
+	margin-left:20px !important;
+	}
+.short_details{
+	margin-left:18px;
+	margin-top:-10px;
+
+}
+</style>
+        <div class="crumb_navigation"> 您现在所在的位置: <a href="__APP__">首页</a>--&gt;<span class="current">店铺信息</span><!--在这里应该添加判断页面当前位置的php代码并输出--> 
+        </div>
+        <div class="left_content">
+			<include file="SideBar:newsbox"/>
+			<include file="SideBar:adbox"/>
+        </div>
+
+     <div class="center_content">
+   		<div class="center_title_bar">{$data.w_name}</div>
+    
+    	<div class="prod_box_big">
+        	<div class="top_prod_box_big"></div>
+            <div class="center_prod_box_big">            
+                 
+                 <div class="product_img_big">
+                 
+                 <a title=""><img src="__ROOT__/Public/upload/{$data.w_pic}"/></a>
+           
+                 </div>
+                     <div class="details_big_box">
+                         <div class="product_title_big">{$data.w_name}</div>
+                         <ul>
+                         	<li>价格：</li>
+                            <li class="big_price">￥{$data.w_price}</li>
+                            <li>所需积分:{$data.price}分</li>
+                            <li>                        
+                            <eq name="data.shop_can_buy" value="1">
+                            <eq name="data.can_buy" value="true">
+                            <a title="收藏"><img src="__ROOT__/Public/images/favs.gif" rel="{$li.id}"class="collect" /></a>
+                			<div class="order_num">
+               				<img src="__ROOT__/Public/images/plus.jpg" width="16" height="16" class="plus" rel="{$li.id}"/>
+                			<input name="num" class="num_{$li.id}" value="1" maxlength="2"/>
+                			<img src="__ROOT__/Public/images/cut.jpg" width="16" height="16" class="cut" rel="{$li.id}"/>
+                			
+                			<a class="prod_buy" pid="{$li.id}" title="购买">购买</a>
+                            </div>
+                            <else/>该商品不支持在线购买</eq><else/> 非营业时间！</eq>
+                            </li>
+                            <li>简介：</li>
+                         </ul>
+                       	<div class="short_details"><p>{$data.w_desn}</p></div>
+
+                     </div>                        
+            </div>
+            <div class="bottom_prod_box_big"></div>                                
+        </div>
+
+   
+   </div>
+        
+        <div class="right_content">
+			<include file="SideBar:cart"/>
+
+			<include file="SideBar:neworder"/>
+        </div>
+        <!-- 右边栏结束 --> 
+        
+    </div>
+    <!-- 主内容区结束 -->
+<include file="Public:footer"/>

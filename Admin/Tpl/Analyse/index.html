@@ -1,0 +1,78 @@
+<include file="Public:header"/>
+<link href="__ROOT__/Public/datepicker/datetimepicker.css" rel="stylesheet">
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/Index">业绩报表</a><span class="divider">/</span>
+    </li>
+    <li>
+        <a>业务统计</a> <span class="divider">/</span>
+    </li>
+</ul>
+    统计时间区间：
+    <div class="controls input-append date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+           <input size="13" type="text" value="<?php echo date("Y-m-01"); ?>" readonly>
+           <span class="add-on"><i class="icon-th"></i></span>
+    </div>
+    到<div class="controls input-append date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+           <input size="13" type="text" value="<?php echo date("Y-m-d"); ?>" readonly>
+           <span class="add-on"><i class="icon-th"></i></span>
+    </div>
+<table class="table">
+    <tr>
+        <td width="89">姓名</td>
+        <td colspan="3">{$admininfo.username}</td>
+        <td width="76">业务级别</td>
+        <td width="158">{$admininfo.post}</td>
+    </tr>
+    <tr>
+        <td>系统扣费统计</td>
+        <td colspan="3">{$dk_sum}元</td>
+        <td>本期提成</td>
+        <td>{$dk_sum*$admininfo['tc_perc']/100}元</td>
+    </tr>
+    <tr>
+        <td rowspan="2">进账单提交统计</td>
+        <td width="60">已收</td>
+        <td width="60">未收</td>
+        <td width="60">总额</td>
+        <td rowspan="2">本期提成</td>
+        <td rowspan="2">{$bill_sum*$admininfo['tc_perc']/100}</td>
+    </tr>
+    <tr>
+        <td>{$bill_received_sum}元</td>
+        <td>{$bill_sum-$bill_received_sum}元</td>
+        <td>{$bill_sum}元</td>
+    </tr>
+    <tr>
+        <td>本期总业绩</td>
+        <td colspan="3">{$bill_sum+$dk_sum}元</td>
+        <td>提成总额</td>
+        <td>{$dk_sum*$admininfo['tc_perc']/100+$bill_sum*$admininfo['tc_perc']/100}</td>
+    </tr>
+</table>
+<script type="text/javascript" src="__ROOT__/Public/datepicker/bootstrap-datetimepicker.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="__ROOT__/Public/datepicker/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+<script type="text/javascript">
+$(function () {
+    'use strict';
+    $('.form_date').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        startDate: '2010-01',
+        endDate:"<?php echo date("Y-m-d"); ?>",
+        minView: 2,
+        maxView:2,
+        forceParse: 0
+    })
+    .on('changeDate', function(ev){
+        console.log(ev.date.valueOf());
+    });
+});
+</script>
+<include file="Public:footer"/>
+
+

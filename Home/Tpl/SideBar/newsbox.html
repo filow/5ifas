@@ -1,0 +1,11 @@
+            <div class="title_box"><a href="__APP__/index/newslist" class="broad">网站公告</a></div>
+            <ul class="left_menu">
+			   <volist name="list" id="ls">
+			   		<if condition="$ls['ishot']==1">
+			   			<li class="odd"><a href="__APP__/index/detial/id/{$ls.id}">{$ls.title}</a></li>
+			   		<else />
+			   			<li class="even"><a href="__APP__/index/detial/id/{$ls.id}">{$ls.title}</a></li>
+			   		</if>
+					
+               </volist>
+            </ul>

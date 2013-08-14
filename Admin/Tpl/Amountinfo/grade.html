@@ -1,0 +1,38 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/grade">会员等级管理</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>等级名</th>
+            <th>最低充值金额</th>
+            <th>每消费一元获得的积分</th>
+            <th>基本操作</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    <volist name="grade" id="li">
+        <tr>
+            <td>{$li.name}</td>
+            <td>{$li.value2}</td>
+            <td>{$li.value1} </td>
+            <td><a href="__APP__/{$Think.MODULE_NAME}/gradedelete/id/{$li.id}"><i class="icon-remove"></i>删除</a></td>
+    </volist>
+</tbody>
+</table>
+<form action="__APP__/{$Think.MODULE_NAME}/gradeinsert" method="post">
+    <label>等级名</label>
+    <input type="text"   name="name"/>
+    <label>最低充值金额</label>
+    <input type="text"   name="value2"/>
+    <label>每购买一元商品得到的积分</label>
+    <input type="text"   name="value1"/>
+    <br/>
+    <input type="submit" value="增加"/>
+</form>
+<include file="Public:footer"/>

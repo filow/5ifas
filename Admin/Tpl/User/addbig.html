@@ -1,0 +1,95 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">用户管理</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a href="#">添加用户</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+<blockquote id="messagebox0"></blockquote>
+<blockquote id="messagebox1"></blockquote>
+<blockquote id="messagebox2"></blockquote>
+<form action="__APP__/{$Think.MODULE_NAME}/insert_big" method="post" class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label" for="loginname">组织名（登录名）:</label>
+        <div class="controls">
+          <input type="text"  class="span5" name="loginname" id="loginname" onchange="check_loginname(this.value)"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="username">联系人姓名:</label>
+        <div class="controls">
+          <input type="text"  class="span5 " name="username" id="username"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="qq">QQ号:</label>
+        <div class="controls">
+          <input type="text"  class="span5 " name="qq" onchange="check_qq2(this.value)" id="qq"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="tele">联系人电话号码:</label>
+        <div class="controls">
+          <input type="text"  class="span5" name="tele" id="tele" onchange="check_tele2(this.value)" />
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="password">密码:</label>
+        <div class="controls">
+          <input type="password" class="span5 " name="password" id="password"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="address">常用联系地址:</label>
+        <div class="controls">
+          <input type="text" class="span5 " name="address" id="address"/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="beizhu">备注:</label>
+        <div class="controls">
+          <textarea name="beizhu" cols="" rows="" style=" width:583px; height:110px;" id="beizhu"></textarea>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+          <input type="submit" class="btn btn-success span2" value="注册"/>
+        </div>
+    </div>  
+</form>
+<script type="text/javascript">
+function check_loginname(value){
+    url=ADMINROOT+"User/check_loginname?loginname="+value;
+    $.get(url,function(data){
+        if(data=="***"){
+            $("#messagebox0").html('<font color=red>您的登陆名已经被占用</font>');
+        }else if(data=="###"){
+            $("#messagebox0").html('<font color=green>您的登录名可以使用</font>');
+        }
+    })
+}
+function check_qq2(value){
+    url=ADMINROOT+"User/check_qq?qq="+value;
+    $.get(url,function(data){
+        if(data=="***"){
+            $("#messagebox1").html('<font color=red>您的QQ号曾被使用过（不影响您继续注册）</font>');
+        }else if(data=="###"){
+            $("#messagebox1").html('<font color=green>您的QQ号可以使用</font>');
+        }
+    })
+}
+function check_tele2(value){
+    url=ADMINROOT+"User/check_tele?tele="+value;
+    $.get(url,function(data){
+        if(data=="***"){
+            $("#messagebox2").html('<font color=red>您的电话号曾被使用过（不影响您继续注册）</font>');
+        }else if(data=="###"){
+            $("#messagebox2").html('<font color=green>您的电话号可以使用</font>');
+        }
+    })
+}
+</script>
+<include file="Public:footer"/>

@@ -1,0 +1,60 @@
+<include file="Public:header"/>
+        <div class="crumb_navigation"> 您现在所在的位置: <a href="__APP__">首页</a>--&gt;<span class="current">营养早餐</span>
+        </div>
+        <div class="left_content">
+            <div class="title_box">营养早餐铺</div>
+            <ul class="left_menu">
+                <li class="even"> <a href="__APP__/index/ware?banid={$Think.get.banid}">全部</a></li>
+				<volist name="cat_list" id="li">
+					<li <if condition="$_GET['cid']==$li['id']">class="odd"<else />class="even"</if>>
+					<a href="__APP__/index/ware?banid={$Think.get.banid}&cid={$li.id}" >{$li.c_name}</a>
+					</li>
+				</volist>
+
+
+            </ul>
+			<include file="SideBar:adbox"/>
+        </div>
+        <!-- 左边栏内容结束 -->
+     <div class="center_content">
+   		<div class="center_title_bar">营养早餐</div>
+
+         <volist name="data" id="li">
+			<div class="prod_box">
+                <div class="top_prod_box"></div>
+                <div class="center_prod_box">
+                    <div class="product_title">{$li.w_name}</div>
+                    <div class="product_img"><a href="__APP__/index/w/id/{$li.id}"><img class="pimg{$li.id}"src="__ROOT__/Public/upload/{$li.w_pic}"/></a></div>
+                    <div class="prod_price"><span class="price">{$li.w_price}元/{$li.danwei}  积分:{$li.price}分</span></div>
+                </div>
+                <div class="bottom_prod_box"></div>
+                <div class="prod_details_tab"> 
+                <a title="收藏"><img src="__ROOT__/Public/images/favs.gif" rel="{$li.id}"class="collect" /></a>
+                <div class="order_num">
+                
+                <img src="__ROOT__/Public/images/plus.jpg" width="16" height="16" class="plus" rel="{$li.id}"/>
+                <input name="num" class="num_{$li.id}" value="1" maxlength="2"/>
+                <img src="__ROOT__/Public/images/cut.jpg" width="16" height="16" class="cut" rel="{$li.id}"/>
+                <a class="prod_buy" pid="{$li.id}" title="购买">购买</a>
+                </div>
+                 </div>
+            </div>
+         </volist>
+
+		<empty name="data"><div style="float:left">无相关检索结果</div></empty>
+  			<div class="pages">
+            	<ul>{$show}</ul>
+            </div>
+   
+   </div>
+        
+        <div class="right_content">
+			<include file="SideBar:cart"/>
+			<include file="SideBar:newsbox"/>
+			<include file="SideBar:neworder"/>
+        </div>
+        <!-- 右边栏结束 --> 
+        
+    </div>
+    <!-- 主内容区结束 -->
+<include file="Public:footer"/>

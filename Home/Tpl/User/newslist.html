@@ -1,0 +1,24 @@
+<include file="Public:userheader"/>
+<include file="left_bar"/>
+        <div class="span10">
+            <table class="table">
+                <thead>
+                <th>#</th>
+                <th>新闻标题</th>
+                <th>时间</th>
+                <th>是否阅读过</th>
+                </thead>
+                <tbody>
+                <volist name="data" id="li">
+                    <tr><td>  {$li.id} </td><td> <a href="__APP__/User/read/id/{$li.id}">{$li.title}</a> </td><td>{$li.createtime|date="Y-m-d",###}</td>
+                        <td><eq name="li.isreaded" value="1">是<else/>否</eq></td>
+                    </tr>
+                </volist>
+
+                </tbody>
+            </table>
+            {$show}
+        </div>
+    </div>
+</div>
+<include file="Public:footer"/>

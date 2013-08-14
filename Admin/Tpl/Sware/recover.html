@@ -1,0 +1,46 @@
+<include file="Public:header_shop"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">商品管理</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+<table class="table  ">
+    <thead>
+        <tr>
+            <th>商品编号</th>
+            <th>商品名称</th>
+            <th>商品售价</th>
+            <th>是否支持货到付款</th>
+            <th>商品添加时间</th>
+            <th>管理</th>
+        </tr>
+    </thead>
+    <tbody>
+    <foreach name="data" item="li">
+        <tr>
+            <td>{$li.id}</td>
+            <td>{$li.w_name}</td>
+            <td>{$li.w_price}元</td>
+            <td><eq name="li.w_price" value="1">否<else/>是</eq></td>
+        <td>{$li.w_time|date="Y-m-d",###}</td>
+        <td><a onclick="return confirm('您确定要删除吗？')"  href="__APP__/{$Think.MODULE_NAME}/delete/id/{$li.id}"><i class="icon-remove"></i>删除</a>| 
+            <a href="__APP__/{$Think.MODULE_NAME}/restore/id/{$li.id}"><i class="icon-trash"></i>上架</a> 
+        </td>
+        </tr>
+    </foreach>
+</tbody>
+</table>
+<div style="float:left">
+<form action="__APP__/{$Think.MODULE_NAME}/recover" method="GET" >
+    商品名：<input type="text"class="span2" name="w_name" value="{$query.w_name}"/> 商品价格：<input class="span2"  type="text" name="w_price" value="{$query.w_price}" /> <input type="submit" value="查询"/>
+
+</form> 
+</div>
+    <form action="__APP__/Export/index" method="POST" >
+        <input type="hidden"class="span2" name="export_data" value='{$export_data}'/>   <input type="submit" value="导出"/>
+    </form>
+
+
+{$show}
+<include file="Public:footer_shop"/>

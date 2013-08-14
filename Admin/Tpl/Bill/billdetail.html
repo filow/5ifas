@@ -1,0 +1,103 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/billlist">进账单</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a>账单详情</a> <span class="divider">/</span>
+    </li>
+</ul>
+<table class="table">
+
+    <tr>
+        <td>单据编号</td>
+        <td>{$bill_data.orderid}</td>
+        <td>单据日期</td>
+        <td>{$bill_data.order_date}</td>
+        <td><if condition="$bill_data.invoice eq 1 "><font color="red">请求发票</font></if><if condition="$bill_data.invoice eq 0 "><font color="green">不请求发票</font></if></td>
+        <td>
+                <if condition="$bill_data.check_state eq 0 "><a style="color:red">未审核</a></if>
+                <if condition="$bill_data.check_state eq 1 "><a style="color:#080">已通过</a></if>
+                <if condition="$bill_data.check_state eq 2 "><a style="color:#eee">未通过</a></if>
+        </td>
+    </tr>
+    <tr>
+        <td>客户名称</td>
+        <td>{$bill_data.customer_name}</td>
+        <td>联系人</td>
+        <td>{$bill_data.contacter}</td>
+        <td>联系电话</td>
+        <td>{$bill_data.customer_phone}</td>
+    </tr>
+    <tr>
+        <td>交货日期</td>
+        <td>{$bill_data.dilivery_date}</td>
+        <td>交付地点</td>
+        <td>{$bill_data.dilivery_location}</td>
+        <td>结算方式</td>
+        <td><eq name="bill_data.settlement" value="1">现金结算</eq><eq name="bill_data.settlement" value="2">记账客户</eq></td>
+    </tr>
+</table>
+<table class="table">
+    <tr>
+        <th width="20">#</th>
+        <th width="120">产品名称</th>
+        <th>备注</th>
+        <th width="80">尺寸/数量</th>
+        <th width="45">单价</th>
+        <th width="45">折扣</th>
+        <th width="45">总价</th>
+    </tr>
+    <volist name="detail_data" id="li">
+    <tr>
+        <td>{$li.id}</td>
+        <td>{$li.product_name}</td>
+        <td>{$li.remark}</td>
+        <td>{$li.number}</td>
+        <td>{$li.unit_price}</td>
+        <td>{$li.discount}</td>
+        <td>{$li.price_sum}</td>
+    </tr>
+    </volist>
+</table>
+<span>应收总额：￥{$bill_data.price_sum}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+<span>实收总额：￥{$bill_data.price_received}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span>收款时间：{$bill_data.receive_date}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span>收款备注：{$bill_data.remark_sk}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<if condition="$bill_data.check_state eq 0 ">
+    <a href="__APP__/{$Think.MODULE_NAME}/billedit?id={$bill_data.id}" class="btn btn_primary">编辑账单</a>
+<else />
+    <if condition="$Think.SESSION.admin_type egt 2">
+        <a href="__APP__/{$Think.MODULE_NAME}/billedit?id={$bill_data.id}" class="btn btn_primary">编辑账单</a>
+    </if>
+</if>
+<a href="__APP__/{$Think.MODULE_NAME}/billoutput_detail_one?id={$bill_data.id}" class="btn btn_primary">导出账单</a>
+<div>发票信息：{$bill_data.invoice_id}</div>
+<div>审核备注：<pre>{$bill_data.remark}</pre></div>
+<div>审核人：{$bill_data.checker}</div>
+<hr />
+<if condition="$Think.SESSION.admin_type egt 1">
+    <h3>账单审核</h3>
+    <if condition="$Think.SESSION.admin_type egt 2">
+        <form action="" class="form-inline">
+          <div class="control-group">
+            <label class="control-label">实收金额：
+                <input type="text" class="input-medium" value="{$bill_data.price_received}" name="price_received" />
+            </label>
+            <label class="control-label">收款备注：<input type="text" class="input-large" value="{$bill_data.remark_sk}" name="remark_sk" /></label>
+            <input type="hidden" name="id" value="{$bill_data.id}">
+            <input type="submit" value="提交" class="btn btn-primary"/>
+          </div>
+        </form>
+    </if>
+<label class="control-label">状态更改：</label>
+<a class="btn btn-success" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$bill_data.id}&verify=1">审核通过</a> 
+<a class="btn btn-danger" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$bill_data.id}&verify=0">审核不通过</a>
+<label class="control-label">审核备注：</label>
+<form action="billremark" method="POST">
+    <textarea name="verify-remark">{$bill_data.remark}</textarea>
+    <input type="hidden" name="id" value="{$bill_data.id}">
+    <input name="submit" class="btn btn-primary" type="submit" />
+</form>
+</if>
+<include file="Public:footer"/>

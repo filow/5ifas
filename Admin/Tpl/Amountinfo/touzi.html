@@ -1,0 +1,35 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/touzi">投资额度管理</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>透支金额</th>
+             
+            <th>基本操作</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    <volist name="data" id="li">
+        <tr>
+            <td>{$li.id}</td>
+            <td>{$li.value2}</td>
+            
+            <td><a href="__APP__/{$Think.MODULE_NAME}/deletetouzi/id/{$li.id}"><i class="icon-remove"></i>删除</a></td>
+    </volist>
+</tbody>
+</table>
+<form action="__APP__/{$Think.MODULE_NAME}/touziserver" method="post">
+    <label>增加透支额</label>
+    <input type="text"   name="touzie"/>
+    <br/>
+    <input type="submit" value="确认"/>
+    
+    </form>
+<include file="Public:footer"/>

@@ -1,0 +1,45 @@
+<include file="Public:header"/>
+
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#1" data-toggle="tab">管理员登录</a></li>
+        <li><a href="#2" data-toggle="tab">商户登录</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="1">
+            <form name="myform" action="__APP__/{$Think.MODULE_NAME}/adminlogin" method="post">
+                <label>用户名
+                </label>
+                <input type="text" class="span3"  autocomplete="off" name="username"/>
+                <label>密码
+                </label>
+                <input type="password" class="span3"  autocomplete="off"name="password"/>
+
+                <div clas="row">
+                    <img src="__APP__/{$Think.MODULE_NAME}/code" onclick=this.src="__APP__/{$Think.MODULE_NAME}/code/"+Math.random() /> <span><input class="span2"  name="code" type="text" ></span>
+
+                </div>
+                <BR/>
+                <button type="submit"   class="btn btn-primary" />确认</button>
+            </form>
+        </div>
+        <div class="tab-pane" id="2">
+            <form name="myform" action="__APP__/{$Think.MODULE_NAME}/shoplogin" method="post">
+                <label>用户名
+                </label>
+                <input type="text" class="span3" autocomplete="off" name="login_name"/>
+                <label>密码
+                </label>
+                <input type="password" class="span3" autocomplete="off" name="password"/>
+
+               <div clas="row">
+                    <img src="__APP__/{$Think.MODULE_NAME}/code" onclick=this.src="__APP__/{$Think.MODULE_NAME}/code/"+Math.random() /> <span><input class="span2"  name="code" type="text" ></span>
+
+                </div>
+                <BR/>
+                <button type="submit"   class="btn btn-primary" />确认</button>
+            </form>
+        </div>
+    </div>
+</div>
+<include file="Public:footer"/>

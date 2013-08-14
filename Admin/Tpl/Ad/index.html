@@ -1,0 +1,28 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">广告管理</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>地址</th>
+            <th>位置</th>
+             <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    <volist  name="data" id="li">
+        <tr>
+            <td>{$li.id}</td>
+            <td>{$li.url}</td>
+            <td>{$li.type}</td>
+            <td><a onclick="return confirm('您确定要删除吗？')"  href="__APP__/{$Think.MODULE_NAME}/delete/id/{$li.id}"><i class="icon-remove"></i>删除</a>|</td>
+        </tr>
+    </volist>
+</tbody>
+</table>
+<include file="Public:footer"/>

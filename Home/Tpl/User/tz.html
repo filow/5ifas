@@ -1,0 +1,17 @@
+<include file="Public:userheader"/>
+<include file="left_bar"/>
+        <div class="span10">
+            <form action="__APP__/user/tzserver" method="post" id="myform" >
+                <h2>申请透支</h2>
+                <label>  透支额度 </label> 
+                <select name="amount">
+                    <volist name="data" id="ls">
+                        <option value="{$ls.value2}">{$ls.value2}元</option>
+                    </volist>
+                </select> 
+                <br/>
+                <input type="submit" value="透支"/>
+            </form>
+        </div>
+    </div>
+    <include file="Public:footer"/>

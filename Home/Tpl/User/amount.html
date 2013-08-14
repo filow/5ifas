@@ -1,0 +1,44 @@
+<include file="Public:userheader"/>
+<include file="left_bar"/>
+        <div class="span10">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>充值订单号</th>
+                        <th>用户卡号</th>
+                        <th>用户名</th>
+                        <th>手机号</th>
+                        <th>申请充值时间</th>
+                        <th>操作人</th>
+                        <th>金额</th>
+                        <th>状态</th>
+                        <th>处理时间</th>
+                        <th>备注</th>
+                        <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <volist name="data" id="li">
+                    <tr>
+                        <td>{$li.orderid}</td>
+                        <td>{$li.userid}</td>
+                        <td>{$li.username}</td>
+                        <td>{$li.tele}</td>
+                        <td>{$li.createtime}</td>
+                        <td>{$li.operator}</td>
+                        <td>{$li.amount}</td>
+                        <td>{$li.type}</td>
+                        <td>{$li.suctime}</td>
+                        <td>{$li.beizhu}</td>
+                        <td>{$li.beizhu1}</td>
+
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+
+            {$show}
+        </div>
+    </div>
+</div>
+<include file="Public:footer"/>

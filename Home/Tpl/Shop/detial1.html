@@ -1,0 +1,108 @@
+<include file="Public:header"/>
+<style type="text/css">
+.buy{text-align:left;}
+.specifications{
+	font-size:15px;
+	font-weight:normal;
+	padding:10px;
+}
+.discount_content{text-align:left; padding-left:20px;}
+</style>
+        <div class="crumb_navigation"> 您现在所在的位置: <a href="index.html">首页</a>--&gt;<span class="current">店铺信息</span><!--在这里应该添加判断页面当前位置的php代码并输出--> 
+        </div>
+        <div class="left_content">
+			<div class="title_box">筛选</div>
+            <ul class="left_menu">
+                <li class="even"> <a href="__APP__/Shop/detial1/id/<?php echo $_GET["id"] ?>">全部</a></li>
+				<volist name="cat_data" id="li">
+					<li <php> if($_GET["cid"]==$li["id"]) echo "class='odd'";</php>  class="even">
+					<a href="__APP__/Shop/detial1?id={$li.shop_id}&catid={$li.id}" >{$li.c_name}</a>
+					</li>
+				</volist>
+            </ul>
+			<include file="SideBar:adbox"/>
+        </div>
+        <!-- 左边栏内容结束 -->
+     <div class="center_content">
+   	<div class="center_title_bar">{$shop_data.shop_name}</div>
+    
+    	<div class="prod_box_big">
+        	<div class="top_prod_box_big"></div>
+            <div class="center_prod_box_big">            
+                 <div class="big_title">
+                        <h1>{$shop_data.shop_name}</h1>
+                    </div>
+                    <div class="buy">
+						    <div class="specifications">
+                            起送价： <span class="blue">{$shop_data.service_price}</span>元<br  />
+							起送份数： <span class="blue">{$shop_data.service_num}</span>份<br />
+
+                            所在位置:<br  /> <span class="blue">{$shop_data.address}</span><br />
+                            联系电话：{$shop_data.tele}<br />
+                            <eq name="shop_data.jc" value="1"><else/><eq name="shop_data.dz" value="1">
+                            	<strong>注意！</strong> 此商品购买需到店消费，订餐完成后，需要电话确认。
+                            </eq></eq>
+                            
+                         </div>
+                        <div class="ltime">营业时间：{$shop_data.start_time}/{$shop_data.end_time}</div>
+                    </div>
+                    
+                    <div class="big_photo">
+                    	<img src="__ROOT__/Public/upload/thumb_{$shop_data.logo_href}"/>
+                    </div>
+                    <div class="xdivider"></div>
+                    <div class="discount_content">
+                    	{$shop_data.shop_desn}
+                    </div>
+   
+            </div>
+           
+            
+            <div class="bottom_prod_box_big"></div>                                
+        </div>
+
+ 
+ <div class="center_title_bar">店铺商品</div>
+ 			
+         <volist name="w_data" id="li">
+             <div class="prod_box">
+                <div class="top_prod_box"></div>
+                <div class="center_prod_box">
+                    <div class="product_title">{$li.w_name}</div>
+                    <div class="product_img">
+                    <eq name="li.is_tuan" value="1"> <div class="discount"><img src="__ROOT__/Public/images/discount.png" /></div></eq>
+                    <a href="__APP__/index/<eq name="li.is_tuan" value="1">tuan<else/>w</eq>/id/{$li.id}"><img class="pimg{$li.id}"src="__ROOT__/Public/upload/{$li.w_pic}" width="150" height="140"/></a>
+                    </div>
+                    <div class="prod_price"><span class="price">￥{$li.w_price}/{$li.danwei}&nbsp;积分:{$li.price}分</span></div>
+                </div>
+                <div class="bottom_prod_box"></div>
+                <div class="prod_details_tab"> 
+                <eq name="shop_data.can_buy" value="1"><eq name="li.can_buy" value="1">
+                
+                <a title="收藏"><img src="__ROOT__/Public/images/favs.gif" rel="{$li.id}"class="collect" /></a>
+                <div class="order_num">
+                
+                <img src="__ROOT__/Public/images/plus.jpg" width="16" height="16" class="plus"/>
+                <input name="num" value="1" maxlength="2"/>
+                <img src="__ROOT__/Public/images/cut.jpg" width="16" height="16" class="cut" />
+                
+                <a class="prod_buy" pid="{$li.id}" title="购买">购买</a>
+                </div>
+                <else/>该商品不支持在线购买</eq><else/> 非营业时间！
+                </eq> </div>
+            </div>
+
+          </volist>
+   </div>
+        
+        <div class="right_content">
+			<include file="SideBar:cart"/>
+			<include file="SideBar:newsbox"/>
+			<include file="SideBar:neworder"/>
+        </div>
+        <!-- 右边栏结束 --> 
+        
+    </div>
+    <!-- 主内容区结束 -->
+
+<include file="Public:footer"/>

@@ -1,0 +1,102 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__">首页</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">代扣</a> <span class="divider">/</span>
+    </li>
+</ul>
+ <script>
+    $(document).ready(function (){
+        $("#search").keyup(function(){
+            var value=$("#search").attr("value");
+            var url="__APP__/Dk/waresearch?item="+encodeURI(value);
+            $.ajax({
+                url:url,
+                type:"get",
+                datatype:"html",
+                success:function (data){
+                    $("#sug").html(data);
+                    $(".pro").click(function (){
+                        var id=$(this).attr("id");
+                        var name=$(this).text();
+                        var desc=id+"#"+name;
+                        var li="<div class='remove_"+id+"'><label class='detial"+id+"' >"+name+"</label>"+"<input class='detial"+id+"' type='text'value=1 name='car["+id+"]' />个 折扣<input class='detial"+id+"' type='text'value=1.0 name='zk["+id+"]' /><span class='delete' id='"+id+"'>删除</span></div> ";
+                        $("#list").append(li);
+                        $('.delete').click(function(){
+                            id=$(this).attr('id');
+                            $('.remove_'+id).remove();
+                        })
+                    })
+                }
+            })})
+
+        $("#userid").keyup(function(){
+            var value=$("#userid").attr("value");
+            var type=$("#searchtype").val(); 
+  
+            var url="__APP__/Dk/usersearch?item="+encodeURI(value)+"&type="+type;
+            $.ajax({
+ 
+                url:url,
+                type:"get",
+                datatype:"html",
+                success:function (data){
+                    $("#userdesc").html(data);
+                    $(".userpro").click(function (){
+                        var id=$(this).attr("id");
+                        var liuser="<input type=hidden name=cardn value="+id+">"+"卡号："+id;
+                        $("#userresult").text("");
+                        $("#userresult").append(liuser);
+                    })}
+            })})
+ 
+    })
+</script>
+    <form action="__APP__/Dk/daikouserver" method="post">
+        <div class="alert alert-info">
+            温馨提示：大客户的商品代扣请前往进账单页面操作。这里不会显示大客户用户。&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{:U('User/list_big')}"><i class="icon-list-alt"></i>大客户列表</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="{:U('Bill/billcreate')}"><i class="icon-plus"></i>添加进账单</a>
+        </div>
+        <label>用户：</label>
+        <select name="searchtype" id="searchtype">
+            <option value="cardn">按卡号查找</option>
+            <option value="username">按真实姓名查找</option>
+            <option value="loginname">按登录名查找</option>
+            <option value="qq">按QQ号查找</option>
+            <option value="tele">按电话号码查询</option>
+        </select>
+        <input  id="userid" type="text"/>
+        
+        <label>送货时间：</label>
+        <select name="shijian">
+            <volist name="timedata" id="ls">
+            <option value="{$ls.data}">{$ls.value}</option>
+            </volist>
+        </select>
+
+        <div id="userdesc">
+        </div>
+        <div id="userresult">
+            <div style="color:red">  </div>
+        </div>
+        <label>请输入商品名</label><input id="search" type="text"  />
+        <div id="sug"></div>
+
+
+        <div style="color:red">
+            您选取的商品是：
+        </div >
+       
+        <div id="list"></div>
+        商品备注：
+        <br/>
+        <textarea  name="beizhu"rows="5" cols="40"/>
+    </textarea>
+    <br/>
+
+    <input value="提交" type="submit"/>
+</form>
+
+<include file="Public:footer"/>

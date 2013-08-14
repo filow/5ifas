@@ -1,0 +1,17 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/jf">积分兑换比例管理</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+<form action="__APP__/{$Think.MODULE_NAME}/jfupdate" method="post">
+ 
+  <label>每一个积分可以兑换的钱数 </label>
+ 
+ <input type="text" value="{$jf}"  name="jf"/> 
+ <br/>
+ <input type="submit" value="确认"/>   
+ 
+ </form>
+<include file="Public:footer"/>

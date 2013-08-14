@@ -1,0 +1,38 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/fanli">返利管理</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>最低充值金额</th>
+            <th>返利</th>
+            <th>基本操作</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    <volist name="fanxian" id="li">
+        <tr>
+            <td>{$li.id}</td>
+            <td>{$li.value2}</td>
+            <td>{$li.value1} </td>
+            <td><a href="__APP__/{$Think.MODULE_NAME}/fanlidelete/id/{$li.id}"><i class="icon-remove"></i>删除</a></td>
+    </volist>
+</tbody>
+</table>
+<form action="__APP__/{$Think.MODULE_NAME}/fanliadd" method="post">
+    
+     <label>充值金额</label>
+    <input type="text"   name="value2"/>
+     <label>返利比例（返利额=充值金额*返利比例）</label>
+    <input type="text"   name="value1"/>
+    
+    <br/>
+    <input type="submit" value="增加"/>
+</form>
+<include file="Public:footer"/>

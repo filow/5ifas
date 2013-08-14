@@ -1,0 +1,61 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">用户管理</a> <span class="divider">/</span>
+    </li>
+
+</ul>
+<table class="table  ">
+    <thead>
+        <tr>
+            <th >卡号</th>
+            <th>用户名</th>
+            <th>真实姓名</th>
+
+            <th>用户住址</th>
+            <th>电话号码</th>
+            <th>QQ号</th>
+            <th>卡内余额</th>
+            <th >会员等级</th>
+            <th>积分</th>
+            <th>注册时间</th>
+            <th>推荐人</th>
+            <th>管理</th>
+        </tr>
+    </thead>
+    <tbody>
+    <foreach name="data" item="li">
+        <tr>
+            <td>{$li.cardn}</td>
+            <td>{$li.loginname}</td>
+            <td>{$li.username}</td>
+            <td>{$li.address}</td>
+            <td>{$li.tele}</td>
+            <td>{$li.qq}</td>
+            <td>{$li.amount}</td>
+            <td>{$li.dj}</td>
+            <td>{$li.jf}</td>
+            <td>{$li.reg_time|date="Y-m-d",###}</td>
+            <td>{$li.referrer}</td>
+            <td><a href="__APP__/{$Think.MODULE_NAME}/mod/id/{$li.cardn}"><i class="icon-pencil"></i>修改</a><a href="__APP__/{$Think.MODULE_NAME}/zx/id/{$li.cardn}"><i class="icon-pencil"></i>注销</a></td>
+        </tr>
+    </foreach>
+</tbody>
+</table>
+<div style="float:left">
+    <form action="__APP__/{$Think.MODULE_NAME}/index" method="GET" >
+        用户名：<input type="text"class="span2" name="loginname" value="{$query.loginname}"/> 真实姓名：<input class="span2"  type="text" name="username" value="{$query.username}" /> 卡号：<input class="span2"  type="text" name="cardn" value="{$query.cardn}" />QQ号：<input class="span2"  type="text" name="qq" value="{$query.qq}" /> 
+		电话：<input class="span2"  type="text" name="tele" value="{$query.tele}" />地址：<input class="span2"  type="text" name="address" value="{$query.address}" />
+		<input type="submit" value="查询"/>
+
+    </form> 
+</div>
+<form action="__APP__/Export/index" method="POST" >
+    <input type="hidden"class="span2" name="export_data" value='{$export_data}'/>
+    <input type="submit" value="导出当前页" class="btn" />
+    <a class="btn" href="__APP__/User/output500?{$Think.SERVER.QUERY_STRING}">导出前500项筛选结果</a>
+</form>
+
+
+{$show}
+<include file="Public:footer"/>

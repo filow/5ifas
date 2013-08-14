@@ -1,0 +1,45 @@
+<include file="Public:userheader"/>
+<include file="left_bar"/>
+        <div class="span10">
+            <table class="table  ">
+                <thead>
+                    <tr>
+                        <th >退款订单号</th>
+                        <th>用户卡号</th>
+                        <th>收货人</th>
+                        <th>电话号码</th>
+                        <th>退款商品</th>
+                        <th>退款金额</th>
+                        <th>送货地址</th>
+                        <th >送货时间</th>
+                        <th>备注</th>
+                        <th>操作人</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                <volist  name="data" id="li">
+                    <tr>
+                        <td>{$li.order_id}</td>
+                        <td>{$li.cardn}</td>
+                        <td>{$li.delivername}</td>
+                        <td>{$li.delivertele}</td>
+                        <td>{$li.desn}</td>
+                        <td>{$li.amount}</td>
+                        <td>{$li.deliveraddress}</td>
+                        <td>{$li.delivertime}</td>
+                        <td>{$li.beizhu}</td>
+                        <td>{$li.operator}</td>
+
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+
+
+
+            {$show}
+        </div>
+    </div>
+</div>
+<include file="Public:footer"/>

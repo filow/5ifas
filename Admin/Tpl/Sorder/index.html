@@ -1,0 +1,137 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">订单管理</a> <span class="divider">/</span>
+    </li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;订单总额:<a id="price_sum">{$price_sum}</a></li>
+    <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="__APP__/{$Think.MODULE_NAME}/index?is_bigcustomer=1">只查看大客户</a>&nbsp;&nbsp;
+        <a href="__APP__/{$Think.MODULE_NAME}/index?is_bigcustomer=0">只查看普通用户</a>&nbsp;&nbsp;
+        <?php if(count($_GET)){  ?>
+            <a href="__APP__/{$Think.MODULE_NAME}/index">全部显示</a>
+        <?php }else{ ?>
+            全部显示
+        <?php   } ?>
+    </li>
+</ul>
+<form>
+    <select id="change_ban_order">
+        <option>选择板块</option>
+        <volist name="ban_data" id="li">
+
+            <option value="{$li.id}"<php>if($_GET["ban_id"]==$li["id"]) echo "selected";</php>>{$li.ban_name}</option>
+        </volist>
+    </select>
+    <select id="change_shop">
+        <option>所有订单</option>
+        <volist name="shop_data" id="li">
+
+            <option value="{$li.id}"<php>if($_GET["shopid"]==$li["id"]) echo "selected";</php> >{$li.shop_name}</option>
+        </volist>
+    </select>
+</form>
+<table class="table  ">
+    <thead>
+        <tr>
+            <th><input type="checkbox" id="checkbox_all" /></th>
+            <th>订单号</th>
+            <th>用户卡号</th>
+            <th>收货人</th>
+            <th>电话号码</th>
+            <th>商品详情</th>
+            <th>金额</th>
+            <th>优惠</th>
+            <th>送货地址</th>
+            <th>货到付款</th>
+            <th>备注</th>
+            <th width="60">操作人</th>
+            <th width="40">管理</th>
+        </tr>
+    </thead>
+    <tbody><?php $num=1; ?>
+    <volist  name="data" id="li">
+        <tr class="list_row">
+            <td><input type="checkbox" class="checkbox" value="<?php echo $num++; ?>"/></td>
+            <td>{$li.order_id}</td>
+            <?php if(count($_GET)){  ?>
+                <td><a href="{$_SERVER['REQUEST_URI']}&cardn={$li.cardn}">{$li.cardn}</a></td>
+                <td><a href="{$_SERVER['REQUEST_URI']}&delivername={$li.delivername}"><?php if($li['is_bigcustomer']==1) echo "<i class=\"icon-star\"></i>";?>{$li.delivername}</a></td>
+                <td>{$li.delivertele}</td>
+                <td>{$li.desn}</td>
+                <td>{$li.amount}</td>
+                <td>{$li.youhui}</td>
+                <td><a href="{$_SERVER['REQUEST_URI']}&deliveraddress={$li.deliveraddress}">{$li.deliveraddress}</a></td>
+                <td><a href="{$_SERVER['REQUEST_URI']}&type={$li.type1}">{$li.type}</a></td>
+                <td>{$li.beizhu}</td>
+                <td><a href="{$_SERVER['REQUEST_URI']}&operator={$li.operator}">{$li.operator}</a></td>
+            <?php }else{ ?>
+                <td><a href="{$_SERVER['PHP_SELF']}?cardn={$li.cardn}">{$li.cardn}</a></td>
+                <td><a href="{$_SERVER['PHP_SELF']}?delivername={$li.delivername}"><?php if($li['is_bigcustomer']==1) echo "<i class=\"icon-star\"></i>";?>{$li.delivername}</a></td>
+                <td>{$li.delivertele}</td>
+                <td>{$li.desn}</td>
+                <td>{$li.amount}</td>
+                <td>{$li.youhui}</td>
+                <td><a href="{$_SERVER['PHP_SELF']}?deliveraddress={$li.deliveraddress}">{$li.deliveraddress}</a></td>
+                <td><a href="{$_SERVER['PHP_SELF']}?type={$li.type1}">{$li.type}</a></td>
+                <td>{$li.beizhu}</td>
+                <td><a href="{$_SERVER['PHP_SELF']}?operator={$li.operator}">{$li.operator}</a></td>
+            <?php   } ?>
+            <td><a href="__APP__/{$Think.MODULE_NAME}/tuikuan/id/{$li.id}"><i class="icon-pencil"></i>退款</a></td>
+        </tr>
+    </volist>
+</tbody>
+</table>
+<div style="float:left">
+    <form action="__APP__/{$Think.MODULE_NAME}/index?shopid={$Think.GET.shopid}" method="GET" >
+        订单号查询:<input type="text"class="span2" name="order_id" value="{$query.order_id}"/>  用户卡号：<input type="text"class="span2" name="cardn" value="{$query.cardn}"/> 收货人：<input class="span2"  type="text" name="delivername" value="{$query.delivername}" />
+        送货时间：<input class="span2"  type="text" name="delivertime" value="{$query.delivertime}" />送货地址：<input class="span2"  type="text" name="deliveraddress" value="{$query.deliveraddress}" />操作人：<input class="span2"  type="text" name="operator" value="{$query.operator}" />
+        <input name="shopid" value="{$Think.GET.shopid}" type="hidden"/>
+        <input type="submit" value="查询"/>
+
+    </form> 
+</div>
+<form action="__APP__/Export/index" method="POST" >
+    <input type="hidden"class="span2" name="export_data" value='{$export_data}'/>
+    <input type="submit" value="导出当前页" class="btn" />
+    <a class="btn" href="__APP__/Sorder/export500?{$Think.SERVER.QUERY_STRING}">导出前500项筛选结果</a>
+</form>
+{$show}
+<script type="text/javascript">
+var datas=[<volist name="data" id="li">{$li.amount},</volist>];
+var statues=[<volist name="data" id="li">0,</volist>];
+$("#checkbox_all").click(function(){
+    var count=0;
+    if($(this).attr("checked")){
+        $('.checkbox').attr("checked",true);
+        statues.forEach(function(x){statues[count++]=1;});
+    }
+    else{
+        $('.checkbox').attr("checked",false);
+        statues.forEach(function(x){statues[count++]=0;});
+    };
+    sum_count();
+});
+$(".list_row").click(function (){
+    var selector=$(this).children("td").children(".checkbox");
+    if(selector.attr("checked")){
+        selector.attr("checked",false);
+        statues[selector.attr("value")-1]=0;
+    }
+    else{
+        selector.attr("checked",true);
+        statues[selector.attr("value")-1]=1;
+    }
+    sum_count();
+});
+function sum_count(){
+    var count=0,sum=0;
+    statues.forEach(function(x){
+        if(x)
+            if(undefined!=datas[count])
+                sum+=datas[count];
+        count++;
+    });
+    $('#price_sum').html(sum);
+}
+</script>
+<include file="Public:footer"/>

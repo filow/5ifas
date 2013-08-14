@@ -1,0 +1,18 @@
+name: 5ifas
+version: 1201
+cron:
+- description: sms_cron_0
+  url: ./cron/sms_cron_0.php
+  schedule: every 1 min,offset 0
+- description: sms_cron_20
+  url: ./cron/sms_cron_20.php
+  schedule: every 1 min,offset 20
+- description: sms_cron_40
+  url: ./cron/sms_cron_40.php
+  schedule: every 1 min,offset 40
+handle:
+- compress:  if ( out_header["Content-type"] ~ "text/css" ) compress
+- compress:  if ( out_header["Content-type"] ~ "text/javascript" ) compress
+- compress:  if ( out_header["Content-type"] ~ "text/html" ) compress
+- compress:  if ( out_header["Content-type"] ~ "application/msword" ) compress
+- compress:  if ( out_header["Content-type"] ~ "text/plain" ) compress
