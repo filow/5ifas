@@ -1,0 +1,21 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="{:U('index')}">权限管理</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a>权限列表</a> <span class="divider">/</span>
+    </li>
+</ul>
+<div class="alert alert-block">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <h4>提示</h4>
+  这个是角色的权限控制页面，如果您不清楚本系统的运作原理和源代码构成，请不要随意添加/删除这些权限。
+</div>
+<ul class="nav nav-tabs">
+  <li class="active">
+    <a href="#">权限列表</a>
+  </li>
+  <li><a href="{:U('Node_ctrl_add')}">增加控制器</a></li>
+</ul>
+<include file="Public:footer"/>

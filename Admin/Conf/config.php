@@ -15,6 +15,6 @@ return array(
         '__PUB__'=> SITE_ADDR.'Public',
         '__ROOT__'=>SITE_ADDR,
     ),
-  //'SHOW_PAGE_TRACE'        =>true
+    'SHOW_PAGE_TRACE'        =>true
 );
 ?>
