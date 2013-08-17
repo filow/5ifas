@@ -20,7 +20,18 @@ class RbacAction extends CommonAction {
 
     public function Node_ctrl_add_handle()
     {
-        var_dump($_POST);
+        $ctrl=D('RbacCtrl');
+        
+        $result=$ctrl->create($_POST);
+        if(!$result)
+            $this->error($ctrl->getError());
+        $result['level']=2;
+        if($ctrl->add($result))
+        {
+            $this->success('添加成功',U('Rbac/Node'));
+        }else{
+            $this->error('添加失败');
+        }
     }
 
     public function Role()

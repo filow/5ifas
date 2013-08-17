@@ -1,12 +1,12 @@
 <?php
 class RbacCtrlModel extends Model
 {
+    protected $tableName = 'node'; 
     protected $_validate = array(
-        array('verify','require','验证码必须！'), //默认情况下用正则进行验证
-        array('name','','帐号名称已经存在！',0,'unique',1), // 在新增的时候验证name字段是否唯一
-        array('value',array(1,2,3),'值的范围不正确！',2,'in'), // 当值不为空的时候判断是否在一个范围内
-        array('repassword','password','确认密码不正确',0,'confirm'), // 验证确认密码是否和密码一致
-        array('password','checkPwd','密码格式不正确',0,'function'), // 自定义函数验证密码格式
+        array('name','require','名称不符合要求',Model::MUST_VALIDATE),
+        array('title','require','必须输入项目描述',Model::MUST_VALIDATE),
+        array('status','number','确认开启项只能是一个数字值',Model::MUST_VALIDATE,'regex'), 
+        array('sort','number','排序必须是1位以上数字',Model::MUST_VALIDATE), 
     );
 
 
