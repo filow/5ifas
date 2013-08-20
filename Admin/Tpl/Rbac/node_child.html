@@ -4,30 +4,31 @@
         <a href="{:U('index')}">权限管理</a> <span class="divider">/</span>
     </li>
     <li>
-        <a>添加控制器</a> <span class="divider">/</span>
+        <a>增加子节点</a> <span class="divider">/</span>
     </li>
 </ul>
 <div class="alert alert-block">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
-  增加的权限里，需要填写的控制器名称和操作名称必须与代码中定义的相同。
+  需要填写的控制器名称和操作名称必须与代码中定义的相同。
 </div>
 <ul class="nav nav-tabs">
   <li>
     <a href="{:U('Node')}">权限列表</a>
   </li>
-  <li class="active"><a href="">增加控制器</a></li>
+  <li class="active"><a href="">增加子节点</a></li>
 </ul>
-<form action="{:U('Node_ctrl_add_handle')}" method="post" class="form-inline" name="form">
-  <table class="table table-bordered" style="width:320px;margin:auto;">
+<form action="{:U('Node_child_handle')}" method="post" class="form-inline" name="form">
+  <input type="hidden" name="pid" value="{$pid}" />
+  <table class="table table-bordered" style="width:420px;margin:auto;">
     <tbody>
       <tr>
-        <td>项目名称</td>
+        <td>节点名称</td>
         <td>
           <input type="text" value="" name="name" />
         </td>
       </tr>
       <tr>
-        <td>项目描述</td>
+        <td>节点描述</td>
         <td>
           <input type="text" value="" name="title" />
         </td>
@@ -35,8 +36,9 @@
       <tr>
         <td>是否开启</td>
         <td>
+
           <label>
-            <input type="radio" name="status" value="1" checked="checked"/>是
+            <input type="radio" name="status" value="1" checked="checked" />是
           </label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <label>
@@ -45,8 +47,21 @@
         </td>
       </tr>
       <tr>
+        <td>是否显示为主界面菜单项</td>
+        <td>
+
+          <label>
+            <input type="radio" name="isshow" value="1" checked="checked" />是
+          </label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label>
+            <input type="radio" name="isshow" value="0" />否
+          </label>
+        </td>
+      </tr>
+      <tr>
         <td>排序</td>
-        <td><input type="text" name="sort" value="{$max|default='1'}" /></td>
+        <td><input type="text" name="sort" value="{$max}" /></td>
       </tr>
       <tr>
         <td></td>

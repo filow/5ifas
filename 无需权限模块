@@ -1,0 +1,7 @@
+无需权限模块
+user
+    check_loginname
+    check_qq
+    check_tele
+Amountinfo
+    manage_searchusr

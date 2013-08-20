@@ -197,12 +197,7 @@ class AmountinfoAction extends CommonAction {
         $this->assign('grade', $grade);
         $this->display();
     }
-
-    function gradeadd() {
-
-        $this->display();
-    }
-
+    
     function gradedelete() {
 
         $info = d("info");
@@ -304,12 +299,6 @@ class AmountinfoAction extends CommonAction {
         } else {
             $this->ERROR("设定失败");
         }
-    }
-    function  dcz(){
-        $this->display();
-    }
-    function cz(){
-        $this->display();
     }
 
 }
