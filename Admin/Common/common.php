@@ -143,5 +143,24 @@ function custom_output($datasource,$prefix){
     echo'</body>';
     echo'</html>';
   }
+/**
+ * 递归重组节点信息为多维数组
+ * @param  [array]  $node [要处理的节点]
+ * @param  integer $pid  [父级id]
+ * @return [array]        [多维数组]
+ */
+function node_merge($node,$pid=0){
+    $arr= array();
+    foreach($node as $v){
+        if($v['pid']==$pid){
+            $temp=node_merge($node,$v['id']);
+            if($temp) $v['child']=$temp;
+            
+            $arr[]=$v;
+        }
+    }
+
+    return $arr;
+}
 
 ?>

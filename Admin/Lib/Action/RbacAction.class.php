@@ -11,13 +11,10 @@ class RbacAction extends CommonAction {
     public function Node()
     {
         $nodes=M('node');
-        $data=$nodes->order('sort,id')->where(array('level'=>2))->select();
-        $childs=array();
-        foreach($data as $key => $val){
-            $childs[$key]=$nodes->order('sort,id')->where(array('level'=>3,'pid' => $val['id']))->select();
-        }
+        $data=$nodes->order('sort,id')->select();
+        $data=node_merge($data);
+        //print_r($data);
         $this->assign("nodes",$data);
-        $this->assign('childs',$childs);
         $this->display();
     }
 

@@ -7,10 +7,6 @@ class CommonAction extends Action {
             $this->redirect("Public/login");
         }
         $this->assign("nav_list", $this->getNav());
-        $shop = d("shop");
-        $shop_nav = $shop->where("area_id=0 ")->select();
-       // print_r($cat_nav);
-        $this->assign("shop_nav", $shop_nav);
         $user_id=$_SESSION["admin_id"];
         $p=D("permission");
         $nav=D("nav");
