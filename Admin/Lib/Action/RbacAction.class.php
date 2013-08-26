@@ -144,13 +144,36 @@ class RbacAction extends CommonAction {
     //角色权限配置
     public function access()
     {
-        $rid=I('rid',0,'intval');
         $nodes=M('node');
         $data=$nodes->where(array('status' => 1))->order('sort,id')->field('id,title,name,pid,isshow')->select();
         $data=node_merge($data);
+        $this->assign('rid',I('rid',0,'intval'));
         $this->assign('nodes',$data);
         $this->display();
     }
+    public function access_handle()
+    {
+        $rid=I('rid',0,'intval');
+        if(!$rid) $this->error('没有传入rid');
+
+        $access=M('access');
+        $access->where(array('role_id' => $rid))->delete();
+        $data=array();
+        foreach($_POST['access'] as $v){
+            $tmp=explode('_', $v);
+            $data[]=array(
+                'role_id' => $rid,
+                'node_id' => $tmp[0],
+                'level' => $tmp[1]
+                );
+        }
+        if($access->addAll($data)){
+            $this->success('修改成功',U('role'));
+        }else{
+            $this->error('修改失败');
+        }
+    }
+    //TODO:增加权限配置信息的读取
 }
 
 ?>
