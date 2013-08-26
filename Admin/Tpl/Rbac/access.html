@@ -1,0 +1,55 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="{:U('index')}">权限管理</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a>权限配置</a> <span class="divider">/</span>
+    </li>
+</ul>
+<div class="alert alert-info">
+  <a class="text-success"><strong>绿色加粗项</strong></a>表示该项会在菜单列表中显示
+</div>
+<form action="" class="form-inline">
+<table class="table table-bordered">
+  <tbody>
+    <volist name="nodes" id="li">
+      <tr style="background-color: #EEE;">
+        <td colspan="4">
+          <label>
+            <input type="checkbox" class="selectall" id="{$li.name}" />
+            {$li.title}
+          </label>
+        </td>
+      </tr>
+
+      <!--  子节点  -->
+      <div class="{$li.name}">
+      <tr>
+        <?php 
+          $count=0;
+          foreach($li['child'] as $key => $val){
+          $count++;
+        ?>
+        <td>
+          <label>
+            <input type="checkbox" id="{$li.name}" />
+
+          <eq name="val.isshow" value="1"><a class="text-success"><strong>{$val.title}</strong></a>
+          <else />{$val.title}</eq>
+
+          </label>
+        </td>
+        <?php
+        if($count%4==0) echo "</tr><tr>";
+        } 
+        ?>
+      </tr>
+      </div>
+    </volist>
+  </tbody>
+</table>
+</form>
+
+
+<include file="Public:footer"/>

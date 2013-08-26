@@ -100,11 +100,57 @@ class RbacAction extends CommonAction {
             $edit->add($node)? $this->success('操作成功',U('node')):$this->success('操作失败');
         }
     }
+
+    //角色管理
     public function Role()
     {
+        $role=M('role');
+        $data=$role->select();
+        $this->assign('data',$data);
         $this->display();
     }
+    public function role_add()
+    {
+        $info['status']=1;
+        $this->assign('info',$info);
+        $this->display();
+    }
+    public function Role_add_handle()
+    {
+        $role=M('role');
+        if($role->add($this->_post())){
+            $this->success('添加成功',U('Role'));
+        }else{
+            $this->error('添加失败');
+        }
+    }
+    public function role_edit(){
+        $role=M('role');
+        $info=$role->where(array('id' => $_GET['id']))->find();
+        $this->assign('info',$info);
+        $this->assign('edit',1);
+        $this->display('role_add');
+    }
+    public function role_edit_handle(){
+        $role=M('role');
+        if($role->save($_POST)){
+            $this->success('修改成功',U('Role'));
+        }else{
+            $this->error('修改失败');
+        }
 
+    }
+
+    //角色权限配置
+    public function access()
+    {
+        $rid=I('rid',0,'intval');
+        $nodes=M('node');
+        $data=$nodes->where(array('status' => 1))->order('sort,id')->field('id,title,name,pid,isshow')->select();
+        $data=node_merge($data);
+        $this->assign('nodes',$data);
+        $this->display();
+    }
 }
 
 ?>
