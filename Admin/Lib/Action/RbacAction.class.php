@@ -5,9 +5,112 @@
 class RbacAction extends CommonAction {
     public function Index()
     {
+        $admin=M('admin');
+        $admin_data=$admin->select();
+        $this->assign('admin',$admin_data);
         $this->display();
     }
+    public function user_mod()
+    {
+        //查询用户是否存在
+        $uid=I('id',0,'intval');
+        $admin=M('admin');
+        $admin_user=$admin->where(array('id'=>$uid))->find();
+        if(!$admin_user) $this->error('id不存在');
+        $this->assign('admin',$admin_user);
+        //提取角色列表
+        $role=M('role');
+        $role_data=$role->where(array('status' => 1))->field('id,remark')->select();
+        $this->assign('role',$role_data);
 
+        $this->display();
+    }
+    public function User_mod_handle()
+    {
+        headerutf8();
+        //密码处理
+        $data=$this->_post();
+        if($data['password']){
+            $data['password']=md5($data['password']);
+        }else{
+            unset($data['password']);
+        }
+        //角色处理
+        $uid=$data['id'];
+        foreach($data['role'] as $k => $v){
+            $role_data[$k]['user_id']=$uid;
+            $role_data[$k]['role_id']=$v;
+        }
+        unset($data['role']);  //释放role键
+        //删除所有原用户角色
+        $role_user=M('role_user');
+        $role_user->where(array('user_id'=>$uid))->delete();
+        //添加角色信息
+        if($role_user->addAll($role_data)){
+            $msg="职位变更成功";
+            $success=1;
+        }else{
+            $msg="职位变更失败";
+            $success=0;
+        }
+        //变更用户信息
+        $admin=M('admin');
+        if($admin->save($data)){
+            $msg.="<br />用户信息变更成功";
+            $success=$success|1;
+        }else{
+            $msg.="<br />用户信息变更失败";
+            $success=$success|0;
+        }
+        if($success) $this->success($msg,U('index'));
+        else $this->error($msg);
+    }
+    public function user_add()
+    {
+        $role=M('role');
+        $role_data=$role->where(array('status' => 1))->field('id,remark')->select();
+        $this->assign('role',$role_data);
+        $this->display();
+    }
+    public function user_add_handle()
+    {
+        //信息处理
+        if(!($_POST['username'] && $_POST['password']))
+            $this->error('必须输入用户名和密码');
+        $data['username']=$_POST['username'];
+        $data['password']=md5($data['password']);
+        $data['isdelete']=I('isdelete',0,'intval');
+        $data['phone']=$_POST['phone'];
+        $data['tc_perc']=I('tc_perc',0,'intval');
+        $data['bx_perc']=I('bx_perc',0,'intval');
+        $data['utime']=time();
+        //添加用户
+        $admin=M('admin');
+        if(!$uid=$admin->add($data)){
+            $this->error('用户添加失败');
+        }
+
+        //角色处理
+        foreach($_POST['role'] as $k => $v){
+            $role_data[$k]['user_id']=$uid;
+            $role_data[$k]['role_id']=$v;
+        }
+        //添加角色信息
+        $role_user=M('role_user');
+        if($role_user->addAll($role_data)){
+            $this->success('用户添加成功',U('index'));
+        }else{
+            $this->error('用户添加成功,但未能写入职位信息');
+        }
+
+    }
+    public function user_delete()
+    {
+        $uid=I('id',0,'intval');
+        $admin=M('admin');
+        if($admin->where(array('id'=> $uid))->delete()) $this->success('删除成功',U('index'));
+        else $this->error('删除失败');
+    }
     public function Node()
     {
         $nodes=M('node');
@@ -144,10 +247,26 @@ class RbacAction extends CommonAction {
     //角色权限配置
     public function access()
     {
+        $rid=I('rid',0,'intval');
+        //读取可用节点列表
         $nodes=M('node');
-        $data=$nodes->where(array('status' => 1))->order('sort,id')->field('id,title,name,pid,isshow')->select();
+        $data=$nodes->where(array('status' => 1))->order('sort,id')->field('id,title,pid,isshow')->select();
+        
+        //读取权限信息
+        $access=M('access');
+        $acc_data=M('access')->where(array('role_id'=>$rid))->getField('node_id',true);
+
+        // 检测当前用户是否拥有该节点权限
+        foreach($data as $k => $v){
+            if($acc_id=in_array($v['id'], $acc_data)){
+                $data[$k]['acc_owned']=1;
+                unset($acc_data[$acc_id]);
+            }
+        }
+        //将数组整合成树形结构,利于输出
         $data=node_merge($data);
-        $this->assign('rid',I('rid',0,'intval'));
+
+        $this->assign('rid',$rid);
         $this->assign('nodes',$data);
         $this->display();
     }
@@ -173,7 +292,8 @@ class RbacAction extends CommonAction {
             $this->error('修改失败');
         }
     }
-    //TODO:增加权限配置信息的读取
+    
+    //
 }
 
 ?>

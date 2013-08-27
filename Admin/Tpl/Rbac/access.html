@@ -4,6 +4,9 @@
         <a href="{:U('index')}">权限管理</a> <span class="divider">/</span>
     </li>
     <li>
+        <a href="{:U('role')}">角色权限配置</a> <span class="divider">/</span>
+    </li>
+    <li>
         <a>权限配置</a> <span class="divider">/</span>
     </li>
 </ul>
@@ -19,7 +22,7 @@
     <tr style="background-color: #EEE;">
       <td colspan="4">
         <label>
-          <input type="checkbox" name="access[]" value="{$li.id}_2" />
+          <input type="checkbox" name="access[]" value="{$li.id}_2" <eq name="li.acc_owned" value="1">checked="checked"</eq> />
           {$li.title}
         </label>
         &nbsp;&nbsp;&nbsp;(<a class="select_child">全选</a> / <a class="select_no">不选</a>)
@@ -35,7 +38,7 @@
       ?>
       <td>
         <label>
-          <input type="checkbox" name="access[]" value="{$val.id}_3" level="3" />
+          <input type="checkbox" name="access[]" value="{$val.id}_3" level="3" <eq name="li.acc_owned" value="1">checked="checked"</eq> />
 
         <eq name="val.isshow" value="1"><a class="text-info"><strong>{$val.title}</strong></a>
         <else />{$val.title}</eq>
