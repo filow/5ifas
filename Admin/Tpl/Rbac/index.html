@@ -23,7 +23,11 @@
         <tr>
             <td>{$i}</td>
             <td>{$li.username}</td>
-            <td></td>
+            <td>
+                <foreach name="li.role" item="vo">
+                    {$vo.remark}<br />
+                </foreach>
+            </td>
             <td>{$li.phone}</td>
             <td><eq name="li.isdelete" value="0"><a class="text-success">启用</a><else /><a class="muted">停用</a></eq></td>
             <td>{$li.tc_perc}</td>

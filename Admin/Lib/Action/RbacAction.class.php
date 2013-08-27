@@ -5,9 +5,10 @@
 class RbacAction extends CommonAction {
     public function Index()
     {
-        $admin=M('admin');
-        $admin_data=$admin->select();
-        $this->assign('admin',$admin_data);
+        $adminRelation=D('AdminRelation')->field('id,username,phone,isdelete,tc_perc,bx_perc')->relation(true)->select();
+     //   print_r($adminRelation);
+     //   die;
+        $this->assign('admin',$adminRelation);
         $this->display();
     }
     public function user_mod()
