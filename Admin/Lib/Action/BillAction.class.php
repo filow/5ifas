@@ -15,9 +15,10 @@ class BillAction extends CommonAction {
 		$query=getQuery();
 		$query=$query['string'];
 		$query.=' and abandon=0';
-		if(session('admin_type')<"1"){
-			$query.=' and operater=`username`';
-		}
+		$username=$_SESSION['username'];
+	//	if(session('admin_type')<"1"){
+	//		$query.=" and operater=`$username`";
+	//	}
 		$count=$bill->where($query)->count();
 		import("ORG.Util.Page");
 		$page=new Page($count,50);

@@ -42,10 +42,14 @@ class CommonAction extends Action {
         $nodes=M('node');
         $data=array();
 
+        //读取模块信息
         $module=$nodes->where(array('isshow' => 1,'level' => 2))->field('id,name,title')->order('sort')->select();
+        //读取控制器信息
         foreach($module as $value){
             $action=$nodes->where(array('isshow' => 1,'pid' => $value['id']))
                     ->field('name,title')->order('sort')->select();
+
+            //重组成适合列表输出的结构
             foreach($action as $act_val){
                 $tmp[$act_val['name']]=$act_val['title'];
             }

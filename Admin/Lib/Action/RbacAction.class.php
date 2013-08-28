@@ -173,8 +173,8 @@ class RbacAction extends CommonAction {
             if($node->where(array('pid' => $_GET['id']))->count()) $this->error('不能删除含有子节点的项目');
 
             $result=$node->where(array('id' => $_GET['id']))->limit(1)->delete();
-
             if($result){
+                M('access')->where(array('node_id'=>$_GET['id']))->delete();
                 $this->success('删除成功');
             }else{
                 $this->error('删除失败');
@@ -241,6 +241,23 @@ class RbacAction extends CommonAction {
             $this->success('修改成功',U('Role'));
         }else{
             $this->error('修改失败');
+        }
+
+    }
+
+    public function role_delete()
+    {
+        if(isset($_GET['id']) && is_numeric($_GET['id'])){
+            $role=M('role');
+            $result=$role->where(array('id' => $_GET['id']))->limit(1)->delete();
+            if($result){
+                M('access')->where(array('role_id'=>$_GET['id']))->delete();
+                $this->success('删除成功');
+            }else{
+                $this->error('删除失败');
+            }
+        }else{
+            $this->error('操作非法');
         }
 
     }
