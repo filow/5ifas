@@ -52,11 +52,11 @@
         <td>是否显示为主界面菜单项</td>
         <td>
           <label>
-            <input type="radio" name="isshow" value="1" checked="checked" />是
+            <input type="radio" name="isshow" value="1" <eq name="info.isshow" value="1">checked="checked"</eq> />是
           </label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <label>
-            <input type="radio" name="isshow" value="0" />否
+            <input type="radio" name="isshow" value="0" <eq name="info.isshow" value="0">checked="checked"</eq> />否
           </label>
         </td>
       </tr>

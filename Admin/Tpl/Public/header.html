@@ -39,19 +39,20 @@
             <div class="row-fluid">
                 <div class="span2">
                     <ul class="nav nav-pills nav-stacked ">
-                        <volist name="nav_list" id="nav" key="k">
+                        <foreach name="nav" item="li" key="k">
                             <li class="dropdown" id="menutest">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#menutest{$k}">
-                                    {$nav.action_desc}
+                                    {$li.MODULE_TITLE}
                                     <b class="caret"></b>
                                 </a>
+                                <?php unset($li['MODULE_TITLE']); ?>
                                 <ul class="dropdown-menu">
-                                    <volist name="nav.children" id="nav_children">
-                                        <li><a href="__APP__/{$nav_children.module_name}/{$nav_children.action_name}"  >{$nav_children.action_desc}</a></li>
-                                    </volist>
+                                    <?php foreach($li as $key => $val){  ?>
+                                        <li><a href="__APP__/{$k}/{$key}">{$val}</a></li>
+                                    <?php  } ?>
                                 </ul>
                             </li>
-                        </volist>
+                        </foreach>
                     </ul>
                 </div>
                 <div class="span10">

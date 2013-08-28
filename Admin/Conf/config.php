@@ -17,15 +17,34 @@ return array(
     ),
 
     //用户验证设置
-    'NOT_AUTH_MODULE' => 'Index',
+    //'RBAC_SUPERADMIN' => 'filowlee', //超级管理员名称
+    'ADMIN_AUTH_KEY' => 'superadmin',
+    'USER_AUTH_ON' => true,
+    'USER_AUTH_TYPE' => 1,
+    'USER_AUTH_KEY' => 'admin_id',  //认证识别号
+
+    //无需验证的模块和控制器
+    'NOT_AUTH_MODULE' => 'Index,Common,Public,Export',
+    'NOT_AUTH_ACTION' => 'user/check_loginname,
+                        user/check_qq,
+                        user/check_tele,
+                        Amountinfo/manage_searchusr,
+                        Bill/index,
+                        Bill/product_ajax,
+                        Bill/product_info_ajax,
+                        Bill/billoutput_detail_one,
+                        Bill/billoutput_detail,
+                        Bill/billoutput_list,
+                        DK/waresearch,
+                        DK/usersearch,
+                        ware/upload_file',
+
     'RBAC_ROLE_TABLE' => 'think_role',
-    'RBAC_USER_TABLE' => 'think_user',
+    'RBAC_USER_TABLE' => 'think_role_user',
     'RBAC_ACCESS_TABLE' => 'think_access',
     'RBAC_NODE_TABLE' => 'think_node',
-    // USER_AUTH_ON 是否需要认证
-    // USER_AUTH_TYPE 认证类型
-    // USER_AUTH_KEY 认证识别号
-    // REQUIRE_AUTH_MODULE  需要认证模块
+
+    // 显示页面追踪信息
     'SHOW_PAGE_TRACE'        =>true
 );
 ?>
