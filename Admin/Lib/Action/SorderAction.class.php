@@ -6,54 +6,36 @@ class SorderAction Extends CommonAction {
      */
 
     function index() {
-        /*         * **
-         * 查询所有商家
-         */
-        $ban_id = (int) $_GET["ban_id"];
-        $ban = D("ban");
-        $ban_data = $ban->select();
-        $this->assign("ban_data", $ban_data);
-        $shop = D("shop");
-        $query = "1=1";
-        if ($ban_id)
-            $query.=" and  ban_id=" . $ban_id;
-        $shop_data = $shop->where($query)->select();
-        // z();
-        $this->assign("shop_data", $shop_data);
-        // print_r($shop_data);
-
-        $order = d("order");
+        $order = M("order");
         import("ORG.Util.Page");
-        if (isset($_GET["shopid"]))
-            $shop_id = (int) $_GET["shopid"];
-
-        $getdata = $_GET;
-        unset($getdata["shopid"], $getdata["ban_id"]);
-        $query_data = getQuery($getdata);
+        //根据条件筛选
+        $query_data = getQuery($_GET);
         $query = $query_data["like_query"];
-        // echo $query;
         $query.=" and type > 0 ";
-        if ($shop_id)
-            $query.=" and shop_id=" . $shop_id;
         $count = $order->where($query)->count();
-
+        //分页读取数据
         $page = new Page($count, 40);
         $show = $page->show();
         $data = $order->where($query)->limit($page->firstRow . ',' . $page->listRows)->order("id desc ")->select();
+        //总价格
         $price_sum=0;
+        //页内导出数据
         $export_data[] = array("订单号", "用户卡号", "收货人", "电话号码", "商品详情", "金额", "优惠金额", "送货地址", "送货时间", "是否货到付款", "备注", "操作人");
         foreach ($data as $key => $value) {
             $info = json_decode($value["info"], true);
+            //商品清单
             $desn = "";
+            foreach ($info as $k => $v) {
+                $desn.=$v["w_name"] . ":" . $v["pnum"] . "份<br />";
+            }
+            //加上价格
+            $price_sum+=$value['amount'];
+
             $data[$key]["type"] = $type = $value["type"] == 1 ? "否" : "是";
             $data[$key]['type1']=$value["type"];
-            foreach ($info as $k => $v) {
-                $desn.=$v["w_name"] . ":" . $v["pnum"] . "份|";
-            }
-            $price_sum+=$value['amount'];
             $data[$key]["desn"] = $desn;
-            $export_data[] = array($value["order_id"], $value["cardn"], $value["delivername"], $value["delivertele"], $desn, $value["amount"], $value["youhui"], $value["deliveraddress"], $value["delivertime"]." ".$value["hour"]." :".$value["minute"], $type, $value["beizhu"], $value["operator"]);
 
+            $export_data[] = array($value["order_id"], $value["cardn"], $value["delivername"], $value["delivertele"], $desn, $value["amount"], $value["youhui"], $value["deliveraddress"], $value["delivertime"]." ".$value["hour"]." :".$value["minute"], $type, $value["beizhu"], $value["operator"]);
         }
 // print_r($data);
         $this->assign("data", $data);
@@ -64,46 +46,31 @@ class SorderAction Extends CommonAction {
         $this->display();
     }
 
-    /*     * ***********退款订单查看*************** */
+    /*************退款订单查看*************** */
 
     function seetuikuan() {
-
-        $ban_id = (int) $_GET["ban_id"];
-        $ban = D("ban");
-        $ban_data = $ban->select();
-        $this->assign("ban_data", $ban_data);
-        $shop = D("shop");
-        $query = "1=1";
-        if ($ban_id)
-            $query.=" and  ban_id=" . $ban_id;
-        $shop_data = $shop->where($query)->select();
-        $this->assign("shop_data", $shop_data);
-        $order = d("order");
+        $order = M("order");
         import("ORG.Util.Page");
-        if (isset($_GET["shopid"]))
-            $shop_id = (int) $_GET["shopid"];
 
-        $getdata = $_GET;
-        unset($getdata["shopid"], $getdata["ban_id"]);
-        $query_data = getQuery($getdata);
+        $query_data = getQuery($_GET);
         $query = $query_data["like_query"];
-// echo $query;
         $query.=" and type=0 ";
-        if ($shop_id)
-            $query.=" and shop_id=" . $shop_id;
 
         $count = $order->where($query)->count();
         $page = new Page($count, 50);
         $show = $page->show();
         $data = $order->where($query)->limit($page->firstRow . ',' . $page->listRows)->order("id desc ")->select();
+
         $export_data[] = array("订单号", "用户卡号", "收货人", "电话号码", "退款商品详情", "退款金额", "送货地址", "送货时间", "备注", "操作人");
+
         foreach ($data as $key => $value) {
             $info = json_decode($value["info"], true);
             $desn = "";
-            $data[$key]["type"] = $type = $value["type"] == 1 ? "否" : "是";
             foreach ($info as $k => $v) {
                 $desn.=$v["w_name"] . ":" . $v["pnum"] . "份|";
             }
+            $data[$key]["type"] = $type = $value["type"] == 1 ? "否" : "是";
+
             $data[$key]["desn"] = $desn;
             $export_data[] = array($value["order_id"], $value["cardn"], $value["delivername"], $value["delivertele"], $desn, $value["amount"], $value["deliveraddress"], $value["delivertime"]." ".$value["hour"]." :".$value["minute"], $value["beizhu"], $value["operator"]);
         }
@@ -116,24 +83,19 @@ class SorderAction Extends CommonAction {
     }
 
     function tuikuan() {
-        $id = (int) $_GET["id"];
-        $order = d("order");
+        $id = I('id',0,'intval');
+        $order = M("order");
         $data = $order->find($id);
-        if ($order->where("order_id='" . $data["order_id"] . "' and type=0")->find()) {
-           // $this->error("该订单已经退款过，请勿重复操作");
-        }
         $data["info"] = json_decode($data["info"], TRUE);
-        //print_r($data);
         $this->assign("data", $data);
-        //print_r($data);
         $this->display();
     }
 
     function tuikuanserver() {
-        $id = (int) $_POST["id"];
-        $order = D("order");
-        $o2p = D("order2product");
-        $order_data = $order->where("id=" . $id)->find();
+        $id = I('id',0,'intval');
+        $order = M("order");
+        $o2p = M("order2product");
+        $order_data = $order->find($id);
 		$type=$order_data["type"];
         $n_order_data = $order_data;
         $o_info = json_decode($order_data["info"], true);
@@ -183,13 +145,12 @@ class SorderAction Extends CommonAction {
 
         $order->add($t_order_data);
 
-        /*         * *****更改用户信息************************ */
-		if($type==1){
-			$user = D("user");
-			$user_data = $user->where("cardn=" . $order_data["cardn"])->find();
-			$user->where("cardn=" . $order_data["cardn"])->setField("amount", $user_data["amount"] + $add_amount);
-		}
-        $this->success("退款成功", "index/index");
+        /*******更改用户信息************************ */
+		if(M("user")->where("cardn=" . $order_data["cardn"])->setInc("amount",$add_amount)){
+            $this->success("退款成功", "index");
+        }else{
+            $this->error('退款失败');
+        }
     }
 
     function export500(){
