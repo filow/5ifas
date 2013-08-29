@@ -304,7 +304,7 @@ class RBAC {
                 $table['user']." as user,".
                 $table['access']." as access ,".
                 $table['node']." as node ".
-                "where user.user_id='{$authId}' and user.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and access.node_id=node.id and node.level=3 and node.pid={$moduleId} and node.status=1 and node.isshow=1";
+                "where user.user_id='{$authId}' and user.role_id=role.id and ( access.role_id=role.id  or (access.role_id=role.pid and role.pid!=0 ) ) and role.status=1 and access.node_id=node.id and node.level=3 and node.pid={$moduleId} and node.status=1 and node.isshow=1 order by sort";
             $rs =   $db->query($sql);
             $action = array();
             foreach ($rs as $a){
@@ -334,4 +334,5 @@ class RBAC {
         }
 		return $access;
 	}
+
 }

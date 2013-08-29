@@ -17,7 +17,7 @@ return array(
     ),
 
     //用户验证设置
-    //'RBAC_SUPERADMIN' => 'filowlee', //超级管理员名称
+    // 'RBAC_SUPERADMIN' => 'filowlee', //超级管理员名称
     'ADMIN_AUTH_KEY' => 'superadmin',
     'USER_AUTH_ON' => true,
     'USER_AUTH_TYPE' => 1,

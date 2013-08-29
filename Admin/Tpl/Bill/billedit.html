@@ -36,9 +36,9 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="/">艾星网络管理后台</a>
+                    <a class="brand" href="/admin.php">艾星网络管理后台</a>
                     <div class="row" style="margin-top:10px;">
-                        <span class="pull-right"><a href="#">欢迎您：{$Think.SESSION.username}</a><a href="__APP__/Public/logout" onclick="return confirm('您确定要退出吗？')">退出登录</a></span>
+                        <span class="pull-right"><a href="#">欢迎您：{$Think.SESSION.username}</a>&nbsp;&nbsp;<a href="__APP__/Public/logout" onclick="return confirm('您确定要退出吗？')">退出登录</a></span>
                     </div>
                 </div>
             </div>
@@ -48,39 +48,39 @@
             <div class="row-fluid">
                 <div class="span2">
                     <ul class="nav nav-pills nav-stacked ">
-                        <volist name="nav_list" id="nav" key="k">
+                        <foreach name="nav" item="li" key="k">
                             <li class="dropdown" id="menutest">
-
-                                <a class="dropdown-toggle   " data-toggle="dropdown" href="#menutest{$k}">
-                                    {$nav.action_desc}
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#menutest{$k}">
+                                    {$li.MODULE_TITLE}
                                     <b class="caret"></b>
                                 </a>
+                                <?php unset($li['MODULE_TITLE']); ?>
                                 <ul class="dropdown-menu">
-                                    <volist name="nav.children" id="nav_children">
-                                        <li><a href="__APP__/{$nav_children.module_name}/{$nav_children.action_name}"  >{$nav_children.action_desc}</a></li>
-                                    </volist>
+                                    <?php foreach($li as $key => $val){  ?>
+                                        <li><a href="__APP__/{$k}/{$key}">{$val}</a></li>
+                                    <?php  } ?>
                                 </ul>
                             </li>
-                        </volist>
+                        </foreach>
                     </ul>
                 </div>
                 <div class="span10">
                     <!--Body content-->
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/billlist">进账单</a> <span class="divider">/</span>
+        <a href="{:U('billlist')}">进账单</a> <span class="divider">/</span>
     </li>
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/billcreate">编辑单据</a> <span class="divider">/</span>
+        <a>编辑单据</a> <span class="divider">/</span>
     </li>
 </ul>
-<form action="__APP__/{$Think.MODULE_NAME}/billedit_submit" method="POST" class="form-inline">
+<form action="{:U('billedit_submit')}" method="POST" class="form-inline">
 	<div class="control-group">
 		 <label class="control-label">单据编号：</label>
          <input type="hidden" name="id" value="{$bill_data.id}" />
 		 <input type="text" class="input-medium" name="orderid" value="{$bill_data.orderid}" disabled="disabled">
 		 <label class="control-label">单据日期：</label>
-		 <div class="controls input-append date form_date" data-date="" data-date-format="yyyy MM dd" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
+		 <div class="controls input-append date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
                     <input size="16" type="text" value="{$bill_data.order_date}" readonly>
                     <span class="add-on"><i class="icon-th"></i></span>
          </div>
@@ -93,7 +93,7 @@
     <input type="text" class="input-medium" value="{$bill_data.customer_phone}" name="contacter_number">
     <label class="control-label">联系人：</label>
     <input type="text" class="input-medium" value="{$bill_data.contacter}" name="contacter">
-    <egt name="Think.Session.admin_type" value="1">
+    <egt name="_bill_not_mine" value="1">
         <label class="control-label">操作人：</label>
         <input type="text" class="input-medium" value="<empty name="$bill_data.operater">{$bill_data.operater}<else />{$Think.Session.username}</empty>" name="operater" />
     </egt>

@@ -9,10 +9,10 @@ a.normal {color:black !important;}
 </style>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/Billlist">进账单</a> <span class="divider">/</span>
+        <a href="{:U('Billlist')}">进账单</a> <span class="divider">/</span>
     </li>
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/Billlist">账单列表</a> <span class="divider">/</span>
+        <a href="{:U('Billlist')}">账单列表</a> <span class="divider">/</span>
     </li>
     <li>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;总额:<a class="price_sum">{$price_sum_received}</a>
@@ -44,7 +44,7 @@ a.normal {color:black !important;}
     <volist  name="data" id="li">
         <tr class="list_row">
             <td><input type="checkbox" name="checkbox<?php echo ++$num; ?>" class="checkbox" value="{$li.id}"/></td>
-            <td><a href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">{$li.orderid}</a></td>
+            <td><a href="{:U('billdetail',array('id' =>$li['id']))}">{$li.orderid}</a></td>
             <?php if(count($_GET)){  ?>
                 <td><a href="{$_SERVER['REQUEST_URI']}&customer_name={$li.customer_name}">{$li.customer_name}</a></td>
                 <td><a href="{$_SERVER['REQUEST_URI']}&contacter={$li.contacter}">{$li.contacter}</a></td>
@@ -103,14 +103,14 @@ a.normal {color:black !important;}
                     <if condition="$li.invoice eq 2 "><a href="{$_SERVER['REQUEST_URI']}?invoice={$li.invoice}"  class="invoice" data-toggle="popover" data-placement="left" data-content="发票号：{$li.invoice_id}<br />开票日期：{$li.invoice_date}" title="发票详情">&nbsp;<i class="icon-ok"></i>&nbsp;</a></if>
                 </td>
             <?php   } ?>
-            <td><a href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">查看</a>
+            <td><a href="{:U('billdetail',array('id' =>$li['id']))}">查看</a>
                 <if condition="$li.check_state eq 0 ">
-                    <a href="__APP__/{$Think.MODULE_NAME}/billedit?id={$li.id}">编辑</a>
-                    <a href="__APP__/{$Think.MODULE_NAME}/billabandon?id={$li.id}">删除</a>
+                    <a href="{:U('billedit',array('id' =>$li['id']))}">编辑</a>
+                    <a href="{:U('billabandon',array('id' =>$li['id']))}">删除</a>
                 <else />
-                    <if condition="$Think.SESSION.admin_type gt 1">
-                        <a href="__APP__/{$Think.MODULE_NAME}/billedit?id={$li.id}">编辑</a>
-                        <a href="__APP__/{$Think.MODULE_NAME}/billabandon?id={$li.id}">删除</a>
+                    <if condition="$delete_checked">
+                        <a href="{:U('billedit',array('id' =>$li['id']))}">编辑</a>
+                        <a href="{:U('billabandon',array('id' =>$li['id']))}">删除</a>
                     <else />
                         <a class="muted">编辑</a> <a class="muted">删除</a>
                     </if>
@@ -124,21 +124,28 @@ a.normal {color:black !important;}
 <input type="submit" name="submit" value="导出账单详情表" class="btn"/>
 </form>
 {$show}
-<if condition="$Think.SESSION.admin_type egt 2">
-    <blockquote>
-        您选择了以下订单：<br />
+<blockquote>
+    您选择了以下订单：<br />
+    <textarea id="Billlist_selected_div" name="Billlist_selected" style="width:100%" readonly="readonly"></textarea>
+    <if condition="$submit_invoiceid">
         <form action="submit_invoiceid" method="POST" class="form-inline">
-            <textarea id="Billlist_selected_div" name="Billlist_selected" style="width:100%" readonly="readonly"></textarea>
+            <input type="hidden" name="Billlist_selected" class="Billlist_selected_div" value="" />
             <label>填写发票号码：<input type="text" class="input-medium" name="invoiceid" placeholder="可以书写汉字，字数不限" /></label>
             <input type="submit" value="确认提交" class="btn btn-primary" name="submit1"/><br /><br />
+        </form>
+    </if>
+    <if condition="$submit_recevied">
+        <form action="submit_recevied" method="POST" class="form-inline">
             应收总额:<a class="price_sum">0</a><br />
+            <input type="hidden" name="Billlist_selected" class="Billlist_selected_div" value="" />
             <input type="hidden" value="0" name="price_sum" id="hidden_price_sum" />
             <label>填写实收金额：<input type="text" class="input-medium" name="receive_sum" placeholder="如应收金额相同则留空" /></label>
             <label>填写实收备注：<input type="text" class="input-large" name="receive_remark" placeholder="将应用到所有订单" /></label>
             <input type="submit" value="批量设置选中订单为已收(请谨慎操作)" class="btn btn-warning" name="submit2" />
         </form>
-    </blockquote>
-</if>
+    </if>  
+</blockquote>
+
 
 <script type="text/javascript">
 var datas={$export};
@@ -185,9 +192,8 @@ function sum_count(){
     $('#price_sum_not').html(sum_not);
     $('#price_sum_all').html(sum-sum_not);
     $('#hidden_price_sum').attr('value',sum);
-    <if condition="$Think.SESSION.admin_type egt 2">
     $('#Billlist_selected_div').html(selected_bill);
-    </if>
+    $('.Billlist_selected_div').attr('value',selected_bill);
 }
 </script>
 <include file="Public:footer"/>

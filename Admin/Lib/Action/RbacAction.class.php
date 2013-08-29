@@ -109,7 +109,10 @@ class RbacAction extends CommonAction {
     {
         $uid=I('id',0,'intval');
         $admin=M('admin');
-        if($admin->where(array('id'=> $uid))->delete()) $this->success('删除成功',U('index'));
+        if($admin->where(array('id'=> $uid))->delete()){
+            M('role_user')->where(array('user_id' => $uid))->delete();
+            $this->success('删除成功',U('index'));
+        }
         else $this->error('删除失败');
     }
     public function Node()
@@ -252,6 +255,7 @@ class RbacAction extends CommonAction {
             $result=$role->where(array('id' => $_GET['id']))->limit(1)->delete();
             if($result){
                 M('access')->where(array('role_id'=>$_GET['id']))->delete();
+                M('role_user')->where(array('role_id'=>$_GET['id']))->delete();
                 $this->success('删除成功');
             }else{
                 $this->error('删除失败');
@@ -272,24 +276,24 @@ class RbacAction extends CommonAction {
         
         //读取权限信息
         $access=M('access');
-        $acc_data=M('access')->where(array('role_id'=>$rid))->getField('node_id',true);
+        $acc_data=M('access')->where(array('role_id'=>$rid))->order('node_id')->getField('node_id',true);
 
         // 检测当前用户是否拥有该节点权限
         foreach($data as $k => $v){
-            if($acc_id=in_array($v['id'], $acc_data)){
+            if(in_array($v['id'], $acc_data)){
                 $data[$k]['acc_owned']=1;
-                unset($acc_data[$acc_id]);
             }
         }
+
         //将数组整合成树形结构,利于输出
         $data=node_merge($data);
-
         $this->assign('rid',$rid);
         $this->assign('nodes',$data);
         $this->display();
     }
     public function access_handle()
     {
+
         $rid=I('rid',0,'intval');
         if(!$rid) $this->error('没有传入rid');
 
@@ -304,6 +308,7 @@ class RbacAction extends CommonAction {
                 'level' => $tmp[1]
                 );
         }
+
         if($access->addAll($data)){
             $this->success('修改成功',U('role'));
         }else{

@@ -8,17 +8,18 @@ class BillAction extends CommonAction {
 		$admin=M('admin');
 		$admin_list=$admin->field('username')->select();
 		$this->assign('admin_list',$admin_list);
+		$this->assign('_bill_not_mine',$this->checkPermission('_bill_not_mine'));
 		$this->display();
 	}
 	function billlist() {
 		$bill=M('bill');
-		$query=getQuery();
-		$query=$query['string'];
-		$query.=' and abandon=0';
-		$username=$_SESSION['username'];
-	//	if(session('admin_type')<"1"){
-	//		$query.=" and operater=`$username`";
-	//	}
+		$query=$_GET;
+		unset($query['_URL_']);
+		$query['abandon']=0;
+		//是否可以查看不是自己提交的订单
+		if(!$this->checkPermission('_billlist_showall')){
+			$query['operater']=session('username');
+		}
 		$count=$bill->where($query)->count();
 		import("ORG.Util.Page");
 		$page=new Page($count,50);
@@ -33,6 +34,13 @@ class BillAction extends CommonAction {
 			$export[$key]['orderid']=$value['orderid'];
 		}
 		$show = $page->show();
+		//是否可以编辑/删除已审核的账单
+		if($this->checkPermission('_bill_delete_checked')){
+			$this->assign('delete_checked',1);
+		}
+		$this->assign('submit_invoiceid',$this->checkPermission('_bill_delete_checked'));
+		$this->assign('submit_recevied',$this->checkPermission('submit_recevied'));
+
 	    $this->assign('data',$data);
 	    $this->assign('price_sum_received',$price_sum_received);
 	    $this->assign('price_sum_notreceived',$price_sum_notreceived);
@@ -44,11 +52,23 @@ class BillAction extends CommonAction {
 	function billdetail(){
 		$bill=M('bill');
 		$bill_detail=M('bill_detail');
-		$bill_number=$this->_get('id');
+		$bill_number=I('id',0,'intval');
+
+		//拒绝没有权限的用户访问非自己的订单
+		if(!$this->checkPermission('_billlist_showall')){
+			if($bill_data['operater']!=session('username')) $this->error("您的权限不够");
+		}
+
+		//是否可以编辑已审核的账单
+		if($this->checkPermission('_bill_delete_checked')){
+			$this->assign('_delete_checked',1);
+		}
+
+		//更改实收金额
 		if(isset($_GET['price_received'])){
-			if(session('admin_type')>="2"){
-				$data['price_received']=(float) $this->_get('price_received');
-				$data['remark_sk']=$this->_get('remark_sk');
+			if($this->checkPermission('_bill_receive')){
+				$data['price_received']=(float) I('price_received');
+				$data['remark_sk']=I('remark_sk');
 				$data['receive_date']=date("Y-m-d");
 				$bill->where(array("id" => $bill_number))->save($data);
 				//z();
@@ -56,8 +76,9 @@ class BillAction extends CommonAction {
 				$this->error('您的权限不足以更改实收金额');
 			}
 		}
+		//更改审核状态
 		if(isset($_GET['verify'])){
-			if(session('admin_type')>="1"){
+			if($this->checkPermission('_bill_check')){
 				if($_GET['verify']=="1") $data['check_state']=1;
 				if($_GET['verify']=="0") $data['check_state']=2;
 				$data['checker']=session('username');
@@ -66,42 +87,48 @@ class BillAction extends CommonAction {
 				//z();
 			}
 		}
+		//读取账单数据
 		$bill_data=$bill->where(array("id" => $bill_number))->find();
 		if(!$bill_data) $this->error("该账单不存在");
 		else{
 			$detail_data=$bill_detail->where(array("bill_id" => $bill_number))->select();
 		}
-		if(session('admin_type')<1){
-			if($bill_data['operater']!=session('username')) $this->error("您的权限不够");
-		}
-		
+		// 标识权限
+		$this->assign('billremark',$this->checkPermission('billremark'));
+		$this->assign('_bill_receive',$this->checkPermission('_bill_receive'));
+		$this->assign('_bill_check',$this->checkPermission('_bill_check'));
+		// 输出账单数据
 		$this->assign('bill_data',$bill_data);
 		$this->assign('detail_data',$detail_data);
 		$this->display();
 	}
 	function billremark(){
 		$bill=M('bill');
-		$bill_number=$this->_post('id');
-		if(session('admin_type')>="1"){
-			$data['remark']=$this->_post('verify-remark');
-			$bill->where(array("id" => $bill_number))->save($data);
-			if($bill) $this->success("审核备注提交成功","billdetail?id=".$bill_number);
-		}
+		$bill_number=I('id',0,'intval');
+		$data['remark']=$this->_post('verify-remark');
+		$bill->where(array("id" => $bill_number))->save($data);
+		if($bill) $this->success("审核备注提交成功","billdetail?id=".$bill_number);
 	}
 	function billedit(){
 		$bill=M('bill');
 		$bill_detail=M('bill_detail');
-		$bill_number=$this->_get('id');
+		$bill_number=I('id',0,'intval');
 		$bill_data=$bill->where(array("id" => $bill_number))->find();
-		if($bill_data['check_state']>0 && session('admin_type')<2)
-				$this->error('您不能修改已经通过审核的账单');
+		//检测是否可以读取其他人的账单信息
+		if(!$this->checkPermission('_billlist_showall')){
+			if($bill_data['operater']!=session('username')) $this->error("您的权限不够");
+		}
+		//检测账单是否存在
 		if(!$bill_data) $this->error("该账单不存在");
 		else{
 			$detail_data=$bill_detail->where(array("bill_id" => $bill_number))->order("id")->select();
 		}
-		if(session('admin_type')<1){
-			if($bill_data['operater']!=session('username')) $this->error("您的权限不够");
-		}
+		//如果已经被审核过,那么验证是否有编辑已审核订单的权限
+		if($bill_data['check_state']>0 && !$this->checkPermission('_bill_delete_checked'))
+				$this->error('您不能修改已经通过审核的账单');
+		//是否可以提交其他管理员的名字
+		$this->assign('_bill_not_mine',$this->checkPermission('_bill_not_mine'));
+
 		$this->assign('bill_data',$bill_data);
 		$this->assign('detail_data',$detail_data);
 		$this->display();
@@ -116,18 +143,22 @@ class BillAction extends CommonAction {
 		$data['dilivery_date']=$this->_post('checkdate');
 		$data['dilivery_location']=$this->_post('checkplace');
 		$data['settlement']=$this->_post('checkmethod');
-		if(session('admin_type')>=2 && !empty($_POST['operater']))
+		//是否可以提交其他管理员的名字
+		if($this->checkPermission('_bill_not_mine') && !empty($_POST['operater']))
 			$data['operater']=$this->_post('operater');
 		else
 			$data['operater']=session('username');
+		// 是否要求发票
 		if(isset($_POST['invoice'])){
 			$data['invoice']=1;
 		}else{
 			$data['invoice']=0;
 		}
+		// 状态改为未审核
 		$data['check_state']=0;
 		$ware=M('ware');
 		$have_product=false;
+		// 检测账单商品列表
 		for($i=1;$i<=5;$i++){
 			if(!empty($_POST['product'.$i])){
 				$ware_item=$ware->where("w_name= '".$this->_post('product'.$i)."'")->field("w_name,w_price")->find();
@@ -140,14 +171,18 @@ class BillAction extends CommonAction {
 			}
 		}
 		if(!$have_product) $this->error('请至少选择一个产品');
+		//统计总价
 		$data['price_sum']=0;
 		foreach($price_sum as $val){
 			$data['price_sum']+=$val;
 		}
+		//提交订单更改
 		$bill=M('bill');
 		$state=$bill->where(array("id" => $bill_number))->save($data);
+		//删除所有原有商品数据
 		$bill_detail=M('bill_detail');
 		$bill_detail->where(array("bill_id" => $bill_number))->delete();
+		//写入新商品数据
 		foreach($bill_detail_data as $key => $value){
 			$bill_detail_items['bill_id']=$bill_number;
 			$bill_detail_items['product_name']=$value['w_name'];
@@ -164,7 +199,7 @@ class BillAction extends CommonAction {
 	}
 	function billwasted(){
 		$bill=M('bill');
-		if(session('admin_type')>="1"){
+		if($this->checkPermission('_billlist_showall')){
 			if(!empty($_GET['operater'])) $query=array("abandon" => "1","operater" => $this->_get('operater'));
 			else $query=array("abandon" => "1");
 		}else{
@@ -178,27 +213,30 @@ class BillAction extends CommonAction {
 		$show = $page->show();
 	    $this->assign('data',$data);
 	    $this->assign('show',$show);
+	    // 是否可以查看不是自己提交的订单
+	    $this->assign('_billlist_showall',$this->checkPermission('_billlist_showall'));
+	    // 恢复账单
+	    $this->assign('billrecover',$this->checkPermission('billrecover'));
+
         $this->display();
 	}
 	function billrecover(){
-		$bill_number=$this->_get('id');
+		$bill_number=I('id',0,'intval');
 		$bill=M('bill');
-		if(session('admin_type')<"2")
-			$this->error("只有系统管理员能恢复账单");
 		$data['abandon']=0;
 		if($bill->where(array('id' => $bill_number))->save($data)) $this->redirect('billwasted');
 		else $this->error("恢复失败");
 	}
 	function billabandon(){
-		$bill_number=$this->_get('id');
+		$bill_number=I('id',0,'intval');
 		$bill=M('bill');
 		$bill_data=$bill->where(array('id' => $bill_number))->find();
 		if($bill_data['check_state']>0){
 			//已经被审核过，若管理员不是系统管理员则报错
-			if(session('admin_type')<"2")	$this->error('您不能删除已经被审核过的订单');
+			if(!$this->checkPermission('_bill_delete_checked'))	$this->error('您不能删除已经被审核过的订单');
 		}else{
 			//没有被审核过，则若不是自己本人操作时报错（管理员权限时忽略）
-			if(session('admin_type')=="0"){
+			if(!$this->checkPermission('_bill_delete_other')){
 				if($bill_data['operater']!=session('username')) $this->error('您只能删除自己的订单');
 			}
 		}
@@ -223,10 +261,8 @@ class BillAction extends CommonAction {
 
 	}
 	public function create_order(){
-		if(!session('?username')) $this->error('您尚未登录！');
 		import("ORG.Util.String");
 		header("Content-type: text/html; charset=utf-8");
-
 
 		$data['orderid']="B".date("YmdG").strtoupper(string::buildFormatRand("**##"));
 		if(empty($_POST['customerid'])) $this->error("必须填写客户名");
@@ -237,10 +273,12 @@ class BillAction extends CommonAction {
 		$data['dilivery_date']=$this->_post('checkdate');
 		$data['dilivery_location']=$this->_post('checkplace');
 		$data['settlement']=$this->_post('checkmethod');
-		if(session('admin_type')>=2 && !empty($_POST['operater']))
+		//是否可以提交其他管理员的名字
+		if($this->checkPermission('_bill_not_mine') && !empty($_POST['operater']))
 			$data['operater']=$this->_post('operater');
 		else
 			$data['operater']=session('username');
+		// 是否要求发票
 		if(isset($_POST['invoice'])){
 			$data['invoice']=1;
 		}else{
@@ -249,6 +287,7 @@ class BillAction extends CommonAction {
 		$data['check_state']=0;
 		$ware=M('ware');
 		$have_product=false;
+		// 检测账单商品列表
 		for($i=1;$i<=5;$i++){
 			if(!empty($_POST['product'.$i])){
 				$ware_item=$ware->where("w_name= '".$this->_post('product'.$i)."'")->field("w_name,w_price")->find();
@@ -265,10 +304,12 @@ class BillAction extends CommonAction {
 		foreach($price_sum as $val){
 			$data['price_sum']+=$val;
 		}
+		//提交订单更改
 		$bill=M('bill');
 		$bill_number=$bill->add($data);
 		if(!$bill_number) $this->error("数据写入错误，请联系管理员解决此问题。");
 		else{
+			//写入新商品数据
 			$bill_detail=M('bill_detail');
 			foreach($bill_detail_data as $key => $value){
 				$bill_detail_items['bill_id']=$bill_number;
@@ -282,25 +323,6 @@ class BillAction extends CommonAction {
 			}
 		}
 		$this->success('账单已成功提交！','Billlist');
-	}
-	function permission(){
-
-		if(session('admin_type')<1) $this->error("您的权限不足");
-		$admin=M('admin');
-		if(isset($_GET['type'])){
-			if(session('admin_type')<2) $this->error("您的权限不足以执行管理员权限更改");
-			if($_GET['type']=="up")	$data['admin_type']=1;
-			else if($_GET['type']=="down")	$data['admin_type']=0;
-			if(isset($data) && isset($_GET['id'])){
-				$result=$admin->where(array('id' => $this->_get('id')))->save($data);
-				if(!$result) $this->error("更改权限失败");
-			}else{
-				$this->error('参数错误，修改权限失败，请确认您是从正常渠道提交的消息。');
-			}
-		}
-		$admin_list=$admin->order('id')->field("id,username,post,admin_type")->select();
-		$this->assign('admin_list',$admin_list);
-		$this->display();
 	}
 
 	function billoutput(){
@@ -432,51 +454,52 @@ class BillAction extends CommonAction {
 	function submit_invoiceid(){
 		headerutf8();
 		if(empty($_POST['Billlist_selected'])) $this->error('你没有选中任何一个订单!');
-		if(session('admin_type')<2) $this->error('您的权限不足');
 		$billarr=explode(",",$_POST['Billlist_selected']);
 		$bill=M('bill');
-		if(!empty($_POST['submit1'])){
-			if(!empty($_POST['invoiceid'])){
-				foreach ($billarr as $key => $value) {
-					if(empty($value)) continue;
-					$bill_order=$bill->where(array('orderid' => $value))->find();
-					if($bill_order){
-						if($bill_order['invoice']==0)	echo "[失败]订单：".$value."不要求发票<br />";
-						else{
-							$bill_order['invoice']=2;
-							$bill_order['invoice_id']=$_POST['invoiceid'];
-							$bill_order['invoice_date']=date('Y-m-d');
-							if($bill->save($bill_order))	echo "[成功]订单：".$value."的发票号码已修改为".$_POST['invoiceid']."<br />";
-							else echo "[失败]订单：".$value."在修改时遭遇未知错误<br />";
-						}
-					}else echo "[失败]订单：".$value."不存在<br />";
-				}
-				echo "操作完成 &nbsp;&nbsp;&nbsp;<a href=\"".U('Bill/billlist')."\">返回订单列表</a>";
-			}else  $this->error('你没有填写发票号码');			
-		}else if(!empty($_POST['submit2'])){
-			$_POST['receive_sum']=trim($_POST['receive_sum']);
-			if(!empty($_POST['receive_sum'])){
-				if(empty($_POST['price_sum'])) $this->error('提交的值存在问题');
-				$receive_rate=$_POST['receive_sum']/$_POST['price_sum'];
-				if($receive_rate<=0) $this->error('提交的值不正确（请确认不包含非数字成分）');
-			}else{
-				$receive_rate=1;
-			}
+
+		if(!empty($_POST['invoiceid'])){
 			foreach ($billarr as $key => $value) {
 				if(empty($value)) continue;
 				$bill_order=$bill->where(array('orderid' => $value))->find();
 				if($bill_order){
-					$bill_order['price_received']=$bill_order['price_sum']*$receive_rate;
-					$bill_order['remark_sk']=$_POST['receive_remark'];
-					$bill_order['receive_date']=date('Y-m-d');
-					if($bill->save($bill_order))	echo "[成功]订单：".$value."的实收价格已修改为".$bill_order['price_sum']*$receive_rate."<br />";
-					else echo "[失败]订单：".$value."在修改时遭遇未知错误<br />";
+					if($bill_order['invoice']==0)	echo "[失败]订单：".$value."不要求发票<br />";
+					else{
+						$bill_order['invoice']=2;
+						$bill_order['invoice_id']=$_POST['invoiceid'];
+						$bill_order['invoice_date']=date('Y-m-d');
+						if($bill->save($bill_order))	echo "[成功]订单：".$value."的发票号码已修改为".$_POST['invoiceid']."<br />";
+						else echo "[失败]订单：".$value."在修改时遭遇未知错误<br />";
+					}
 				}else echo "[失败]订单：".$value."不存在<br />";
 			}
 			echo "操作完成 &nbsp;&nbsp;&nbsp;<a href=\"".U('Bill/billlist')."\">返回订单列表</a>";
+		}else  $this->error('你没有填写发票号码');
+	}
+	public function submit_recevied()
+	{
+		if(empty($_POST['Billlist_selected'])) $this->error('你没有选中任何一个订单!');
+		$billarr=explode(",",$_POST['Billlist_selected']);
+		$bill=M('bill');
+		$_POST['receive_sum']=trim($_POST['receive_sum']);
+		if(!empty($_POST['receive_sum'])){
+			if(empty($_POST['price_sum'])) $this->error('提交的值存在问题');
+			$receive_rate=$_POST['receive_sum']/$_POST['price_sum'];
+			if($receive_rate<=0) $this->error('提交的值不正确（请确认不包含非数字成分）');
 		}else{
-			$this->error('提交出错。'.$_POST['submit']);
+			$receive_rate=1;
 		}
+		foreach ($billarr as $key => $value) {
+			if(empty($value)) continue;
+			$bill_order=$bill->where(array('orderid' => $value))->find();
+			if($bill_order){
+				$bill_order['price_received']=$bill_order['price_sum']*$receive_rate;
+				$bill_order['remark_sk']=$_POST['receive_remark'];
+				$bill_order['receive_date']=date('Y-m-d');
+				if($bill->save($bill_order))	echo "[成功]订单：".$value."的实收价格已修改为".$bill_order['price_sum']*$receive_rate."<br />";
+				else echo "[失败]订单：".$value."在修改时遭遇未知错误<br />";
+			}else echo "[失败]订单：".$value."不存在<br />";
+		}
+		echo "操作完成 &nbsp;&nbsp;&nbsp;<a href=\"".U('Bill/billlist')."\">返回订单列表</a>";
 	}
 	function list_big(){
 		$this->redirect('User/list_big');

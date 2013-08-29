@@ -1,10 +1,10 @@
 <include file="Public:header"/>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/billlist">进账单</a> <span class="divider">/</span>
+        <a href="{:U('billlist')}">进账单</a> <span class="divider">/</span>
     </li>
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/billwasted">废弃账单列表</a> <span class="divider">/</span>
+        <a>废弃账单列表</a> <span class="divider">/</span>
     </li>
 </ul>
 <table class="table">
@@ -28,7 +28,7 @@
     <tbody>
     <volist  name="data" id="li">
         <tr>
-            <td><i class="icon-asterisk"></i><a href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">{$li.orderid}</a></td>
+            <td><i class="icon-asterisk"></i><a href="{:U('billdetail',array('id' => $li['id']))}">{$li.orderid}</a></td>
             <td>{$li.customer_name}</td>
             <td>{$li.contacter}</td>
             <td>{$li.customer_phone}</td>
@@ -38,21 +38,21 @@
             <td>{$li.price_sum}</td>
             <td>{$li.price_received}</td>
             <td>
-                <if condition="$li.check_state eq 0 "><a style="color:red" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">未审核</a></if>
-                <if condition="$li.check_state eq 1 "><a style="color:#080" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">已通过</a></if>
-                <if condition="$li.check_state eq 2 "><a style="color:#eee" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">未通过</a></if>
+                <if condition="$li.check_state eq 0 "><a style="color:red" href="{:U('billdetail',array('id' => $li['id']))}">未审核</a></if>
+                <if condition="$li.check_state eq 1 "><a style="color:#080" href="{:U('billdetail',array('id' => $li['id']))}">已通过</a></if>
+                <if condition="$li.check_state eq 2 "><a style="color:#eee" href="{:U('billdetail',array('id' => $li['id']))}">未通过</a></if>
             </td>
             <td>
-                <if condition="$Think.SESSION.admin_type egt 1">
-                    <a href="__APP__/{$Think.MODULE_NAME}/billwasted?operater={$li.operater}">{$li.operater}</a>
+                <if condition="$_billlist_showall">
+                    <a href="{:U('billwasted',array('operater' => $li['operater']))}">{$li.operater}</a>
                 <else />
                     {$li.operater}
                 </if>
             </td>
             <td><if condition="$li.invoice eq 0 ">--</if><if condition="$li.invoice eq 1 "><font color="red">√</font></if></td>
-            <td><a href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$li.id}">查看</a>
-                <if condition="$Think.SESSION.admin_type egt 2">
-                    <a href="__APP__/{$Think.MODULE_NAME}/billrecover?id={$li.id}">恢复</a>
+            <td><a href="{:U('billdetail',array('id' => $li['id']))}">查看</a>
+                <if condition="$billrecover egt 2">
+                    <a href="{:U('billrecover',array('id' => $li['id']))}">恢复</a>
                 <else />
                     <a class="muted">恢复</a>
                 </if>

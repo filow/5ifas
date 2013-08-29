@@ -16,6 +16,7 @@ class CommonAction extends Action {
             //如果是超级管理员,则不验证,且给予所有节点列表
             if(C('RBAC_SUPERADMIN')==session('username')){
                 //给予所有权限
+                session(C('ADMIN_AUTH_KEY'),true);
                 if(!isset($_SESSION['NAV'])){
                     $_SESSION['NAV']=$this->getNavAll();
                 }
@@ -59,6 +60,24 @@ class CommonAction extends Action {
         }
         
         return $data;
+    }
+    /**
+     * 检测当前用户是否拥有制定权限
+     * @param  [string] $module [模块名]
+     * @param  [string] $action [动作名]
+     * @return [bool]         [结果]
+     */
+    static public function checkPermission($action=ACTION_NAME,$module=MODULE_NAME)
+    {
+
+        if(!C('USER_AUTH_ON')){
+            return 1;
+        }
+        if(session(C('ADMIN_AUTH_KEY'))){
+            return 1;
+        }
+        
+        return array_key_exists(strtoupper($action),$_SESSION['_ACCESS_LIST'][strtoupper(APP_NAME)][strtoupper($module)]);
     }
 
 }
