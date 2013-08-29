@@ -3,24 +3,25 @@
 class UserAction extends CommonAction {
 
     function index() {
-        $user = D("user");
+        $user = M("user");
         import("ORG.Util.Page");
+        //读取筛选信息
         $query_data = getQuery();
-
         $query = $query_data["like_query"];
         $query.=" and zx=0 and is_bigcustomer=0";
         $count = $user->where($query)->count();
-// z();
+        //分页
         $page = new Page($count, 20);
         $show = $page->show();
         $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("id desc ")->limit($page->firstRow . ',' . $page->listRows)->select();
-        //	z();
+
         $export_data[] = array("用户名", "卡号", "真实姓名", "地址", "电话号码", "QQ号", "账户余额", "积分余额", "等级", "推荐人", "注册时间", "备注");
+
         foreach ($u_data as $key => $value) {
             $value["reg_time"] = date("Y-m-d", $value["reg_time"]);
             $export_data[] = $value;
         }
-        // print_r($u_data);
+
         $this->assign("data", $u_data);
         $this->assign("query", $query_data["array"]);
         $this->assign("show", $show);
@@ -35,17 +36,17 @@ class UserAction extends CommonAction {
         $query = $query_data["like_query"];
         $query.=" and zx=0 and is_bigcustomer=1";
         $count = $user->where($query)->count();
-// z();
+
         $page = new Page($count, 20);
         $show = $page->show();
         $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("id desc ")->limit($page->firstRow . ',' . $page->listRows)->select();
-        //  z();
+
         $export_data[] = array("客户名", "卡号", "联系人", "地址", "电话号码", "QQ号", "账户余额", "积分余额", "等级", "推荐人", "注册时间", "备注");
         foreach ($u_data as $key => $value) {
             $value["reg_time"] = date("Y-m-d", $value["reg_time"]);
             $export_data[] = $value;
         }
-        // print_r($u_data);
+
         $this->assign("data", $u_data);
         $this->assign("query", $query_data["array"]);
         $this->assign("show", $show);
@@ -53,7 +54,7 @@ class UserAction extends CommonAction {
         $this->display();
     }
     function add() {
-        $info = D('Info');
+        $info = M('Info');
         $sushe = $info->field("name,value")->where(array("type" => 1))->order('value')->select();
         $data = $info->where(array("type" => 3))->select();
         $this->assign("data", $data);
@@ -62,9 +63,10 @@ class UserAction extends CommonAction {
     }
 
     function insert() {
-        $user = D('User');
-        $info = d("info");
-        $amountinfo = D("Amountinfo");
+        $user = M('User');
+        $info = M("info");
+        $amountinfo = M("Amountinfo");
+
         $sushelou = $info->field('name')->where(array('type' => 1, 'value' => $_POST['sushel']))->find();
         $_POST['address'] = $sushelou['name'] . $_POST['susheh'];
         $_POST['reg_time'] = time();
@@ -120,28 +122,31 @@ class UserAction extends CommonAction {
         }else{
             $this->error('添加大客户失败'.$cardn.z());
         }
-
     }
     function mod() {
-        $id = (int) $_GET['id'];
-        $info = D('Info');
-        $sushe = $info->field("name,value")->where(array("type" => 1))->select();
-        $this->assign('sushe', $sushe);
-        $user = D('user');
+        $id = I('id',0,'intval');
+        //读取用户信息
+        $user = M('user');
         $data = $user->where(array("cardn" => $id))->find();
         $this->assign("data", $data);
+
+        //读取宿舍信息
+        $info = M('Info');
+        $sushe = $info->field("name,value")->where(array("type" => 1))->select();
+        $this->assign('sushe', $sushe);
+        
         $this->display();
     }
     function mod_big() {
-        $id = (int) $_GET['id'];
-        $user = D('user');
+        $id = I('id',0,'intval');
+        $user = M('user');
         $data = $user->where(array("cardn" => $id))->find();
         $this->assign("data", $data);
         $this->display();
     }
     function update_big() {
-        $user = D("User");
-        $id = (int) $_POST['id'];
+        $user = M("User");
+        $id = I('id',0,'intval');
 
         if ((isset($_POST['password'])) && ($_POST['password'] != "")) {
             $_POST['password'] = md5($_POST['password']);
@@ -160,10 +165,12 @@ class UserAction extends CommonAction {
         $this->redirect('list_big');
     }
     function update() {
-        $user = D("User");
-        $info = D("info");
+        $user = M("User");
+        
         $loginname = $_POST['loginname'];
-        $id = (int) $_POST['id'];
+        $id = I('id',0,'intval');
+
+        $info = M("info");
         $sushelou = $info->field('name')->where(array('type' => 1, 'value' => $_POST['sushel']))->find();
         $address = $sushelou['name'] . $_POST['susheh'];
         $susheh = $_POST['susheh'];
@@ -213,17 +220,17 @@ class UserAction extends CommonAction {
     }
 
     function zx() {
-        $id = (int) $_GET["id"];
-        $User = D("User");
+        $id = I('id',0,'intval');
+        $User = M("User");
         if ($User->where("cardn=" . $id)->setField("zx", 1)) {
             $this->success("注销成功");
         } else {
             $this->error("注销失败");
         }
     }
- function qzx() {
-        $id = (int) $_GET["id"];
-        $User = D("User");
+    function qzx() {
+        $id = I('id',0,'intval');
+        $User = M("User");
         if ($User->where("cardn=" . $id)->setField("zx", 0)) {
             $this->success("取消注销成功");
         } else {
@@ -231,24 +238,24 @@ class UserAction extends CommonAction {
         }
     }
     function show_zx() {
-        $user = D("user");
+        $user = M("user");
         import("ORG.Util.Page");
         $query_data = getQuery();
 
         $query = $query_data["like_query"];
         $query.=" and zx=1";
         $count = $user->where($query)->count();
-// z();
+
         $page = new Page($count, 20);
         $show = $page->show();
         $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("id asc ")->limit($page->firstRow . ',' . $page->listRows)->select();
-        //	z();
+
         $export_data[] = array("用户名", "卡号", "真实姓名", "地址", "电话号码", "QQ号", "账户余额", "积分余额", "等级", "推荐人", "注册时间", "备注");
         foreach ($u_data as $key => $value) {
             $value["reg_time"] = date("Y-m-d", $value["reg_time"]);
             $export_data[] = $value;
         }
-        // print_r($u_data);
+
         $this->assign("data", $u_data);
         $this->assign("query", $query_data["array"]);
         $this->assign("show", $show);
@@ -256,7 +263,7 @@ class UserAction extends CommonAction {
         $this->display();
     }
     function output500(){
-        $user = D("user");
+        $user = M("user");
         $query_data = getQuery();
         $query = $query_data["like_query"];
         $query.=" and zx=0 and is_bigcustomer=0";
@@ -269,7 +276,7 @@ class UserAction extends CommonAction {
         custom_output(json_encode($export_data),"User");
     }
     function outputall(){
-        $user = D("user");
+        $user = M("user");
         $query_data = getQuery();
         $query = $query_data["like_query"];
         $query.=" and zx=0 and is_bigcustomer=0";
@@ -282,7 +289,7 @@ class UserAction extends CommonAction {
         custom_output(json_encode($export_data),"User");
     }
     function output500_big(){
-        $user = D("user");
+        $user = M("user");
         $query_data = getQuery();
         $query = $query_data["like_query"];
         $query.=" and zx=0 and is_bigcustomer=1";

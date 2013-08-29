@@ -6,16 +6,16 @@
 </style>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/Dorm">宿舍管理</a> <span class="divider">/</span>
+        <a href="{:U('Dorm')}">宿舍管理</a> <span class="divider">/</span>
     </li>
 </ul>
-<form method="get" action="__APP__/{$Think.MODULE_NAME}/dorm_add" class="form-inline">
+<form method="get" action="{:U('dorm_add')}" class="form-inline">
 <label>增加新宿舍：<input type="text" class="input-small" name="dormname" /></label>
 <label>序号：<input type="text" class="input-small" name="order" value="1" /></label>
 
 <input type="submit" value="提交" class="btn btn-primary" />
 </form>
-<form method="get" action="__APP__/{$Think.MODULE_NAME}/dorm_edit">
+<form method="get" action="{:U('dorm_edit')}">
 <table class="table">
     <thead>
         <tr>
