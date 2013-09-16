@@ -4,17 +4,20 @@
         <meta charset="utf-8">
         <title>艾星网络</title>
         <link href="__ROOT__/Public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <php>if(defined('APP_DEBUG')){</php>
+        <script src="http://lib.sinaapp.com/js/jquery/1.7/jquery.min.js"></script>
+        <script src="http://lib.sinaapp.com/js/bootstrap/2.3.1/js/bootstrap.min.js"></script>
+        <php>}else{</php>
         <script src="__ROOT__/Public/bootstrap/js/jquery.min.js"></script>
-        <script src="__ROOT__/Public/js/publicjs.js"></script>
         <script src="__ROOT__/Public/bootstrap/js/bootstrap.min.js"></script>
+        <php>}</php>
+        <script src="__ROOT__/Public/js/publicjs.js"></script>
         <!--[if IE 6]>    
             <script src="__ROOT__/Public/bootstrap/js/ie6.min.js"></script>
+            <link href="__ROOT__/Public/bootstrap/css/ie6.min.css" rel="stylesheet">
         <![endif]-->
         <!--[if lt IE 9]>
             <script src="__ROOT__/Public/bootstrap/js/html5.js"></script>
-        <![endif]-->
-        <!--[if IE 6]>    
-            <link href="__ROOT__/Public/bootstrap/css/ie6.min.css" rel="stylesheet">
         <![endif]-->
     </head>
     <body>
