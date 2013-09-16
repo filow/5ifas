@@ -1,14 +1,9 @@
-
 <?php
-
-header("location:admin.php");
-
-die;
 define('SITE_ADDR',substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-10));
-define('THINK_PATH','./ThinkPHP/'); //thinkphp框架的地址
-define('APP_NAME','Home');          //预设app的名称  一般是home
-define('APP_PATH','./Home/');       //预设app的地址
-define('APP_DEBUG',true);			//调试模式
-//define('SAE_RUNTIME',true);       
-require './ThinkPHP/Extend/Engine/Sae.php';	//sae引擎
-?>
+define('THINK_PATH','./ThinkPHP/');
+define('APP_NAME','Admin');
+define('APP_PATH','./Admin/');
+define('APP_DEBUG',false);
+//define('SAE_RUNTIME',true);
+define('ENGINE_PATH', THINK_PATH . '/Extend/Engine/');
+require './ThinkPHP/Extend/Engine/Sae.php'; //sae引擎
