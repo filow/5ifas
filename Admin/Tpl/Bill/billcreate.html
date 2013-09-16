@@ -48,6 +48,10 @@
             <div class="row-fluid">
                 <div class="span2">
                     <ul class="nav nav-pills nav-stacked ">
+                        <li class="dropdown" id="menutest">
+                            <a href="{:U('index/index')}">首页
+                            </a>
+                        </li>
                         <foreach name="nav" item="li" key="k">
                             <li class="dropdown" id="menutest">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#menutest{$k}">
@@ -68,13 +72,13 @@
                     <!--Body content-->
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/billlist">进账单</a> <span class="divider">/</span>
+        <a href="{:U('billlist')}">进账单</a> <span class="divider">/</span>
     </li>
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/billcreate">新增单据</a> <span class="divider">/</span>
+        <a href="{:U('billcreate')}">新增单据</a> <span class="divider">/</span>
     </li>
 </ul>
-<form action="__APP__/{$Think.MODULE_NAME}/create_order" method="POST" class="form-inline">
+<form action="{:U('create_order')}" method="POST" class="form-inline">
 	<div class="control-group">
 		 <label class="control-label">单据编号：</label>
 		 <input type="text" class="input-medium" name="orderid" value="---将在提交后生成---" disabled="disabled">
@@ -207,6 +211,7 @@
         <![endif]-->
 <script type="text/javascript">
 var current_selector;
+//统计总价
 function update_sum(){
     var sum=0;
     sum+=parseFloat($("#sum1").text());
@@ -248,7 +253,7 @@ $(function () {
         temp_selector.children(".sum").html((numbers*discount*cost).toFixed(2));
     });
     $.ajax({
-        url: '__APP__/Bill/product_ajax',
+        url: "{:U('product_ajax')}",
         cache:true,
         dataType: 'json'
     }).done(function (source) {
@@ -258,7 +263,7 @@ $(function () {
 
         // Setup jQuery ajax mock:
         $.mockjax({
-            url: '__APP__/Bill/product_ajax',
+            url: "{:U('product_ajax')}",
             responseTime:  100,
             response: function (settings) {
                 var query = settings.data.query,
@@ -277,14 +282,14 @@ $(function () {
 
         // Initialize ajax autocomplete:
         $('.autocomplete').autocomplete({
-            serviceUrl: '__APP__/Bill/product_ajax',
+            serviceUrl: "{:U('product_ajax')}",
             onSelect: function(data){
                 $.ajax({
-                    url:"product_info_ajax?name="+data.value,
+                    url:"{:U('product_info_ajax')}?name="+data.value,
                     type:"get",
                     datatype:"html",
-                    success:function (data){
-                        current_selector.parents("#table_control").children(".price").html(data);
+                    success:function (thedata){
+                        current_selector.parents("#table_control").children(".price").html(thedata);
                     }
                 });
 

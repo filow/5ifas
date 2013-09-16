@@ -8,6 +8,9 @@ return array(
     "DB_NAME" => "thinkphp",
     "DB_USER" => "root",
     "DB_PWD" => "",
+    // "DB_NAME" => "wwwfilow_blog",
+    // "DB_USER" => "wwwfilow_blog",
+    // "DB_PWD" => "filowleeblog@123",
     "DB_PORT" => "3306",
     "DB_PREFIX" => "think_",
     'URL_CASE_INSENSITIVE' => true,
@@ -15,6 +18,9 @@ return array(
         '__PUB__'=> SITE_ADDR.'Public',
         '__ROOT__'=>SITE_ADDR,
     ),
+
+    //Session
+    //'SESSION_TYPE' => 'Db',
 
     //用户验证设置
     // 'RBAC_SUPERADMIN' => 'filowlee', //超级管理员名称

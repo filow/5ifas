@@ -4,5 +4,5 @@ define('THINK_PATH','./ThinkPHP/');
 define('APP_NAME','Admin');
 define('APP_PATH','./Admin/');
 define('APP_DEBUG',true);
-//define('SAE_RUNTIME',true);
-require './ThinkPHP/Extend/Engine/Sae.php';
+define('SAE_RUNTIME',true);
+require './ThinkPHP/Extend/Engine/Sae.php'; //sae引擎

@@ -257,7 +257,7 @@ class BillAction extends CommonAction {
 		$ware = M("ware");
 
         $data = $ware->where("w_name like '%" . $this->_get('name') . "%'")->field("w_price")->find();
-		echo $data[w_price] ;
+		echo $data['w_price'] ;
 
 	}
 	public function create_order(){
