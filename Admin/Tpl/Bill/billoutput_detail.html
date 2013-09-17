@@ -76,7 +76,9 @@
         <td colspan="8">
             制单时间：<span class="underline">{$date}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             操作人：<span class="underline">{$bill_data.operater}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            审核：<span class="underline">{$bill_data.checker|default="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"}</span>
+            审核：<span class="underline">{$bill_data.checker|default="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            制单人：<span class="underline">{$_SESSION.username}</span>
         </td>
     </tr>
 </table>
+<br /><br />

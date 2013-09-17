@@ -35,8 +35,8 @@ a.normal {color:black !important;}
             <th>总价</th>
             <th>实收</th>
             <th>审核状态</th>
-            <th>操作人</th>
             <th>发票</th>
+            <th>操作人</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -66,13 +66,13 @@ a.normal {color:black !important;}
                     </a>
                 </td>
                 <td>
-                    <a href="{$_SERVER['REQUEST_URI']}&operater={$li.operater}">{$li.operater}</a>
-                </td>
-                <td>
                     <if condition="$li.invoice eq 0 ">-</if>
                     <if condition="$li.invoice eq 1 "><a href="{$_SERVER['REQUEST_URI']}&invoice={$li.invoice}"  class="invoice" data-toggle="popover" data-placement="left" data-content="尚未开票" title="发票详情">&nbsp;<i class="icon-asterisk"></i>&nbsp;</a>
                     </if>
                     <if condition="$li.invoice eq 2 "><a href="{$_SERVER['REQUEST_URI']}&invoice={$li.invoice}"  class="invoice" data-toggle="popover" data-placement="left" data-content="发票号：{$li.invoice_id}<br />开票日期：{$li.invoice_date}" title="发票详情">&nbsp;<i class="icon-ok"></i>&nbsp;</a></if>
+                </td>
+                <td>
+                    <a href="{$_SERVER['REQUEST_URI']}&operater={$li.operater}">{$li.operater}</a>
                 </td>
             <?php }else{ ?>
                 <td><a href="{$_SERVER['REQUEST_URI']}?customer_name={$li.customer_name}">{$li.customer_name}</a></td>
@@ -94,13 +94,13 @@ a.normal {color:black !important;}
                     
                 </td>
                 <td>
-                    <a href="{$_SERVER['REQUEST_URI']}?operater={$li.operater}">{$li.operater}</a>
-                </td>
-                <td>
                     <if condition="$li.invoice eq 0 ">-</if>
                     <if condition="$li.invoice eq 1 "><a href="{$_SERVER['REQUEST_URI']}?invoice={$li.invoice}"  class="invoice" data-toggle="popover" data-placement="left" data-content="尚未开票" title="发票详情">&nbsp;<i class="icon-asterisk"></i>&nbsp;</a>
                     </if>
                     <if condition="$li.invoice eq 2 "><a href="{$_SERVER['REQUEST_URI']}?invoice={$li.invoice}"  class="invoice" data-toggle="popover" data-placement="left" data-content="发票号：{$li.invoice_id}<br />开票日期：{$li.invoice_date}" title="发票详情">&nbsp;<i class="icon-ok"></i>&nbsp;</a></if>
+                </td>
+                <td>
+                    <a href="{$_SERVER['REQUEST_URI']}?operater={$li.operater}">{$li.operater}</a>
                 </td>
             <?php   } ?>
             <td><a href="{:U('billdetail',array('id' =>$li['id']))}">查看</a>

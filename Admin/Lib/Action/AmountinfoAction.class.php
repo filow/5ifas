@@ -111,7 +111,7 @@ class AmountinfoAction extends CommonAction {
         $count = $amtinfo->where(array('type' => 0))->count();
         $page = new Page($count, 20);
         $show = $page->show();
-        $data=$amtinfo->where($query)->limit($page->firstRow . ',' . $page->listRows)->order('id desc')->select();
+        $data=$amtinfo->where(array('type' => 0))->limit($page->firstRow . ',' . $page->listRows)->order('id desc')->select();
         foreach ($data as $key => $value){
             $userid = $u->where(array("cardn" => $value['userid']))->field('username,amount,is_bigcustomer')->find();
             $data[$key]['username'] = $userid['username'];
