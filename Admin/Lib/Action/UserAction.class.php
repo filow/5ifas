@@ -253,7 +253,7 @@ class UserAction extends CommonAction {
 
         $page = new Page($count, 20);
         $show = $page->show();
-        $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("zx_time desc")->limit($page->firstRow . ',' . $page->listRows)->select();
+        $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("zx_time desc,id desc")->limit($page->firstRow . ',' . $page->listRows)->select();
 
         $export_data[] = array("用户名", "卡号", "真实姓名", "地址", "电话号码", "QQ号", "账户余额", "积分余额", "等级", "推荐人", "注册时间", "备注");
         foreach ($u_data as $key => $value) {

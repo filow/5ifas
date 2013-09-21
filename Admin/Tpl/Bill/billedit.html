@@ -48,6 +48,10 @@
             <div class="row-fluid">
                 <div class="span2">
                     <ul class="nav nav-pills nav-stacked ">
+                        <li class="dropdown" id="menutest">
+                            <a href="{:U('index/index')}">首页
+                            </a>
+                        </li>
                         <foreach name="nav" item="li" key="k">
                             <li class="dropdown" id="menutest">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#menutest{$k}">
@@ -244,7 +248,7 @@ $(function () {
     });
     // Load countries then initialize plugin:
     $.ajax({
-        url: '__APP__/Bill/product_ajax',
+        url: "{:U('product_ajax')}",
         cache:true,
         dataType: 'json'
     }).done(function (source) {
@@ -254,7 +258,7 @@ $(function () {
 
         // Setup jQuery ajax mock:
         $.mockjax({
-            url: '__APP__/Bill/product_ajax',
+            url: "{:U('product_ajax')}",
             responseTime:  200,
             response: function (settings) {
                 var query = settings.data.query,
@@ -273,14 +277,14 @@ $(function () {
 
         // Initialize ajax autocomplete:
         $('.autocomplete').autocomplete({
-            serviceUrl: '__APP__/Bill/product_ajax',
+            serviceUrl: "{:U('product_ajax')}",
             onSelect: function(data){
                 $.ajax({
-                    url:"product_info_ajax?name="+data.value,
+                    url:"{:U('product_info_ajax')}?name="+data.value,
                     type:"get",
                     datatype:"html",
-                    success:function (data){
-                        current_selector.parents("#table_control").children(".price").html(data);
+                    success:function (thedata){
+                        current_selector.parents("#table_control").children(".price").html(thedata);
                     }
                 });
 
