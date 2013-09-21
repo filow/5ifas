@@ -65,12 +65,13 @@ class UserAction extends CommonAction {
     function insert() {
         $user = M('User');
         $info = M("info");
-        $amountinfo = M("Amountinfo");
+        $amountinfo = D("Amountinfo");
 
         $sushelou = $info->field('name')->where(array('type' => 1, 'value' => $_POST['sushel']))->find();
         $_POST['address'] = $sushelou['name'] . $_POST['susheh'];
         $_POST['reg_time'] = time();
         $_POST['password'] = md5(trim($_POST['password']));
+        $_POST['amount']=0;
         if (!isset($_POST['referrer'])) {
             $_POST['referrer'] = 0;
         }
@@ -84,10 +85,10 @@ class UserAction extends CommonAction {
             $amount2 = $_POST['amount2'];
             $amount1 = $_POST['amount1'];
             if ($amount2 > 0) {
-                $amountinfo->tz($id, $amount2);
+                $amountinfo->overdraw($id, $amount2);
             }
             if ($amount1 > 0) {
-                $amountinfo->cz($id, $amount1);
+                $amountinfo->recharge($id, $amount1);
             }
             $this->success("注册成功");
         } else {
@@ -222,7 +223,9 @@ class UserAction extends CommonAction {
     function zx() {
         $id = I('id',0,'intval');
         $User = M("User");
-        if ($User->where("cardn=" . $id)->setField("zx", 1)) {
+        $data['zx']=1;
+        $data['zx_time']=time();
+        if ($User->where("cardn=" . $id)->save($data)) {
             $this->success("注销成功");
         } else {
             $this->error("注销失败");
@@ -231,7 +234,9 @@ class UserAction extends CommonAction {
     function qzx() {
         $id = I('id',0,'intval');
         $User = M("User");
-        if ($User->where("cardn=" . $id)->setField("zx", 0)) {
+        $data['zx']=0;
+        $data['zx_time']=0;
+        if ($User->where("cardn=" . $id)->save($data)) {
             $this->success("取消注销成功");
         } else {
             $this->error("取消注销失败");
@@ -248,7 +253,7 @@ class UserAction extends CommonAction {
 
         $page = new Page($count, 20);
         $show = $page->show();
-        $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("id asc ")->limit($page->firstRow . ',' . $page->listRows)->select();
+        $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("zx_time desc")->limit($page->firstRow . ',' . $page->listRows)->select();
 
         $export_data[] = array("用户名", "卡号", "真实姓名", "地址", "电话号码", "QQ号", "账户余额", "积分余额", "等级", "推荐人", "注册时间", "备注");
         foreach ($u_data as $key => $value) {

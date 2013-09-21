@@ -12,7 +12,7 @@ class WareAction extends CommonAction {
         $count = $ware->where($query)->count();
         $page = new Page($count, 50);
         $show = $page->show();
-        $w_data = $ware->field("id,w_name,w_price,onlinepay,w_time")->where($query)->limit($page->firstRow . ',' . $page->listRows)->select();
+        $w_data = $ware->field("id,w_name,w_price,onlinepay,w_time")->where($query)->limit($page->firstRow . ',' . $page->listRows)->order('id desc')->select();
         $export_data[] = array("商品编号", "商品名称", "商品售价", "是否支持货到付款", "商品添加时间");
         foreach ($w_data as $key => $value) {
             $onlinepay = $value["onlinepay"] == 2 ? "是" : "否";
@@ -44,8 +44,8 @@ class WareAction extends CommonAction {
         $_POST["ratecount"] = 0;
 
         $_POST['w_time'] = time();
-        $file_data = $this->upload_file();
-        $_POST['w_pic'] = $file_data["savename"];
+        // $file_data = $this->upload_file();
+        // $_POST['w_pic'] = $file_data["savename"];
 
         $_POST["can_buy"]=$_POST["can_buy"]? 1: 0;
 
@@ -73,7 +73,7 @@ class WareAction extends CommonAction {
             }
             $this->success('添加商品成功');
         } else {
-            sae_unlink('./Public/upload/' . $_POST['pic']);
+            // sae_unlink('./Public/upload/' . $_POST['pic']);
             $this->error("添加失败");
         }
     }
@@ -101,10 +101,10 @@ class WareAction extends CommonAction {
     //商品修改
     function update() {
         $_POST["w_desn"]=$_POST["text"];
-        IF ($_FILES["w_pic"]['size'] > 0) {
-            $file_data = $this->upload_file();
-            $_POST['w_pic'] = $file_data["savename"];
-        }
+        // IF ($_FILES["w_pic"]['size'] > 0) {
+        //     $file_data = $this->upload_file();
+        //     $_POST['w_pic'] = $file_data["savename"];
+        // }
          if($_POST["can_buy"]){
             $_POST["can_buy"]=1;
         }else{
@@ -137,8 +137,7 @@ class WareAction extends CommonAction {
         $w = M('ware');
         $f2s = M("F2s");
         $id = (int) $_GET['id'];
-        $pic = $w->where("id=" . $id)->field('w_pic')->find();
-        if (($w->where("id=" . $id)->delete()) && (sae_unlink('./Public/upload/' . $pic['w_pic'])) && (sae_unlink('./Public/upload/thumb_' . $pic['w_pic']))) {
+        if ($w->where("id=" . $id)->delete()) {
             $f2s->where("cid=" . $id)->delete();
             $this->success('删除成功');
         } else {
