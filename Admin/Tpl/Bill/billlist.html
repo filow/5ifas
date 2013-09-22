@@ -45,64 +45,34 @@ a.normal {color:black !important;}
         <tr class="list_row">
             <td><input type="checkbox" name="checkbox<?php echo ++$num; ?>" class="checkbox" value="{$li.id}"/></td>
             <td><a href="{:U('billdetail',array('id' =>$li['id']))}">{$li.orderid}</a></td>
-            <?php if(count($_GET)){  ?>
-                <td><a href="{$_SERVER['REQUEST_URI']}&customer_name={$li.customer_name}">{$li.customer_name}</a></td>
-                <td><a href="{$_SERVER['REQUEST_URI']}&contacter={$li.contacter}">{$li.contacter}</a></td>
-                <td>{$li.customer_phone}</td>
-                <td><a href="{$_SERVER['REQUEST_URI']}&dilivery_date={$li.dilivery_date}">{$li.dilivery_date}</a></td>
-                <td><a href="{$_SERVER['REQUEST_URI']}&dilivery_location={$li.dilivery_location}">{$li.dilivery_location}</a></td>
-                <td><a href="{$_SERVER['REQUEST_URI']}&settlement={$li.settlement}">
-                    <if condition="$li.settlement eq 1 ">现金结算</if>
-                    <if condition="$li.settlement eq 2 ">记账客户</if>
-                    </a>
-                </td>
-                <td>{$li.price_sum}</td>
-                <td><a class="invoice" data-toggle="popover" data-placement="left" data-content="收款日期：{$li.receive_date}<br />收款备注：{$li.remark_sk}" title="实收详情">{$li.price_received}</a></td>
-                <td>
-                    <a href="{$_SERVER['REQUEST_URI']}&check_state={$li.check_state}">
-                    <if condition="$li.check_state eq 0 "><a href="{$_SERVER['REQUEST_URI']}?check_state={$li.check_state}" class="red">未审核</a></if>
-                    <if condition="$li.check_state eq 1 "><a href="{$_SERVER['REQUEST_URI']}?check_state={$li.check_state}" class="green">已通过</a></if>
-                    <if condition="$li.check_state eq 2 "><a href="{$_SERVER['REQUEST_URI']}?check_state={$li.check_state}" class="normal">未通过</a></if>
-                    </a>
-                </td>
-                <td>
-                    <if condition="$li.invoice eq 0 ">-</if>
-                    <if condition="$li.invoice eq 1 "><a href="{$_SERVER['REQUEST_URI']}&invoice={$li.invoice}"  class="invoice" data-toggle="popover" data-placement="left" data-content="尚未开票" title="发票详情">&nbsp;<i class="icon-asterisk"></i>&nbsp;</a>
-                    </if>
-                    <if condition="$li.invoice eq 2 "><a href="{$_SERVER['REQUEST_URI']}&invoice={$li.invoice}"  class="invoice" data-toggle="popover" data-placement="left" data-content="发票号：{$li.invoice_id}<br />开票日期：{$li.invoice_date}" title="发票详情">&nbsp;<i class="icon-ok"></i>&nbsp;</a></if>
-                </td>
-                <td>
-                    <a href="{$_SERVER['REQUEST_URI']}&operater={$li.operater}">{$li.operater}</a>
-                </td>
-            <?php }else{ ?>
-                <td><a href="{$_SERVER['REQUEST_URI']}?customer_name={$li.customer_name}">{$li.customer_name}</a></td>
-                <td><a href="{$_SERVER['REQUEST_URI']}?contacter={$li.contacter}">{$li.contacter}</a></td>
-                <td>{$li.customer_phone}</td>
-                <td><a href="{$_SERVER['REQUEST_URI']}?dilivery_date={$li.dilivery_date}">{$li.dilivery_date}</a></td>
-                <td><a href="{$_SERVER['REQUEST_URI']}?dilivery_location={$li.dilivery_location}">{$li.dilivery_location}</a></td>
-                <td><a href="{$_SERVER['REQUEST_URI']}?settlement={$li.settlement}">
-                    <if condition="$li.settlement eq 1 ">现金结算</if>
-                    <if condition="$li.settlement eq 2 ">记账客户</if>
-                    </a>
-                </td>
-                <td>{$li.price_sum}</td>
-                <td><a class="invoice" data-toggle="popover" data-placement="left" data-content="收款日期：{$li.receive_date}<br />收款备注：{$li.remark_sk}" title="实收详情">{$li.price_received}</a></td>
-                <td>
-                    <if condition="$li.check_state eq 0 "><a href="{$_SERVER['REQUEST_URI']}?check_state={$li.check_state}" class="red">未审核</a></if>
-                    <if condition="$li.check_state eq 1 "><a href="{$_SERVER['REQUEST_URI']}?check_state={$li.check_state}" class="green">已通过</a></if>
-                    <if condition="$li.check_state eq 2 "><a href="{$_SERVER['REQUEST_URI']}?check_state={$li.check_state}" class="normal">未通过</a></if>
-                    
-                </td>
-                <td>
-                    <if condition="$li.invoice eq 0 ">-</if>
-                    <if condition="$li.invoice eq 1 "><a href="{$_SERVER['REQUEST_URI']}?invoice={$li.invoice}"  class="invoice" data-toggle="popover" data-placement="left" data-content="尚未开票" title="发票详情">&nbsp;<i class="icon-asterisk"></i>&nbsp;</a>
-                    </if>
-                    <if condition="$li.invoice eq 2 "><a href="{$_SERVER['REQUEST_URI']}?invoice={$li.invoice}"  class="invoice" data-toggle="popover" data-placement="left" data-content="发票号：{$li.invoice_id}<br />开票日期：{$li.invoice_date}" title="发票详情">&nbsp;<i class="icon-ok"></i>&nbsp;</a></if>
-                </td>
-                <td>
-                    <a href="{$_SERVER['REQUEST_URI']}?operater={$li.operater}">{$li.operater}</a>
-                </td>
-            <?php   } ?>
+            <td><a href="{:UG(array('customer_name' =>$li['customer_name']))}">{$li.customer_name}</a></td>
+            <td><a href="{:UG(array('contacter' =>$li['contacter']))}">{$li.contacter}</a></td>
+            <td>{$li.customer_phone}</td>
+            <td><a href="{:UG(array('dilivery_date' =>$li['dilivery_date']))}">{$li.dilivery_date}</a></td>
+            <td><a href="{:UG(array('dilivery_location' =>$li['dilivery_location']))}">{$li.dilivery_location}</a></td>
+            <td><a href="{:UG(array('settlement' =>$li['settlement']))}">
+                <if condition="$li.settlement eq 1 ">现金结算</if>
+                <if condition="$li.settlement eq 2 ">记账客户</if>
+                </a>
+            </td>
+            <td>{$li.price_sum}</td>
+            <td><a class="invoice" data-toggle="popover" data-placement="left" data-content="收款日期：{$li.receive_date}<br />收款备注：{$li.remark_sk}" title="实收详情">{$li.price_received}</a></td>
+            <td>
+                <a href="{:UG(array('check_state' =>$li['check_state']))}">
+                <if condition="$li.check_state eq 0 "><a href="{$_SERVER['REQUEST_URI']}?check_state={$li.check_state}" class="red">未审核</a></if>
+                <if condition="$li.check_state eq 1 "><a href="{$_SERVER['REQUEST_URI']}?check_state={$li.check_state}" class="green">已通过</a></if>
+                <if condition="$li.check_state eq 2 "><a href="{$_SERVER['REQUEST_URI']}?check_state={$li.check_state}" class="normal">未通过</a></if>
+                </a>
+            </td>
+            <td>
+                <if condition="$li.invoice eq 0 ">-</if>
+                <if condition="$li.invoice eq 1 "><a href="{:UG(array('invoice' =>$li['invoice']))}" class="invoice" data-toggle="popover" data-placement="left" data-content="尚未开票" title="发票详情">&nbsp;<i class="icon-asterisk"></i>&nbsp;</a>
+                </if>
+                <if condition="$li.invoice eq 2 "><a href="{:UG(array('invoice' =>$li['invoice']))}"  class="invoice" data-toggle="popover" data-placement="left" data-content="发票号：{$li.invoice_id}<br />开票日期：{$li.invoice_date}" title="发票详情">&nbsp;<i class="icon-ok"></i>&nbsp;</a></if>
+            </td>
+            <td>
+                <a href="{:UG(array('operater' =>$li['operater']))}">{$li.operater}</a>
+            </td>
             <td><a href="{:U('billdetail',array('id' =>$li['id']))}">查看</a>
                 <if condition="$li.check_state eq 0 ">
                     <a href="{:U('billedit',array('id' =>$li['id']))}">编辑</a>

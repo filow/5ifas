@@ -37,29 +37,16 @@
         <tr class="list_row">
             <td><input type="checkbox" class="checkbox" value="<?php echo $num++; ?>"/></td>
             <td>{$li.order_id}</td>
-            <?php if(count($_GET)){  ?>
-                <td><a href="{$_SERVER['REQUEST_URI']}&cardn={$li.cardn}">{$li.cardn}</a></td>
-                <td><a href="{$_SERVER['REQUEST_URI']}&delivername={$li.delivername}"><?php if($li['is_bigcustomer']==1) echo "<i class=\"icon-star\"></i>";?>{$li.delivername}</a></td>
-                <td>{$li.delivertele}</td>
-                <td>{$li.desn}</td>
-                <td>{$li.amount}</td>
-                <td>{$li.youhui}</td>
-                <td><a href="{$_SERVER['REQUEST_URI']}&deliveraddress={$li.deliveraddress}">{$li.deliveraddress}</a></td>
-                <td><a href="{$_SERVER['REQUEST_URI']}&type={$li.type1}">{$li.type}</a></td>
-                <td>{$li.beizhu}</td>
-                <td><a href="{$_SERVER['REQUEST_URI']}&operator={$li.operator}">{$li.operator}</a></td>
-            <?php }else{ ?>
-                <td><a href="{$_SERVER['PHP_SELF']}?cardn={$li.cardn}">{$li.cardn}</a></td>
-                <td><a href="{$_SERVER['PHP_SELF']}?delivername={$li.delivername}"><?php if($li['is_bigcustomer']==1) echo "<i class=\"icon-star\"></i>";?>{$li.delivername}</a></td>
-                <td>{$li.delivertele}</td>
-                <td>{$li.desn}</td>
-                <td>{$li.amount}</td>
-                <td>{$li.youhui}</td>
-                <td><a href="{$_SERVER['PHP_SELF']}?deliveraddress={$li.deliveraddress}">{$li.deliveraddress}</a></td>
-                <td><a href="{$_SERVER['PHP_SELF']}?type={$li.type1}">{$li.type}</a></td>
-                <td>{$li.beizhu}</td>
-                <td><a href="{$_SERVER['PHP_SELF']}?operator={$li.operator}">{$li.operator}</a></td>
-            <?php   } ?>
+            <td><a href="{:UG(array('cardn' =>$li['cardn']))}">{$li.cardn}</a></td>
+            <td><a href="{:UG(array('delivername' =>$li['delivername']))}"><?php if($li['is_bigcustomer']==1) echo "<i class=\"icon-star\"></i>";?>{$li.delivername}</a></td>
+            <td>{$li.delivertele}</td>
+            <td>{$li.desn}</td>
+            <td>{$li.amount}</td>
+            <td>{$li.youhui}</td>
+            <td><a href="{:UG(array('deliveraddress' =>$li['deliveraddress']))}">{$li.deliveraddress}</a></td>
+            <td><a href="{:UG(array('type' =>$li['type1']))}">{$li.type}</a></td>
+            <td>{$li.beizhu}</td>
+            <td><a href="{:UG(array('operator' =>$li['operator']))}">{$li.operator}</a></td>
             <td><a href="{:U('tuikuan',array('id'=>$li['id']))}" class="btn btn-small">退款</a></td>
         </tr>
     </volist>

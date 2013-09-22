@@ -162,8 +162,19 @@ function node_merge($node,$pid=0){
 
     return $arr;
 }
-
-
+/**
+ * 包含筛选条件的URL生成函数
+ * 将根据目前的get参数和传入的新参数,组装新url
+ * 默认地址为当前页面
+ * @param array  $vars [description]
+ * @param string $url  [description]
+ */
+function UG($vars=array(),$url=''){
+    $get=$_GET;
+    unset($get['_URL_']);
+    $get=array_merge($get,$vars);
+    return U($url,$get);
+}
 
 
 ?>

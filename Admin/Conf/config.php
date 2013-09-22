@@ -51,6 +51,6 @@ return array(
     'RBAC_NODE_TABLE' => 'think_node',
 
     // 显示页面追踪信息
-    // 'SHOW_PAGE_TRACE'        =>true
+    'SHOW_PAGE_TRACE'        =>true
 );
 ?>
