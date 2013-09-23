@@ -40,9 +40,6 @@ function z() {
     echo M()->getLastSql();
 }
 
-function email($to, $name, $type, $code) {
-    
-}
 function generateId($shop_id,$sushel){
     $orderid="";
     $date=date("YmdHi",time());

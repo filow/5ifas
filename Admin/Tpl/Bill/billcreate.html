@@ -91,11 +91,11 @@
 	</div>
   <div class="control-group">
     <label class="control-label">客户名称：</label>
-    <input type="text" class="input-medium" name="customerid" value="{$_GET['customerid']}" />
-    <label class="control-label">联系电话：</label>
-    <input type="text" class="input-medium" name="contacter_number"  value="{$_GET['contacter_number']}" />
+    <input type="text" class="input-medium" name="customerid" value="{$_GET['customerid']}" <php>if(isset($_GET['customerid'])) echo 'readonly';</php> />
     <label class="control-label">联系人：</label>
     <input type="text" class="input-medium" name="contacter"  value="{$_GET['contacter']}" />
+    <label class="control-label">联系电话：</label>
+    <input type="text" class="input-medium" name="contacter_number"  value="{$_GET['contacter_number']}" />
     <egt name="_bill_not_mine" value="1">
         <label class="control-label">操作人：</label>
         <select name="operater">

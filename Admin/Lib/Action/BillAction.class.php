@@ -11,6 +11,73 @@ class BillAction extends CommonAction {
 		$this->assign('_bill_not_mine',$this->checkPermission('_bill_not_mine'));
 		$this->display();
 	}
+	public function create_order(){
+		import("ORG.Util.String");
+		header("Content-type: text/html; charset=utf-8");
+
+		$data['orderid']="B".date("YmdG").strtoupper(string::buildFormatRand("**##"));
+		if(empty($_POST['customerid'])) $this->error("必须填写客户名");
+		$data['customer_name']=$this->_post('customerid');
+		$data['customer_phone']=$this->_post('contacter_number');
+		$data['contacter']=$this->_post('contacter');
+		$data['order_date']=$this->_post('orderdate');
+		$data['dilivery_date']=$this->_post('checkdate');
+		$data['dilivery_location']=$this->_post('checkplace');
+		$data['settlement']=$this->_post('checkmethod');
+		//是否可以提交其他管理员的名字
+		if($this->checkPermission('_bill_not_mine') && !empty($_POST['operater']))
+			$data['operater']=$this->_post('operater');
+		else
+			$data['operater']=session('username');
+		// 是否要求发票
+		if(isset($_POST['invoice'])){
+			$data['invoice']=1;
+		}else{
+			$data['invoice']=0;
+		}
+		$data['check_state']=0;
+		$ware=M('ware');
+		$have_product=false;
+		// 商品详情列表存储
+		$data['desn']='';
+		// 检测账单商品列表
+		for($i=1;$i<=5;$i++){
+			if(!empty($_POST['product'.$i])){
+				$ware_item=$ware->where("w_name= '".$this->_post('product'.$i)."'")->field("w_name,w_price")->find();
+				if(!is_numeric($_POST['number'.$i])) $this->error("商品：“".$this->_post('product'.$i)."”的数量：".$_POST['number'.$i]."不是一个有效的值");
+				if(!is_numeric($_POST['discount'.$i])) $this->error("商品：“".$this->_post('product'.$i)."”的折扣：".$_POST['discount'.$i]."不是一个有效的值");;
+				if(empty($ware_item)) $this->error("找不到您商品：“".$this->_post('product'.$i)."”");
+				$data['desn'].=I('product'.$i).'：'.I('number'.$i)."份||";
+				$have_product=true;
+				$bill_detail_data[$i]=$ware_item;
+				$price_sum[$i]=$_POST['number'.$i]*$_POST['discount'.$i]*$ware_item['w_price'];
+			}
+		}
+		if(!$have_product) $this->error('请至少选择一个产品');
+		$data['price_sum']=0;
+		foreach($price_sum as $val){
+			$data['price_sum']+=$val;
+		}
+		//提交订单更改
+		$bill=M('bill');
+		$bill_number=$bill->add($data);
+		if(!$bill_number) $this->error("数据写入错误，请联系管理员解决此问题。");
+		else{
+			//写入新商品数据
+			$bill_detail=M('bill_detail');
+			foreach($bill_detail_data as $key => $value){
+				$bill_detail_items['bill_id']=$bill_number;
+				$bill_detail_items['product_name']=$value['w_name'];
+				$bill_detail_items['remark']=$this->_post('remark'.$key);
+				$bill_detail_items['number']=$this->_post('number'.$key);
+				$bill_detail_items['unit_price']=$value['w_price'];
+				$bill_detail_items['discount']=$this->_post('discount'.$key);
+				$bill_detail_items['price_sum']=$price_sum[$key];
+				if(!$bill_detail->add($bill_detail_items)) $this->errer("数据条目：".$value['w_name']."写入出错，请联系管理员解决此问题。");
+			}
+		}
+		$this->success('账单已成功提交！','Billlist');
+	}
 	function billlist() {
 		$bill=M('bill');
 		$query=$_GET;
@@ -158,6 +225,8 @@ class BillAction extends CommonAction {
 		$data['check_state']=0;
 		$ware=M('ware');
 		$have_product=false;
+		// 商品详情列表存储
+		$data['desn']='';
 		// 检测账单商品列表
 		for($i=1;$i<=5;$i++){
 			if(!empty($_POST['product'.$i])){
@@ -166,6 +235,7 @@ class BillAction extends CommonAction {
 				if(!is_numeric($_POST['discount'.$i])) $this->error("商品：“".$this->_post('product'.$i)."”的折扣：".$_POST['discount'.$i]."不是一个有效的值");;
 				if(empty($ware_item)) $this->error("找不到您商品：“".$this->_post('product'.$i)."”");
 				$have_product=true;
+				$data['desn'].=I('product'.$i).'：'.I('number'.$i)."份 | ";
 				$bill_detail_data[$i]=$ware_item;
 				$price_sum[$i]=$_POST['number'.$i]*$_POST['discount'.$i]*$ware_item['w_price'];
 			}
@@ -260,70 +330,7 @@ class BillAction extends CommonAction {
 		echo $data['w_price'] ;
 
 	}
-	public function create_order(){
-		import("ORG.Util.String");
-		header("Content-type: text/html; charset=utf-8");
 
-		$data['orderid']="B".date("YmdG").strtoupper(string::buildFormatRand("**##"));
-		if(empty($_POST['customerid'])) $this->error("必须填写客户名");
-		$data['customer_name']=$this->_post('customerid');
-		$data['customer_phone']=$this->_post('contacter_number');
-		$data['contacter']=$this->_post('contacter');
-		$data['order_date']=$this->_post('orderdate');
-		$data['dilivery_date']=$this->_post('checkdate');
-		$data['dilivery_location']=$this->_post('checkplace');
-		$data['settlement']=$this->_post('checkmethod');
-		//是否可以提交其他管理员的名字
-		if($this->checkPermission('_bill_not_mine') && !empty($_POST['operater']))
-			$data['operater']=$this->_post('operater');
-		else
-			$data['operater']=session('username');
-		// 是否要求发票
-		if(isset($_POST['invoice'])){
-			$data['invoice']=1;
-		}else{
-			$data['invoice']=0;
-		}
-		$data['check_state']=0;
-		$ware=M('ware');
-		$have_product=false;
-		// 检测账单商品列表
-		for($i=1;$i<=5;$i++){
-			if(!empty($_POST['product'.$i])){
-				$ware_item=$ware->where("w_name= '".$this->_post('product'.$i)."'")->field("w_name,w_price")->find();
-				if(!is_numeric($_POST['number'.$i])) $this->error("商品：“".$this->_post('product'.$i)."”的数量：".$_POST['number'.$i]."不是一个有效的值");
-				if(!is_numeric($_POST['discount'.$i])) $this->error("商品：“".$this->_post('product'.$i)."”的折扣：".$_POST['discount'.$i]."不是一个有效的值");;
-				if(empty($ware_item)) $this->error("找不到您商品：“".$this->_post('product'.$i)."”");
-				$have_product=true;
-				$bill_detail_data[$i]=$ware_item;
-				$price_sum[$i]=$_POST['number'.$i]*$_POST['discount'.$i]*$ware_item['w_price'];
-			}
-		}
-		if(!$have_product) $this->error('请至少选择一个产品');
-		$data['price_sum']=0;
-		foreach($price_sum as $val){
-			$data['price_sum']+=$val;
-		}
-		//提交订单更改
-		$bill=M('bill');
-		$bill_number=$bill->add($data);
-		if(!$bill_number) $this->error("数据写入错误，请联系管理员解决此问题。");
-		else{
-			//写入新商品数据
-			$bill_detail=M('bill_detail');
-			foreach($bill_detail_data as $key => $value){
-				$bill_detail_items['bill_id']=$bill_number;
-				$bill_detail_items['product_name']=$value['w_name'];
-				$bill_detail_items['remark']=$this->_post('remark'.$key);
-				$bill_detail_items['number']=$this->_post('number'.$key);
-				$bill_detail_items['unit_price']=$value['w_price'];
-				$bill_detail_items['discount']=$this->_post('discount'.$key);
-				$bill_detail_items['price_sum']=$price_sum[$key];
-				if(!$bill_detail->add($bill_detail_items)) $this->errer("数据条目：".$value['w_name']."写入出错，请联系管理员解决此问题。");
-			}
-		}
-		$this->success('账单已成功提交！','Billlist');
-	}
 
 	function billoutput(){
 		header("Content-type: text/html; charset=utf-8");

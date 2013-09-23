@@ -93,10 +93,10 @@
   <div class="control-group">
     <label class="control-label">客户名称：</label>
     <input type="text" class="input-medium" value="{$bill_data.customer_name}" name="customerid">
-    <label class="control-label">联系电话：</label>
-    <input type="text" class="input-medium" value="{$bill_data.customer_phone}" name="contacter_number">
     <label class="control-label">联系人：</label>
     <input type="text" class="input-medium" value="{$bill_data.contacter}" name="contacter">
+    <label class="control-label">联系电话：</label>
+    <input type="text" class="input-medium" value="{$bill_data.customer_phone}" name="contacter_number">
     <egt name="_bill_not_mine" value="1">
         <label class="control-label">操作人：</label>
         <input type="text" class="input-medium" value="<empty name="$bill_data.operater">{$bill_data.operater}<else />{$Think.Session.username}</empty>" name="operater" />

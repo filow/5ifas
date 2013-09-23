@@ -6,6 +6,7 @@
 a.red {color:red !important;}
 a.green {color:green !important;}
 a.normal {color:black !important;}
+.detailinfo{background-color: #EEE;}
 </style>
 <ul class="breadcrumb">
     <li>
@@ -28,7 +29,7 @@ a.normal {color:black !important;}
             <th>帐单号</th>
             <th>客户名称</th>
             <th>联系人</th>
-            <th>联系电话</th>
+            <th>商品详情</th>
             <th>交货日期</th>
             <th>交货地点</th>
             <th>结算方式</th>
@@ -47,7 +48,7 @@ a.normal {color:black !important;}
             <td><a href="{:U('billdetail',array('id' =>$li['id']))}">{$li.orderid}</a></td>
             <td><a href="{:UG(array('customer_name' =>$li['customer_name']))}">{$li.customer_name}</a></td>
             <td><a href="{:UG(array('contacter' =>$li['contacter']))}">{$li.contacter}</a></td>
-            <td>{$li.customer_phone}</td>
+            <td>{$li.desn}</td>
             <td><a href="{:UG(array('dilivery_date' =>$li['dilivery_date']))}">{$li.dilivery_date}</a></td>
             <td><a href="{:UG(array('dilivery_location' =>$li['dilivery_location']))}">{$li.dilivery_location}</a></td>
             <td><a href="{:UG(array('settlement' =>$li['settlement']))}">
@@ -66,9 +67,9 @@ a.normal {color:black !important;}
             </td>
             <td>
                 <if condition="$li.invoice eq 0 ">-</if>
-                <if condition="$li.invoice eq 1 "><a href="{:UG(array('invoice' =>$li['invoice']))}" class="invoice" data-toggle="popover" data-placement="left" data-content="尚未开票" title="发票详情">&nbsp;<i class="icon-asterisk"></i>&nbsp;</a>
+                <if condition="$li.invoice eq 1 "><a href="{:UG(array('invoice' =>$li['invoice']))}">&nbsp;<i class="icon-asterisk"></i>&nbsp;</a>
                 </if>
-                <if condition="$li.invoice eq 2 "><a href="{:UG(array('invoice' =>$li['invoice']))}"  class="invoice" data-toggle="popover" data-placement="left" data-content="发票号：{$li.invoice_id}<br />开票日期：{$li.invoice_date}" title="发票详情">&nbsp;<i class="icon-ok"></i>&nbsp;</a></if>
+                <if condition="$li.invoice eq 2 "><a href="{:UG(array('invoice' =>$li['invoice']))}">&nbsp;<i class="icon-ok"></i>&nbsp;</a></if>
             </td>
             <td>
                 <a href="{:UG(array('operater' =>$li['operater']))}">{$li.operater}</a>
@@ -85,6 +86,13 @@ a.normal {color:black !important;}
                         <a class="muted">编辑</a> <a class="muted">删除</a>
                     </if>
                 </if>
+            </td>
+        </tr>
+        <tr class="detailinfo" style="display:none;">
+            <td colspan="14">
+                联系电话:{$li.customer_phone}&nbsp;&nbsp;&nbsp;
+                发票id:{$li.invoice_id}&nbsp;&nbsp;&nbsp;开票日期：{$li.invoice_date}
+                <div class=""></div>
             </td>
         </tr>
     </volist>
@@ -120,7 +128,6 @@ a.normal {color:black !important;}
 <script type="text/javascript">
 var datas={$export};
 var statues=[<volist name="data" id="li">0,</volist>];
-$('.invoice').popover();
 $("#checkbox_all").click(function(){
     var count=0;
     if($(this).attr("checked")){
@@ -138,10 +145,12 @@ $(".list_row").click(function (){
     if(selector.attr("checked")){
         selector.attr("checked",false);
         statues[selector.attr("name").substr(8)-1]=0;
+        $(this).next().hide();
     }
     else{
         selector.attr("checked",true);
         statues[selector.attr("name").substr(8)-1]=1;
+        $(this).next().removeAttr('style');
     }
     sum_count();
 });
