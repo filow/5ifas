@@ -89,7 +89,7 @@ class BillAction extends CommonAction {
 		}
 		$count=$bill->where($query)->count();
 		import("ORG.Util.Page");
-		$page=new Page($count,50);
+		$page=new Page($count,30);
 		$data=$bill->where($query)->limit($page->firstRow . ',' . $page->listRows)->order("id desc ")->select();
 		$price_sum_received=0;
 		$price_sum_notreceived=0;
