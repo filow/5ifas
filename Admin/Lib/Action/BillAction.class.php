@@ -80,8 +80,17 @@ class BillAction extends CommonAction {
 	}
 	function billlist() {
 		$bill=M('bill');
-		$query=$_GET;
-		unset($query['_URL_']);
+		foreach($_GET as $key => $val){
+			if($key=="_URL_") continue;
+			if($val){
+				if($_GET['filter_type']=="like"){
+					$query[$key]=array('like',"%".$val."%");
+				}else{
+					$query[$key]=$val;
+				}
+			}
+		}
+		unset($query['filter_type']);
 		$query['abandon']=0;
 		//是否可以查看不是自己提交的订单
 		if(!$this->checkPermission('_billlist_showall')){
@@ -278,7 +287,7 @@ class BillAction extends CommonAction {
 
 		$count=$bill->where($query)->count();
 		import("ORG.Util.Page");
-		$page=new Page($count,50);
+		$page=new Page($count,30);
 		$data=$bill->where($query)->limit($page->firstRow . ',' . $page->listRows)->order("id desc ")->select();
 		$show = $page->show();
 	    $this->assign('data',$data);
@@ -423,10 +432,10 @@ class BillAction extends CommonAction {
         		<th>联系人</th><th>联系电话</th>
         		<th>交货日期</th><th>交货地点</th>
         		<th>结算方式</th><th>总价</th>
-        		<th>实收</th><th>审核状态</th>
+        		<th>实收</th><th>收款日期</th><th>审核状态</th>
         		<th>审核人</th><th>是否要求发票</th>
-        		<th>下单日期</th><th>备注</th>
-        		<th>操作人</th>
+        		<th>下单日期</th><th>备注</th><th>收款备注</th>
+        		<th>操作人</th><th>发票号码</th><th>开票日期</th><th>商品详情</th>
         		</tr></thead><tbody>";
 
 		$bill=M('bill');
@@ -435,7 +444,7 @@ class BillAction extends CommonAction {
 				echo "<tr>";
 				$bill_data=$bill->where(array("id" => $value))->find();
 				foreach ($bill_data as $key1 => $value1) {
-					if($key1=="id"||$key1=="abandon") continue;
+					if(in_array($key1, array("id","abandon"))) continue;
 					if($key1=="settlement"){
 						if($value1=="1")	$value1="现金账户";
 						else if($value1=="2")	$value1="记账客户";

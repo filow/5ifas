@@ -169,6 +169,7 @@ function node_merge($node,$pid=0){
 function UG($vars=array(),$url=''){
     $get=$_GET;
     unset($get['_URL_']);
+    unset($get['filter_type']);
     $get=array_merge($get,$vars);
     return U($url,$get);
 }

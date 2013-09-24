@@ -21,7 +21,19 @@ a.normal {color:black !important;}
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;未收总额:<a id="price_sum_all"></a>
     </li>
 </ul>
-<form action="billoutput" method="POST">
+<form action="{:U('billlist')}" method="get" class="form-inline">
+    账单号：
+    <input type="text" class="span2" name="orderid" value="{:I('orderid')}">
+    客户名称：
+    <input class="span2" type="text" name="customer_name" value="{:I('customer_name')}">
+    联系人：
+    <input class="span2" type="text" name="contacter" value="{:I('contacter')}">
+    交货地点：
+    <input class="span2" type="text" name="dilivery_location" value="{:I('dilivery_location')}">
+    <input type="hidden" name="filter_type" value="like" />
+    <input type="submit" value="查询" class="btn btn-primary">
+</form>
+<form action="{:U('billoutput')}" method="POST">
 <table class="table">
     <thead>
         <tr>
@@ -167,7 +179,7 @@ $('.detailinfo').mouseenter(function(){
             var html="<table class='table'><thead><th>#</th><th>产品名称</th><th>备注</th><th>尺寸/数量</th><th>单价</th><th>折扣</th><th>总价</th></thead><tbody>";
             $.each(data,function(i,items){
                 html+="<tr>";
-                html+="<td>"+i+"</td>";
+                html+="<td>"+(i+1)+"</td>";
                 html+="<td>"+items.product_name+"</td>";
                 html+="<td>"+items.remark+"</td>";
                 html+="<td>"+items.number+"</td>";
