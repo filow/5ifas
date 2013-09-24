@@ -92,7 +92,7 @@ a.normal {color:black !important;}
             <td colspan="14">
                 联系电话:{$li.customer_phone}&nbsp;&nbsp;&nbsp;
                 发票id:{$li.invoice_id}&nbsp;&nbsp;&nbsp;开票日期：{$li.invoice_date}
-                <div class=""></div>
+                <div class="detailcontent" billid="{$li.id}"></div>
             </td>
         </tr>
     </volist>
@@ -132,10 +132,12 @@ $("#checkbox_all").click(function(){
     var count=0;
     if($(this).attr("checked")){
         $('.checkbox').attr("checked",true);
+        $('.list_row').next().removeAttr('style');
         statues.forEach(function(x){statues[count++]=1;});
     }
     else{
         $('.checkbox').attr("checked",false);
+        $('.list_row').next().hide();
         statues.forEach(function(x){statues[count++]=0;});
     };
     sum_count();
@@ -154,6 +156,33 @@ $(".list_row").click(function (){
     }
     sum_count();
 });
+//使得在直接单击复选框的时候不会导致无法选中的问题
+<literal>
+$('.checkbox').change(function(){$(this).attr("checked",!$(this).attr("checked"));});
+$('.detailinfo').mouseenter(function(){
+    var detailcontent=$(this).find('div');
+    if(!detailcontent.html()){
+        detailcontent.html("正在加载账单数据.....");
+        $.getJSON("/admin.php/bill/detail_ajax.html?billid="+detailcontent.attr('billid'),function(data){
+            var html="<table class='table'><thead><th>#</th><th>产品名称</th><th>备注</th><th>尺寸/数量</th><th>单价</th><th>折扣</th><th>总价</th></thead><tbody>";
+            $.each(data,function(i,items){
+                html+="<tr>";
+                html+="<td>"+i+"</td>";
+                html+="<td>"+items.product_name+"</td>";
+                html+="<td>"+items.remark+"</td>";
+                html+="<td>"+items.number+"</td>";
+                html+="<td>"+items.unit_price+"</td>";
+                html+="<td>"+items.discount+"</td>";
+                html+="<td>"+items.price_sum+"</td>";
+                html+="</tr>";
+            });
+            html+="</tbody></table>";
+            detailcontent.html(html);
+        });
+        
+    };
+});
+</literal>
 function sum_count(){
     var count=0,sum=0,sum_not=0;
     var selected_bill="";

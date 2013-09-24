@@ -41,6 +41,7 @@ return array(
                         Bill/billoutput_detail_one,
                         Bill/billoutput_detail,
                         Bill/billoutput_list,
+                        Bill/detail_ajax,
                         DK/waresearch,
                         DK/usersearch,
                         ware/upload_file',

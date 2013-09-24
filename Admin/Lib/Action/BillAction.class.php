@@ -511,6 +511,13 @@ class BillAction extends CommonAction {
 	function list_big(){
 		$this->redirect('User/list_big');
 	}
+	function detail_ajax($billid){
+		if(session('username')){
+			$bill_detail=M('bill_detail');
+			$data=$bill_detail->where(array('bill_id'=>$billid))->select();
+			$this->ajaxReturn($data);
+		}
+	}
 }
 
 ?>
