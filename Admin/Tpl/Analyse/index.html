@@ -1,5 +1,69 @@
 <include file="Public:header"/>
 <link href="__ROOT__/Public/datepicker/datetimepicker.css" rel="stylesheet">
+<style>
+.sorting_asc:after{
+    content:" (正序)";
+}
+.sorting_desc:after{
+    content:" (倒序)";
+}
+.dataTables_length{
+    float:left;
+    margin-right: 10px;
+}
+.dataTables_info{
+    float:left;
+    margin-top: 7px;
+}
+.dataTables_paginate {
+  display: inline-block;
+  padding-left: 0;
+  border-radius: 4px;
+  margin-left:5px;
+}
+.dataTables_paginate > a,
+.dataTables_paginate > span {
+  position: relative;
+  float: left;
+  padding: 6px 12px;
+  line-height: 1.428571429;
+  text-decoration: none;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  margin-left: -1px;
+}
+.dataTables_paginate > a:first-child{
+  margin-left: 0;
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+}
+.dataTables_paginate > a:last-child {
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.dataTables_paginate > a:hover,
+.dataTables_paginate > a:focus,{
+  background-color: #eeeeee;
+}
+.dataTables_paginate > .active > a,
+.dataTables_paginate > .active > a:hover,
+.dataTables_paginate > .active > a:focus{
+  z-index: 2;
+  color: #ffffff;
+  background-color: #428bca;
+  border-color: #428bca;
+  cursor: default;
+}
+.dataTables_paginate > .disabled > a,
+.dataTables_paginate > .disabled > a:hover,
+.dataTables_paginate > .disabled > a:focus {
+  color: #999999;
+  background-color: #ffffff;
+  border-color: #dddddd;
+  cursor: not-allowed;
+}
+
+</style>
 <ul class="breadcrumb">
     <li>
         <a href="__APP__/{$Think.MODULE_NAME}/Index">业绩报表</a><span class="divider">/</span>
@@ -67,7 +131,7 @@
 <h3 style="font-family:'微软雅黑'">
     以下是商家订单列表
 </h3>
-<table class="table">
+<table class="table" id="dk">
     <thead>
         <th>#</th>
         <th>订单号</th>
@@ -93,7 +157,7 @@
 <h3 style="font-family:'微软雅黑'">
     以下是进账单列表
 </h3>
-<table class="table" id="example">
+<table class="table table-hover" id="bill">
     <thead>
         <th>#</th>
         <th>订单号</th>
@@ -144,15 +208,40 @@ $(function () {
         console.log(ev.date.valueOf());
     });
 
-    $('#example').dataTable({
+    $('#bill').dataTable({
         "oLanguage": {
             "sLengthMenu": "每页显示 _MENU_ 个订单",
             "sZeroRecords": "没有搜寻到符合要求的订单:(",
             "sInfo": "当前记录: _START_ - _END_ ，共 _TOTAL_ 个记录",
             "sInfoEmpty": "0个记录",
-            "sInfoFiltered": "(从 _MAX_ 个记录中筛选)"
+            "sInfoFiltered": "(从 _MAX_ 个记录中筛选)",
+            "oPaginate": {
+                "sFirst":    "第一页",
+                "sPrevious": "上一页",
+                "sNext":     "下一页",
+                "sLast":     "最后一页"
+            },
+            "sSearch": "搜索",
+        }
+        
+    });
+    $('#dk').dataTable({
+        "oLanguage": {
+            "sLengthMenu": "每页显示 _MENU_ 个订单",
+            "sZeroRecords": "没有搜寻到符合要求的订单:(",
+            "sInfo": "当前记录: _START_ - _END_ ，共 _TOTAL_ 个记录",
+            "sInfoEmpty": "0个记录",
+            "sInfoFiltered": "(从 _MAX_ 个记录中筛选)",
+            "oPaginate": {
+                "sFirst":    "第一页",
+                "sPrevious": "上一页",
+                "sNext":     "下一页",
+                "sLast":     "最后一页"
+            },
+            "sSearch": "搜索",
         }
     });
+
 });
 </script>
 <include file="Public:footer"/>
