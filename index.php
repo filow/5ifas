@@ -5,5 +5,6 @@ define('APP_NAME','Home');          //预设app的名称  一般是home
 define('APP_PATH','./Home/');       //预设app的地址
 define('APP_DEBUG',true);            //调试模式
 //define('SAE_RUNTIME',true);       
+define('ENGINE_PATH', THINK_PATH . '/Extend/Engine/');
 require './ThinkPHP/Extend/Engine/Sae.php';  //sae引擎
 ?>
