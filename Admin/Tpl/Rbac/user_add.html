@@ -1,0 +1,70 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="{:U('index')}">权限管理</a> <span class="divider">/</span>
+    </li> 
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">管理员列表</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a>添加管理员</a> <span class="divider">/</span>
+    </li>
+</ul>
+<form action="{:U('User_add_handle')}" method="post" class="form-inline" name="form">
+  <table class="table table-bordered" style="width:420px;margin:auto;">
+    <tbody>
+      <tr>
+        <td>管理员名称</td>
+        <td>
+          <input type="text" name="username" />
+        </td>
+      </tr>
+      <tr>
+        <td>密码</td>
+        <td><input type="password" name="password" /></td>
+      </tr>
+      <tr>
+        <td>职位(按住Ctrl可多选)</td>
+        <td>
+            <select name="role[]" multiple="multiple">
+              <volist name="role" id="li">
+              <option value="{$li.id}">{$li.remark}</option>
+              </volist>
+            </select><br />
+        </td>
+      </tr>
+      <tr>
+        <td>是否启用</td>
+        <td>
+          <label>
+            <input type="radio" name="isdelete" value="0" checked="checked" />是
+          </label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label>
+            <input type="radio" name="isdelete" value="1" />否
+          </label>
+        </td>
+      </tr>
+      <tr>
+        <td>手机</td>
+        <td><input type="text" name="phone" /></td>
+      </tr>
+      <tr>
+        <td>提成比例</td>
+        <td><input type="text" name="tc_perc" /></td>
+      </tr>
+      <tr>
+        <td>报销比例</td>
+        <td><input type="text" name="bx_perc" /></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+           <input type="submit" value="提交" class="btn btn-primary">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</form>
+<include file="Public:footer"/>

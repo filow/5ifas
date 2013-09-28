@@ -1,45 +1,45 @@
-<include file="Public:header"/>
-
-<div class="tabbable">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#1" data-toggle="tab">管理员登录</a></li>
-        <li><a href="#2" data-toggle="tab">商户登录</a></li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane active" id="1">
-            <form name="myform" action="__APP__/{$Think.MODULE_NAME}/adminlogin" method="post">
-                <label>用户名
-                </label>
-                <input type="text" class="span3"  autocomplete="off" name="username"/>
-                <label>密码
-                </label>
-                <input type="password" class="span3"  autocomplete="off"name="password"/>
-
-                <div clas="row">
-                    <img src="__APP__/{$Think.MODULE_NAME}/code" onclick=this.src="__APP__/{$Think.MODULE_NAME}/code/"+Math.random() /> <span><input class="span2"  name="code" type="text" ></span>
-
-                </div>
-                <BR/>
-                <button type="submit"   class="btn btn-primary" />确认</button>
-            </form>
-        </div>
-        <div class="tab-pane" id="2">
-            <form name="myform" action="__APP__/{$Think.MODULE_NAME}/shoplogin" method="post">
-                <label>用户名
-                </label>
-                <input type="text" class="span3" autocomplete="off" name="login_name"/>
-                <label>密码
-                </label>
-                <input type="password" class="span3" autocomplete="off" name="password"/>
-
-               <div clas="row">
-                    <img src="__APP__/{$Think.MODULE_NAME}/code" onclick=this.src="__APP__/{$Think.MODULE_NAME}/code/"+Math.random() /> <span><input class="span2"  name="code" type="text" ></span>
-
-                </div>
-                <BR/>
-                <button type="submit"   class="btn btn-primary" />确认</button>
-            </form>
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <title>艾星网络</title>
+    <link href="__ROOT__/Public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="__ROOT__/Public/bootstrap/js/bootstrap.min.js"></script>
+    <!--[if IE 6]>    
+        <script src="__ROOT__/Public/bootstrap/js/ie6.min.js"></script>
+    <![endif]-->
+    <!--[if lt IE 9]>
+        <script src="__ROOT__/Public/bootstrap/js/html5.js"></script>
+    <![endif]-->
+    <!--[if IE 6]>    
+        <link href="__ROOT__/Public/bootstrap/css/ie6.min.css" rel="stylesheet">
+    <![endif]-->
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="/admin.php">艾星网络管理后台</a>
+            </div>
         </div>
     </div>
+
+<div class="container-fluid">
+    <div style="margin-left:38%;">
+        <form name="myform" action="{:U('public/adminlogin')}" method="post">
+        <label>用户名</label>
+        <input type="text" class="span3" name="username"/>
+        <label>密码</label>
+        <input type="password" class="span3" name="password"/>
+
+        <div clas="row">
+            <img src="{:U('public/code')}" onclick=this.src="{:U('public/code')}?"+Math.random() />
+            <span><input class="span2" name="code" type="text" ></span>
+        </div>
+
+        <input type="submit" class="btn btn-primary span3" />
+        </form>
+    </div>
 </div>
-<include file="Public:footer"/>
+</body>
+</html>

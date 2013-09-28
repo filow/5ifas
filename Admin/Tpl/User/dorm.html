@@ -1,0 +1,61 @@
+<include file="Public:header"/>
+<style>
+    .hidden{display: none;}
+    .show{display: inline;}
+    .edit{cursor:pointer;}
+</style>
+<ul class="breadcrumb">
+    <li>
+        <a href="{:U('Dorm')}">宿舍管理</a> <span class="divider">/</span>
+    </li>
+</ul>
+<form method="get" action="{:U('dorm_add')}" class="form-inline">
+<label>增加新宿舍：<input type="text" class="input-small" name="dormname" /></label>
+<label>序号：<input type="text" class="input-small" name="order" value="1" /></label>
+
+<input type="submit" value="提交" class="btn btn-primary" />
+</form>
+<form method="get" action="{:U('dorm_edit')}">
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>宿舍显示名称</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    <volist  name="data" id="li">
+        <tr>
+            <td>{$li.order}</td>
+            <td class="dormname">{$li.name}</td>
+            <td>
+                <a class="edit" id="{$li.id}"><i class="icon-pencil"></i>编辑</a>
+                <a href="?action=delete&id={$li.id}"><i class="icon-remove"></i>删除</a>
+                <a href="?action=up&id={$li.id}"><i class="icon-arrow-up"></i>上升</a>
+                <a href="?action=down&id={$li.id}"><i class="icon-arrow-down"></i>下降</a>
+            </td>
+        </tr>
+    </volist>
+</tbody>
+</table>
+</form>
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".edit").click(function(){
+        var id=$(this).attr("id");
+        var selector=$(this).parents().children(".dormname");
+        var htmlcontents="<input type=\"text\" name=\"dormname\" class=\"input-small\" value=\"";
+        htmlcontents+=selector.html();
+        htmlcontents+="\" /><input type=\"hidden\" name=\"id\" value=\""+id+"\" />";
+        htmlcontents+="<input type=\"submit\" value=\"提交\" class=\"btn btn-primary\"/>";
+        selector.html(htmlcontents);
+        $(this).children('input[type="text"]').focus();
+    });
+    $("#addnew").click(function(){
+        
+    });
+});
+
+</script>
+<include file="Public:footer"/>

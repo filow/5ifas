@@ -1,0 +1,78 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="{:U('index')}">权限管理</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a>修改项目</a> <span class="divider">/</span>
+    </li>
+</ul>
+<div class="alert alert-block">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  需要填写的控制器名称和操作名称必须与代码中定义的相同。
+</div>
+<ul class="nav nav-tabs">
+  <li>
+    <a href="{:U('Node')}">权限列表</a>
+  </li>
+  <li class="active"><a href="">修改控制项目</a></li>
+</ul>
+<form action="{:U('Node_edit_handle')}" method="post" class="form-inline" name="form">
+  <input type="hidden" name="id" value="{$info.id}" />
+  <input type="hidden" name="pid" value="{$info.pid}" />
+  <input type="hidden" name="level" value="{$info.level}" />
+  <table class="table table-bordered" style="width:420px;margin:auto;">
+    <tbody>
+      <tr>
+        <td>项目名称</td>
+        <td>
+          <input type="text" value="{$info.name}" name="name" />
+        </td>
+      </tr>
+      <tr>
+        <td>项目描述</td>
+        <td>
+          <input type="text" value="{$info.title}" name="title" />
+        </td>
+      </tr>
+      <tr>
+        <td>是否开启</td>
+        <td>
+          <label>
+            <input type="radio" name="status" value="1" <eq name="info.status" value="1">checked="checked"</eq> />是
+          </label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label>
+            <input type="radio" name="status" value="0" <eq name="info.status" value="0">checked="checked"</eq> />否
+          </label>
+        </td>
+      </tr>
+      <neq name="info.pid" value="0">
+      <tr>
+        <td>是否显示为主界面菜单项</td>
+        <td>
+          <label>
+            <input type="radio" name="isshow" value="1" <eq name="info.isshow" value="1">checked="checked"</eq> />是
+          </label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label>
+            <input type="radio" name="isshow" value="0" <eq name="info.isshow" value="0">checked="checked"</eq> />否
+          </label>
+        </td>
+      </tr>
+      </neq>
+      <tr>
+        <td>排序</td>
+        <td><input type="text" name="sort" value="{$info.sort}" /></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+           <input type="submit" value="提交" class="btn btn-primary">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</form>
+<include file="Public:footer"/>

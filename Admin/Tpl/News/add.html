@@ -1,16 +1,16 @@
 <include file="Public:header"/>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/index">网站消息管理</a> <span class="divider">/</span>
+        <a href="{:U('index')}">网站消息管理</a> <span class="divider">/</span>
     </li>
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/add">添加消息</a> <span class="divider">/</span>
+        <a href="{:U('add')}">添加消息</a> <span class="divider">/</span>
     </li
 </ul>
 <script type="text/javascript" src="__ROOT__/Public/uedit/editor_config.js"></script>
 <script type="text/javascript" src="__ROOT__/Public/uedit/editor_all.js"></script>
 <link rel="stylesheet" href="__ROOT__/Public/uedit/themes/default/ueditor.css"/>
-<form action="__APP__/{$Think.MODULE_NAME}/insert" method="POST">
+<form action="{:U('insert')}" method="POST">
     <select name="newstype">
         <option value="0">面向商城</option>
         <option value="1">面向用户</option>
@@ -18,8 +18,8 @@
     <label>文章标题</label>
     <input type="text" class="span2" name="title"/></br>
 
-    <script  id="myEditor"> </script>
-    <input type="submit" value="提交">
+    <script id="myEditor"> </script>
+    <input type="submit" value="提交" class="btn btn-primary" />
 </form>
 <script type="text/javascript">
     var editor = new baidu.editor.ui.Editor();

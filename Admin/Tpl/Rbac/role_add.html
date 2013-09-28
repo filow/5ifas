@@ -1,0 +1,47 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="__APP__/{$Think.MODULE_NAME}/index">权限管理</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a href="#">添加角色</a> <span class="divider">/</span>
+    </li>
+</ul>
+<eq name="edit" value="1">
+<form action="{:U('Role_edit_handle')}" method="post" class="form-inline" name="form">
+    <input type="hidden" name="id" value="{$info.id}">
+<else />
+<form action="{:U('Role_add_handle')}" method="post" class="form-inline" name="form">
+</eq>
+<table class="table table-bordered" style="width:360px;margin:auto;">
+    <tr>
+        <td>角色名称</td>
+        <td><input type="text" value="{$info.name}" name="name" /></td>
+    </tr>
+    <tr>
+        <td>角色描述</td>
+        <td><input type="text" value="{$info.remark}" name="remark" /></td>
+    </tr>
+    <tr>
+        <td>开启状态</td>
+        <td>
+           <label>
+            <input type="radio" name="status" value="1" <eq name="info.status" value="1">checked="checked"</eq> />是
+          </label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label>
+            <input type="radio" name="status" value="0" <eq name="info.status" value="0">checked="checked"</eq> />否
+          </label></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <eq name="edit" value="1">
+            <input type="submit" value="确定修改" class="btn btn-warning" />
+            <else />
+            <input type="submit" value="提交" class="btn btn-primary" />
+            </eq>   
+        </td>
+    </tr>
+</table>
+</form>
+<include file="Public:footer"/>

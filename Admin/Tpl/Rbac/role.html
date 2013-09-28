@@ -1,10 +1,39 @@
 <include file="Public:header"/>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/index">权限管理</a> <span class="divider">/</span>
+        <a href="{:U('index')}">权限管理</a> <span class="divider">/</span>
     </li>
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/index">管理员列表</a> <span class="divider">/</span>
+        <a href="{:U('role')}">角色权限配置</a> <span class="divider">/</span>
     </li>
 </ul>
+<table class="table table-bordered">
+    <thead>
+        <th>角色名称</th>
+        <th>角色描述</th>
+        <th>开启状态</th>
+        <th>操作</th>
+    </thead>
+    <tbody>
+       <volist name="data" id="li">
+        <tr>
+            <td>{$li.name}</td>
+            <td>{$li.remark}</td>
+            <td>
+                <eq name="li.status" value="1">
+                    <a class="text-success">开启</a>
+                <else />
+                    <a class="muted">关闭</a>
+                </eq>
+            </td>
+            <td width="300">
+                <a href="{:U('role_edit',array('id' => $li['id']))}" class="btn btn-success">编辑</a> &nbsp;&nbsp;&nbsp;
+                <a href="{:U('access',array('rid' => $li['id']))}" class="btn btn-primary">权限配置</a> &nbsp;&nbsp;&nbsp;
+                <a href="{:U('role_delete',array('id' => $li['id']))}" onclick="return confirm('确定要删除吗?')" class="btn btn-warning">删除</a>
+            </td>
+        </tr>
+        </volist>  
+    </tbody>
+</table>
+<a href="{:U('role_add')}" class="btn btn-primary">增加角色</a>
 <include file="Public:footer"/>

@@ -1,68 +1,40 @@
 <include file="Public:header"/>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/index">用户管理</a> <span class="divider">/</span>
+        <a href="{:U('index')}">用户管理</a> <span class="divider">/</span>
     </li>
     <li>
-        <a href="#">修改用户</a> <span class="divider">/</span>
+        <a>修改用户</a> <span class="divider">/</span>
     </li>
-
 </ul>
-<form action="__APP__/{$Think.MODULE_NAME}/update" method="post"   >
-
-
-
+<form action="{:U('update')}" method="post"   >
     <input type="hidden" name="id" value="{$data.id}"/>
-    <label>
-        用户名: {$data.loginname}
-    </label>
+    <label>用户名: {$data.loginname}</label>
 
-
-
-    <label>
-        姓名:
-    </label>
-
+    <label>姓名:</label>
     <input type="text" value="{$data.username}" class="span5 "  name="username"/> 
 
-    <label>
-        QQ号:
-    </label>
-
+    <label>QQ号:</label>
     <input type="text" value="{$data.qq}" class="span5 "   name="qq"/> 
 
-
-    <label>
-        电话号码 
-    </label>
-
+    <label>电话号码</label>
     <input type="text"value="{$data.tele}" class="span5 "   name="tele"/> 
 
-    <label>
+    <label>密码</label>
+    <input type="text" class="span5" placeholder="如不更改则留空"  name="password"/>
 
-        密码 
-    </label>
-
-    <input type="text" class="span5 "  name="password"/> 
-    <label>
-
-        宿舍楼
-    </label>
+    <label>宿舍楼</label>
 
     <select name="sushel">
         <volist name="sushe" id="ls">
             <option value="{$ls.value}" <php> if($ls["value"]==$data["sushel"]) echo "selected";</php> >{$ls.name}</option >
         </volist>
     </select> 
-    <label>
+    <label>宿舍号</label>
 
-        宿舍号
-    </label>
-
-    <input type="text"class="span5 "  value="{$data.susheh}" name="susheh"/> 
+    <input type="text" class="span5 "  value="{$data.susheh}" name="susheh"/> 
     <br/>
-
-    <input type="submit" class="btn" value="修改"/>   
+    <input type="submit" class="btn btn-primary" value="修改"/>   
 </form>
 
 

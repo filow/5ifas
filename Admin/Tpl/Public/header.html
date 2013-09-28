@@ -4,17 +4,20 @@
         <meta charset="utf-8">
         <title>艾星网络</title>
         <link href="__ROOT__/Public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <php>if(defined('APP_DEBUG')){</php>
+        <script src="http://lib.sinaapp.com/js/jquery/1.7/jquery.min.js"></script>
+        <script src="http://lib.sinaapp.com/js/bootstrap/2.3.1/js/bootstrap.min.js"></script>
+        <php>}else{</php>
         <script src="__ROOT__/Public/bootstrap/js/jquery.min.js"></script>
-        <script src="__ROOT__/Public/js/publicjs.js"></script>
         <script src="__ROOT__/Public/bootstrap/js/bootstrap.min.js"></script>
+        <php>}</php>
+        <script src="__ROOT__/Public/js/publicjs.js"></script>
         <!--[if IE 6]>    
             <script src="__ROOT__/Public/bootstrap/js/ie6.min.js"></script>
+            <link href="__ROOT__/Public/bootstrap/css/ie6.min.css" rel="stylesheet">
         <![endif]-->
         <!--[if lt IE 9]>
             <script src="__ROOT__/Public/bootstrap/js/html5.js"></script>
-        <![endif]-->
-        <!--[if IE 6]>    
-            <link href="__ROOT__/Public/bootstrap/css/ie6.min.css" rel="stylesheet">
         <![endif]-->
     </head>
     <body>
@@ -39,19 +42,24 @@
             <div class="row-fluid">
                 <div class="span2">
                     <ul class="nav nav-pills nav-stacked ">
-                        <volist name="nav_list" id="nav" key="k">
+                        <li class="dropdown" id="menutest">
+                            <a href="{:U('index/index')}">首页
+                            </a>
+                        </li>
+                        <foreach name="nav" item="li" key="k">
                             <li class="dropdown" id="menutest">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#menutest{$k}">
-                                    {$nav.action_desc}
+                                    {$li.MODULE_TITLE}
                                     <b class="caret"></b>
                                 </a>
+                                <?php unset($li['MODULE_TITLE']); ?>
                                 <ul class="dropdown-menu">
-                                    <volist name="nav.children" id="nav_children">
-                                        <li><a href="__APP__/{$nav_children.module_name}/{$nav_children.action_name}"  >{$nav_children.action_desc}</a></li>
-                                    </volist>
+                                    <?php foreach($li as $key => $val){  ?>
+                                        <li><a href="__APP__/{$k}/{$key}">{$val}</a></li>
+                                    <?php  } ?>
                                 </ul>
                             </li>
-                        </volist>
+                        </foreach>
                     </ul>
                 </div>
                 <div class="span10">

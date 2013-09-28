@@ -1,11 +1,10 @@
 <include file="Public:header"/>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/index">网站消息管理</a> <span class="divider">/</span>
+        <a href="{:U('index')}">网站消息管理</a> <span class="divider">/</span>
     </li>
-
 </ul>
-<table class="table  ">
+<table class="table">
     <thead>
         <tr>
             <th>文章ID</th>
@@ -13,18 +12,28 @@
             <th>文章类型</th>
             <th>文章创建时间</th>
             <th>基本操作</th>
-
         </tr>
     </thead>
     <tbody>
     <volist  name="data" id="li">
-        <tr>
-            <td>{$li.id}</td>
-            <td>{$li.title}</td>
-            <td><eq name="li.newstype" value="1">面向用户<else/>面向商城</eq></td>
+    <tr>
+        <td>{$li.id}</td>
+        <td>{$li.title}</td>
+        <td><eq name="li.newstype" value="1">面向用户<else/>面向商城</eq></td>
         <td>{$li.createtime|date="Y-m-d",###}</td>
-        <td><a onclick="return confirm('您确定要删除吗？')"  href="__APP__/{$Think.MODULE_NAME}/delete/id/{$li.id}"><i class="icon-remove"></i>删除</a>|<a href="__APP__/{$Think.MODULE_NAME}/mod/id/{$li.id}"><i class="icon-pencil"></i>修改</a>|<eq name="li.ishot" value="0"><a href="__APP__/{$Think.MODULE_NAME}/hot/id/{$li.id}"><i class=" icon-arrow-up"></i>置顶</a><else/><a href="__APP__/{$Think.MODULE_NAME}/qhot/id/{$li.id}"><i class=" icon-arrow-down"></i>取消置顶</a></eq></td>
-        </tr>
+        <td>
+            <a onclick="return confirm('您确定要删除吗？')"  href="__APP__/{$Think.MODULE_NAME}/delete/id/{$li.id}">
+                <i class="icon-remove"></i>删除
+            </a>
+                |
+            <a href="__APP__/{$Think.MODULE_NAME}/mod/id/{$li.id}">
+                <i class="icon-pencil"></i>修改</a>
+                |
+            <eq name="li.ishot" value="0">
+                <a href="{:U('hot',array('id' => $li['id']))}"><i class=" icon-arrow-up"></i>置顶</a><else/><a href="{:U('qhot',array('id' => $li['id']))}"><i class=" icon-arrow-down"></i>取消置顶</a>
+            </eq>
+        </td>
+    </tr>
     </volist>
 </tbody>
 </table>

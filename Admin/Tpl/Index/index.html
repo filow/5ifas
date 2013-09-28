@@ -1,12 +1,75 @@
 <include file="Public:header"/>
+<link rel="stylesheet" href="__PUBLIC__/morris/morris.css" />
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/index">区域管理</a> <span class="divider">/</span>
+        <a href="{:U('index')}">首页</a> <span class="divider">/</span>
     </li>
-    <li>
-        <a href="#">修改</a> <span class="divider">/</span>
-    </li>
-    <li class="active">{$data.area_name}</li>
 </ul>
+<div>
+    <h3>系统信息</h3>
+</div>
+<table class="table">
+    <tbody>
+        <tr>
+            <td>管理员总数</td>
+            <td>{$admin_count.total}</td>
+            <td>可用管理员总数</td>
+            <td>{$admin_count.zx}</td>
+        </tr>
+        <tr>
+            <td>用户总数</td>
+            <td>{$user_count.total}</td>
+            <td>可用用户总数</td>
+            <td>{$user_count.zx}</td>
+        </tr>
+        <tr>
+            <td>大客户总数</td>
+            <td>{$user_count.bigcustomer}</td>
+            <td>资产为正的用户数</td>
+            <td>{$user_count.havemoney}</td>
+        </tr>
+    </tbody>
+</table>
+<h5>充值订单量统计</h5>
+<div id="amountinfo_data"></div>
+<h5>账单提交量统计</h5>
+<div id="bill_data"></div>
+<h5>商家订单量统计</h5>
+<div id="order_data"></div>
+<div class="alert alert-info">
+  提示:为节约资源,管理员和用户数据每8小时更新1次,订单统计数据每12小时更新1次.
+  <a href="{:U('clearcache')}" class="btn btn-warning">现在立即更新</a>
+</div>
+<script src="__PUBLIC__/morris/morris.min.js"></script>
+<script src="__PUBLIC__/morris/raphael-2.0.2.min.js"></script>
+<script>
+$(function(){
+    var amountinfo_data = {$amountinfo_data};
+    var bill_data={$bill_data};
+    var order_data={$order_data};
 
+    Morris.Line({
+        element: 'amountinfo_data',
+        data: amountinfo_data,
+        xkey: 'date',
+        ykeys: ['month', 'total'],
+        labels: ['当月订单量', '总订单量']
+    });
+    Morris.Line({
+        element: 'bill_data',
+        data: bill_data,
+        xkey: 'date',
+        ykeys: ['month', 'total'],
+        labels: ['当月订单量', '总订单量']
+    });
+    Morris.Line({
+        element: 'order_data',
+        data: order_data,
+        xkey: 'date',
+        ykeys: ['month', 'total'],
+        labels: ['当月订单量', '总订单量']
+    });
+});
+
+</script>
 <include file="Public:footer"/>

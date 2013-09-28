@@ -3,7 +3,7 @@
 class NewsAction extends CommonAction {
 
     function index() {
-        $news = D("news");
+        $news = M("news");
         import("ORG.Util.Page");
         $count = $news->where($query)->count();
         $page = new Page($count, 10);
@@ -19,7 +19,7 @@ class NewsAction extends CommonAction {
     }
 
     function insert() {
-        $news = D("news");
+        $news = M("news");
         $_POST['createtime'] = time();
         $news->create();
         if ($news->add()) {
@@ -45,7 +45,7 @@ class NewsAction extends CommonAction {
     function update() {
         if (isset($_POST['id'])) {
             $id = $_POST['id'];
-            $news = D("news");
+            $news = M("news");
             $news->create();
             if ($news->where("id=".$id)->save()) {
                 $this->success("修改成功");
@@ -58,7 +58,7 @@ class NewsAction extends CommonAction {
     function delete() {
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
-            $news = D("news");
+            $news = M("news");
             if ($news->where("id=" . $id)->delete()) {
                 $this->success("删除成功");
             } else {
