@@ -58,6 +58,14 @@ class IndexAction extends CommonAction {
         $this->display();
     }
     
+    public function clearcache()
+    {
+    	S('admin_count',NULL);
+    	S('user_count',NULL);
+    	S('analyse_rebuild',NULL);
+    	S('ana_data',NULL);
+    	$this->success('更新数据成功','index/index');
+    }
 
 }
 
