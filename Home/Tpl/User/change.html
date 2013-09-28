@@ -1,37 +1,28 @@
-<include file="Public:userheader"/>
+<include file="Public:header"/>
 <include file="left_bar"/>
-        <div class="span6">
+        <div class="span10">
             <form action="__APP__/user/mod" method="post"   >
                 <input type="hidden" name="id" value="{$data.id}"/>
-                <label>
-                    QQ号:
-                </label>
 
+                <label>QQ号:</label>
                 <input type="text" value="{$data.qq}"  name="qq"/> 
 
-                <label>
-                    新密码 (选填)
-                </label>
+                <label>新密码 (选填)</label>
                 <input type="password" name="password"/> 
-                <label>
-                    电话号码 
-                </label>
-                <input type="text"value="{$data.tele}"  name="tele"/> 
-                <label>
-                    宿舍楼
-                </label>
 
+                <label>电话号码</label>
+                <input type="text"value="{$data.tele}"  name="tele"/> 
+
+                <label>宿舍楼</label>
                 <select name="sushel">
                     <volist name="sushe" id="ls">
                         <option value="{$ls.value}" <php>if($data["sushel"]==$ls["value"]) echo "selected"</php> >{$ls.name}</option >
                     </volist>
                 </select> 
-                <label>
-                    宿舍号
-                </label>
+                <label>宿舍号</label>
                 <input type="text" value="{$data.susheh}" name="susheh"/> 
                 <br/>
-                <input type="submit"value="修改"/>   
+                <input type="submit" value="修改" class="btn btn-primary" />   
             </form>
         </div>
     </div>

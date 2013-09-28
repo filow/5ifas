@@ -1,4 +1,4 @@
-<include file="Public:userheader"/>
+<include file="Public:header"/>
 <include file="left_bar"/>
         <div class="span10">
             <form action="__APP__/user/tzserver" method="post" id="myform" >
@@ -6,11 +6,11 @@
                 <label>  透支额度 </label> 
                 <select name="amount">
                     <volist name="data" id="ls">
-                        <option value="{$ls.value2}">{$ls.value2}元</option>
+                        <option value="{$ls}">{$ls}元</option>
                     </volist>
                 </select> 
                 <br/>
-                <input type="submit" value="透支"/>
+                <input type="submit" value="透支" class="btn btn-primary"/>
             </form>
         </div>
     </div>

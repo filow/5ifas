@@ -1,24 +1,18 @@
 <include file="Public:header"/>
+        <ul class="breadcrumb" style="margin-bottom:0px;">您当前所在位置:
+          <li><a href="{:U('index/index')}">首页</a> <span class="divider">/</span></li>
+          <li class="active">公告<span class="divider">/</span></li> 
+          <li class="active">{$data.title}</li>
+        </ul>
 
-
-        <div class="crumb_navigation"> 您现在所在的位置:<a href="__APP__"> 首页</a>--&gt;<span class="current">公告</span><!--在这里应该添加判断页面当前位置的php代码并输出--> 
-        </div>
         <div class="left_content">
-            <div class="title_box">最新新闻</div>
-            <ul class="left_menu">
-				<volist name="list" id="ls">
-                  <li class="even"><a href="__APP__/index/detial/id/{$ls.id}">{$ls.title}</a></li>
-                </volist>
-            </ul>
-			<include file="SideBar:adbox"/>
+            <include file="SideBar:newsbox"/>
         </div>
         <!-- 左边栏内容结束 -->
-        
-      
-   <div class="center_content">
-   	<div class="center_title_bar_bro">
-    	<div class="news_title">{$data.title}</div>
-    </div>
+        <div class="center_content">
+       	<div class="center_title_bar_bro">
+        	<div class="news_title">{$data.title}</div>
+        </div>
     
     	<div class="prod_box_big">
         	<div class="top_prod_box_big"></div>
@@ -27,21 +21,14 @@
                		{$data.text}
                    <div class="news_right">艾星网<br />{$data.createtime|date="Y-m-d",###}</div>
                 </div>
-                                     
             </div>
             <div class="bottom_prod_box_big"></div>                                
         </div>
-       
-    
-   
    </div>
-        
         <div class="right_content">
-			<include file="SideBar:cart"/>
 			<include file="SideBar:neworder"/>
         </div>
         <!-- 右边栏结束 --> 
-        
     </div>
     <!-- 主内容区结束 -->
 <include file="Public:footer"/>

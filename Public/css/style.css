@@ -141,20 +141,6 @@ li.currencies {
 	font-size:11px;
 	font-weight:bold;
 }
-/*----------------目前所在位置-------------*/
-.crumb_navigation {
-	width:980px;
-	height:15px;
-	padding:5px 10px 0 20px;
-	color:#333333;
-	background:url(../images/navbullet.png) no-repeat left;
-	background-position:5px 6px;
-}
-.crumb_navigation a {
-	color:#0fa0dd;
-	text-decoration:underline;
-}
-span.current { color:#0fa0dd; }
 /*-------------左侧边栏内容------------------*/
 .left_content {
 	width:196px;
@@ -470,23 +456,6 @@ span.border_cart {
 	padding:0px;
 	margin:0px;
 }
-.prod_details_tab {
-	width:173px;
-	height:31px;
-	float:left;
-	background:url(../images/products_details_bg.gif) no-repeat center;
-	margin:3px 0 0 0;
-}
-img.collect {
-	float:left;
-	padding:6px 0 0 6px;
-	cursor: pointer;
-}
-img.collect_shop {
-	float:left;
-	padding:6px 0 0 6px;
-	cursor: pointer;
-}
 a.prod_details, a.prod_buy {
 	width:42px;
 	height:21px;
@@ -603,22 +572,7 @@ ul.new_order li a:hover {
 	background-color: #7bbcc7;
 	background-repeat: no-repeat;
 }
-div.order_num {
-	float:left;
-	width:150px;
-}
-.order_num img { margin-top:8px; }
-.order_num input {
-	width: 20px;
-	height: 13px;
-	margin-top:-10px;
-}
-.order_num a.prod_details { margin-top:-20px; }
-img.plus { margin-left:10px; }
-/*--------------分页---------------*/
-.pages {
-	clear: left;
-}
+
 /*--------------页脚----------------*/
 .footer {
 	width:1000px;
@@ -669,88 +623,3 @@ input.btn2:active {
 	background-position: bottom;
 }
 .dropdown a:visited { color:#000; }
-/*团购*/
-.big_title h1 {
-	text-align:left;
-	font-size:28px;
-	font-family:"微软雅黑", "黑体", "宋体";
-	margin-top:0px;
-	margin-left:20px;
-}
-.big_title h2 {
-	text-align:left;
-	font-size:20px;
-	font-family:"微软雅黑", "黑体", "宋体";
-	text-decoration:none;
-	font-weight:normal;
-	margin-left:20px;
-	margin-top:-10px;
-}
-.buy {
-	width:200px;
-	height:250px;
-	background-color: #EEE;
-	margin-left:20px;
-	margin-bottom:20px;
-}
-.big_photo img {
-	width:300px;
-	height:250px;
-	float:right;
-	margin-top:-270px;
-	margin-right:20px;
-}
-.i_price {
-	color:#F60;
-	text-align:center;
-	font-size:34px;
-	font-family:"微软雅黑", "黑体", "宋体";
-	font-weight:bold;
-	padding-top:20px;
-}
-.buy_button {
-	width:94px;
-	height:33px;
-	background-image: url(../images/button.png);
-	background-repeat: no-repeat;
-	margin-top:16px;
-	margin-left:54px;
-	padding-top:10px;
-}
-.buy_button:hover {
-	background-image: url(../images/button.png);
-	background-repeat: no-repeat;
-	background-position: center;
-}
-.buy_button:active {
-	background-image: url(../images/button.png);
-	background-repeat: no-repeat;
-	background-position: bottom;
-}
-.buy_now {
-	color:#FFF;
-	font-size:18px;
-	font-family:"微软雅黑", "黑体", "宋体";
-}
-.buy_bottom {
-	margin-top:15px;
-	width:170px;
-	border-top-width: thin;
-	border-top-style: solid;
-	border-top-color: #999;
-	margin-left:15px;
-	padding-top:20px;
-}
-.ltime {
-	height:20px;
-	margin-top:24px;
-	background-color: #CCC;
-	padding-top:5px;
-}
-.xdivider {
-	width:88%;
-	height:2px;
-	background-color:#999;
-	margin-left:auto;
-	margin-right:auto;
-}

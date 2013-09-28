@@ -1,39 +1,38 @@
 <include file="Public:header"/>
-        <div class="crumb_navigation"> 您现在所在的位置:<a href="__APP__"> 首页</a>--&gt;<span class="current">新闻中心</span></div>
+        <ul class="breadcrumb" style="margin-bottom:0px;">您当前所在位置:
+          <li><a href="{:U('index/index')}">首页</a> <span class="divider">/</span></li>
+          <li class="active">新闻中心<span class="divider">/</span></li> 
+        </ul>
         <div class="left_content">
 			<include file="SideBar:newsbox"/>
-			<include file="SideBar:adbox"/>
         </div>
 
    <div class="center_content">
    	<div class="center_title_bar">新闻中心</div>
-    
-    	<div class="prod_box_big">
-        	<div class="top_prod_box_big"></div>
-            <div class="center_prod_box_big">            
-                 <ul>
-				    <volist name="data" id="li">
-                 	<li><a href="__APP__/index/detial/id/{$li.id}">{$li.title}</a></li>
-					<li class="date">{$li.createtime|date="Y-m-d",###}</li>
-					</volist>
-                 </ul>
-				<div class="pages"><ul>{$show}</ul></div>
-                                     
-            </div>
-            <div class="bottom_prod_box_big"></div>                                
-        </div>
-       
-    
-   
+    <div class="prod_box_big">
+        <table class="table">
+            <thead>
+                <th>#</th>
+                <th>新闻标题</th>
+                <th>发布日期</th>
+            </thead>
+            <tbody>
+                <volist name="data" id="li">
+                <tr>
+                    <td>{$i}</td>
+                    <td><a href="{:U('index/detial',array('id'=>$li['id']))}">{$li.title}</a></td>
+                    <td>{$li.createtime|date="Y-m-d",###}</td>
+                </tr>
+                </volist>
+            </tbody>
+        </table>
+    </div>
+        <div class="pages"><ul>{$show}</ul></div>
    </div>
-        
         <div class="right_content">
-			<include file="SideBar:cart"/>
-
 			<include file="SideBar:neworder"/>
         </div>
         <!-- 右边栏结束 --> 
-        
     </div>
     <!-- 主内容区结束 -->
 <include file="Public:footer"/>

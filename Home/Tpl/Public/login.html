@@ -1,21 +1,32 @@
 <include file="Public:header"/>
-    <div class="span4 offset4">
-        <form name="myform" action="__APP__/{$Think.MODULE_NAME}/islogin" method="post">
-            <label>用户名
-            </label>
-            <input type="text" class="span3" autocomplete="off" name="loginname"/>
-            <label>密码
-            </label>
-            <input type="password" class="span3" autocomplete="off" name="password"/>
-
-            <div clas="row">
-                <span><img src="__APP__/{$Think.MODULE_NAME}/code" onclick=this.src="__APP__/{$Think.MODULE_NAME}/code/"+Math.random() /></span> <span><input class="span2"  name="code" type="text" ></span>
-
+    <div class="span4 offset3">
+        <form name="myform" action="{:U('logincheck')}" method="post">
+            <label>用户名</label>
+            <input type="text" class="span3" name="loginname"/>
+            <label>密码</label>
+            <input type="password" class="span3" name="password"/>
+            <div>
+                <span><img src="{:U('code')}" onclick=this.src="{:U('code')}?"+Math.random() /></span>
+                <span><input class="span2" name="code" autocomplete="off" type="text" ></span>
             </div>
-            <BR/>
-             <input type="submit" value="登陆"class="btn btn-primary"/>
+            <br />
+             <input type="submit" value="登陆" class="btn btn-primary"/>
             &nbsp;&nbsp;&nbsp;&nbsp;
-             <a class="btn btn-inverse" href="__APP__/Public/forget">找回密码</a>
+             <a class="btn btn-inverse" data-toggle="modal" data-target="#myModal">找回密码</a>
+
+             <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">找回密码</h3>
+              </div>
+              <div class="modal-body">
+                <p>目前本系统因暂定发送短消息,因此不提供找回密码服务.<br />请联系我们的客服189-1448-6244或者<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=800097413&site=qq&menu=yes">企业QQ：800097413</a>以重置密码</p>
+              </div>
+              <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+              </div>
+            </div>
+
         </form>
     </div>
 </div>
