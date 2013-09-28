@@ -1,14 +1,16 @@
 <include file="Public:header"/>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/billlist">进账单</a> <span class="divider">/</span>
+        <a href="{:U('billlist')}">进账单</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a href="{:U('Billlist')}">账单列表</a> <span class="divider">/</span>
     </li>
     <li>
         <a>账单详情</a> <span class="divider">/</span>
     </li>
 </ul>
 <table class="table">
-
     <tr>
         <td>单据编号</td>
         <td>{$bill_data.orderid}</td>
@@ -65,39 +67,41 @@
 <span>收款时间：{$bill_data.receive_date}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <span>收款备注：{$bill_data.remark_sk}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <if condition="$bill_data.check_state eq 0 ">
-    <a href="__APP__/{$Think.MODULE_NAME}/billedit?id={$bill_data.id}" class="btn btn_primary">编辑账单</a>
+    <a href="{:U('billedit',array('id' => $bill_data['id']))}" class="btn btn_primary">编辑账单</a> 
 <else />
-    <if condition="$Think.SESSION.admin_type egt 2">
-        <a href="__APP__/{$Think.MODULE_NAME}/billedit?id={$bill_data.id}" class="btn btn_primary">编辑账单</a>
+    <if condition="$_delete_checked">
+        <a href="{:U('billedit',array('id' => $bill_data['id']))}" class="btn btn_primary">编辑账单</a> 
     </if>
 </if>
-<a href="__APP__/{$Think.MODULE_NAME}/billoutput_detail_one?id={$bill_data.id}" class="btn btn_primary">导出账单</a>
+<a href="{:U('billoutput_detail_one',array('id' => $bill_data['id']))}" class="btn btn_primary">导出账单</a>
 <div>发票信息：{$bill_data.invoice_id}</div>
 <div>审核备注：<pre>{$bill_data.remark}</pre></div>
 <div>审核人：{$bill_data.checker}</div>
 <hr />
-<if condition="$Think.SESSION.admin_type egt 1">
-    <h3>账单审核</h3>
-    <if condition="$Think.SESSION.admin_type egt 2">
-        <form action="" class="form-inline">
-          <div class="control-group">
-            <label class="control-label">实收金额：
-                <input type="text" class="input-medium" value="{$bill_data.price_received}" name="price_received" />
-            </label>
-            <label class="control-label">收款备注：<input type="text" class="input-large" value="{$bill_data.remark_sk}" name="remark_sk" /></label>
-            <input type="hidden" name="id" value="{$bill_data.id}">
-            <input type="submit" value="提交" class="btn btn-primary"/>
-          </div>
-        </form>
-    </if>
-<label class="control-label">状态更改：</label>
-<a class="btn btn-success" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$bill_data.id}&verify=1">审核通过</a> 
-<a class="btn btn-danger" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$bill_data.id}&verify=0">审核不通过</a>
-<label class="control-label">审核备注：</label>
-<form action="billremark" method="POST">
-    <textarea name="verify-remark">{$bill_data.remark}</textarea>
-    <input type="hidden" name="id" value="{$bill_data.id}">
-    <input name="submit" class="btn btn-primary" type="submit" />
-</form>
+<h3>账单审核</h3>
+<if condition="$_bill_receive">
+    <form action="" class="form-inline">
+      <div class="control-group">
+        <label class="control-label">实收金额：
+            <input type="text" class="input-medium" value="{$bill_data.price_received}" name="price_received" />
+        </label>
+        <label class="control-label">收款备注：<input type="text" class="input-large" value="{$bill_data.remark_sk}" name="remark_sk" /></label>
+        <input type="hidden" name="id" value="{$bill_data.id}">
+        <input type="submit" value="提交" class="btn btn-primary"/>
+      </div>
+    </form>
+</if>
+<if condition="$_bill_check eq 1">
+    <label class="control-label">状态更改：</label>
+    <a class="btn btn-success" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$bill_data.id}&verify=1">审核通过</a> 
+    <a class="btn btn-danger" href="__APP__/{$Think.MODULE_NAME}/billdetail?id={$bill_data.id}&verify=0">审核不通过</a>
+</if>
+<if condition="$billremark">
+    <label class="control-label">审核备注：</label>
+    <form action="billremark" method="POST">
+        <textarea name="verify-remark">{$bill_data.remark}</textarea>
+        <input type="hidden" name="id" value="{$bill_data.id}">
+        <input name="submit" class="btn btn-primary" type="submit" />
+    </form>
 </if>
 <include file="Public:footer"/>

@@ -67,8 +67,6 @@ class DkAction extends CommonAction {
         $cardn = $_POST['cardn'];
         $zk=$_POST["zk"];
         
-         
-      
         if ($cardn < 0.11) {
             $this->error("没有选取用户");
         }
@@ -77,15 +75,12 @@ class DkAction extends CommonAction {
         $cardesc = $_POST['car'];
         $result =$order->pay($cardesc, $time, $cardn, $beizhu,$zk);
         switch ($result) {
-            case 4: $this->error("您没有选取商品");
-                break;
-            case 1: $this->error("用户余额不足");
-                break;
-            case 2: $this->success("扣费成功");
-                break;
-             case 3: $this->error("优惠多于该产品售价");
-                break;
-			default : echo "<script>alert('".$result."')</script>";$this->success();
+            case 1: $this->error("用户余额不足");break;
+            case 2: $this->success("扣费成功");break;
+            case 3: $this->error("您没有选取商品");break;
+            case 4: $this>error('新建订单失败');break;
+            case 5: $this>error('建立订单商品列表失败');break;
+            case 6: $this>error('订单建立成功,但用户扣费失败');break;
         }
     }
 

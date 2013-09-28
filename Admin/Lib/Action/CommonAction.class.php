@@ -3,41 +3,81 @@
 class CommonAction extends Action {
 
     function _initialize() {
-        if(!isset($_SESSION["isLogin"])){
+        //判断是否登录
+        if(!isset($_SESSION[C('USER_AUTH_KEY')])){
             $this->redirect("Public/login");
         }
-        $this->assign("nav_list", $this->getNav());
-        $shop = d("shop");
-        $shop_nav = $shop->where("area_id=0 ")->select();
-       // print_r($cat_nav);
-        $this->assign("shop_nav", $shop_nav);
-        $user_id=$_SESSION["admin_id"];
-        $p=D("permission");
-        $nav=D("nav");
-        $nav_id=$nav->where(array("module_name"=>MODULE_NAME))->find();
-        $nav_id=$nav_id["id"];
-        if(!$p->where(array("userid"=>$user_id,"nav_id"=>$nav_id))->find()&&MODULE_NAME!="Index")
-                 $this->error("权限不够");
-       
-    }
+ 
+        import('@.ORG.RBAC');
 
-    function getNav() {
-        $nav = M("nav");
-        $nav_list = $nav->order("pid asc, id asc ")->select();
-        $nav_data = array();
-        $user_id=$_SESSION["admin_id"];
-        $p=D("permission");
-        
-        foreach ($nav_list as $key => $value) {
-            if(!$p->where("userid=".$user_id." and nav_id=".$value["id"])->find())
-                    continue;
-            if ($value["pid"] == 0) {
-                $nav_data[$value["id"]]["action_desc"] = $value["action_desc"];
-            } else {
-                $nav_data[$value["pid"]]["children"][] = $value;
+        //检测是否拥有权限
+        if(C('USER_AUTH_ON')){
+
+            //如果是超级管理员,则不验证,且给予所有节点列表
+            if(C('RBAC_SUPERADMIN')==session('username')){
+                //给予所有权限
+                session(C('ADMIN_AUTH_KEY'),true);
+                if(!isset($_SESSION['NAV'])){
+                    $_SESSION['NAV']=$this->getNavAll();
+                }
+            }else{
+                $auth=RBAC::AccessDecision();
+                if(!$auth){
+                    $this->error('您没有访问此功能的权限!');
+                }else{
+                    if(!isset($_SESSION['NAV'])){
+                        $_SESSION['NAV']=RBAC::getNav();
+                    }
+                // print_r($_SESSION['NAV']);die;
+                }
+            }
+        }else{
+            if(!isset($_SESSION['NAV'])){
+                $_SESSION['NAV']=$this->getNavAll();
             }
         }
-        return $nav_data;
+        $this->assign("nav",$_SESSION['NAV']);
+    }
+
+    function getNavAll(){
+        $nodes=M('node');
+        $data=array();
+
+        //读取模块信息
+        $module=$nodes->where(array('isshow' => 1,'level' => 2))->field('id,name,title')->order('sort')->select();
+        //读取控制器信息
+        foreach($module as $value){
+            $action=$nodes->where(array('isshow' => 1,'pid' => $value['id']))
+                    ->field('name,title')->order('sort')->select();
+
+            //重组成适合列表输出的结构
+            foreach($action as $act_val){
+                $tmp[$act_val['name']]=$act_val['title'];
+            }
+            $data[$value['name']]=$tmp;
+            $data[$value['name']]['MODULE_TITLE']=$value['title'];
+            unset($tmp);
+        }
+        
+        return $data;
+    }
+    /**
+     * 检测当前用户是否拥有制定权限
+     * @param  [string] $module [模块名]
+     * @param  [string] $action [动作名]
+     * @return [bool]         [结果]
+     */
+    static public function checkPermission($action=ACTION_NAME,$module=MODULE_NAME)
+    {
+
+        if(!C('USER_AUTH_ON')){
+            return 1;
+        }
+        if(session(C('ADMIN_AUTH_KEY'))){
+            return 1;
+        }
+        
+        return array_key_exists(strtoupper($action),$_SESSION['_ACCESS_LIST'][strtoupper(APP_NAME)][strtoupper($module)]);
     }
 
 }

@@ -14,8 +14,58 @@
 </div>
 <ul class="nav nav-tabs">
   <li class="active">
-    <a href="#">权限列表</a>
+    <a href="#">权限列表</a> 
   </li>
   <li><a href="{:U('Node_ctrl_add')}">增加控制器</a></li>
 </ul>
+<table class="table">
+  <thead>
+    <th>项目名称</th>
+    <th>项目描述</th>
+    <th>状态</th>
+    <th>排序</th>
+    <th>菜单项</th>
+    <th width="300">操作</th>
+  </thead>
+  <tbody>
+    <volist name="nodes" id="li">
+      <tr style="background-color: #EEE;">
+        <td>{$li.name}</td>
+        <td>{$li.title}</td>
+        <td>
+            <eq name="li.status" value="1">
+                <a class="text-success">开启</a>
+            <else />
+                <a class="muted">关闭</a>
+            </eq>
+        </td>
+        <td>{$li.sort}</td>
+        <td></td>
+        <td>
+            <a href="{:U('node_edit',array('id' => $li['id']))}" class="btn btn-success">编辑</a> &nbsp;&nbsp;&nbsp;
+            <a href="{:U('node_child',array('pid' => $li['id']))}" class="btn btn-info">增加子节点</a> &nbsp;&nbsp;&nbsp;
+            <a href="{:U('node_delete',array('id' => $li['id']))}" onclick="return confirm('确定要删除吗?')" class="btn btn-warning">删除</a></td>
+      </tr>
+
+      <!--  子节点  -->
+      <?php foreach($li['child'] as $key => $val){  ?>
+       <tr>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;{$val.name}</td>
+        <td>{$val.title}</td>
+        <td>
+            <eq name="val.status" value="1">
+                <a class="text-success">开启</a>
+            <else />
+                <a class="muted">关闭</a>
+            </eq>
+        </td>
+        <td>{$li.sort}-{$val.sort}</td>
+        <td><eq name="val.isshow" value="1"><a class="text-success">是</a><else />否</eq></td>
+        <td>
+            <a href="{:U('node_edit',array('id' => $val['id']))}" class="btn btn-success">编辑</a> &nbsp;&nbsp;&nbsp;
+            <a href="{:U('node_delete',array('id' => $val['id']))}" onclick="return confirm('确定要删除吗?')" class="btn btn-warning">删除</a></td>
+      <?php  } ?>
+    </volist>
+  </tbody>
+</table>
 <include file="Public:footer"/>

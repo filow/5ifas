@@ -1,0 +1,75 @@
+<include file="Public:header"/>
+<ul class="breadcrumb">
+    <li>
+        <a href="{:U('index')}">权限管理</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a href="{:U('role')}">角色权限配置</a> <span class="divider">/</span>
+    </li>
+    <li>
+        <a>权限配置</a> <span class="divider">/</span>
+    </li>
+</ul>
+<div class="alert alert-info">
+  <a class="text-info"><strong>蓝色加粗项</strong></a>表示该项会在菜单列表中显示<br />
+  在有子菜单的项目中，父菜单的选择框应该勾上
+</div>
+<form action="{:U('access_handle')}" class="form-inline" method="post">
+<label><input type="checkbox" id="selectall" />全选</label>
+<input type="hidden" name="rid" value="{$rid}">
+<volist name="nodes" id="li">
+  <table class="table table-bordered">
+    <tr style="background-color: #EEE;">
+      <td colspan="4">
+        <label>
+          <input type="checkbox" name="access[]" value="{$li.id}_2" <eq name="li.acc_owned" value="1">checked="checked"</eq> />
+          {$li.title}
+        </label>
+        &nbsp;&nbsp;&nbsp;(<a class="select_child">全选</a> / <a class="select_no">不选</a>)
+      </td>
+    </tr>
+
+    <!--  子节点  -->
+    <tr>
+      <?php 
+        $count=0;
+        foreach($li['child'] as $key => $val){
+        $count++;
+      ?>
+      <td>
+        <label>
+          <input type="checkbox" name="access[]" value="{$val.id}_3" level="3" <eq name="val.acc_owned" value="1">checked="checked"</eq> />
+
+        <eq name="val.isshow" value="1"><a class="text-info"><strong>{$val.title}</strong></a>
+        <else />{$val.title}</eq>
+
+        </label>
+      </td>
+      <?php
+      if($count%4==0) echo "</tr><tr>";
+      } 
+      ?>
+    </tr>
+
+  </table>
+</volist>
+<input type="submit" class="btn btn-large btn-primary span12" />
+</form>
+<script>
+  $(function () {
+    $('#selectall').click(function () {
+      var inputs=$('table input[type=checkbox]');
+      $(this).attr('checked') ? inputs.attr('checked','checked') : inputs.removeAttr('checked');
+    });
+
+     $('.select_child').click(function(){
+       $(this).parents('table').find('input').attr('checked','checked');
+     });
+
+     $('.select_no').click(function(){
+       $(this).parents('table').find('input').removeAttr('checked');
+     });
+  });
+</script>
+
+<include file="Public:footer"/>

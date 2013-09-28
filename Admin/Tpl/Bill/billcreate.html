@@ -36,9 +36,9 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="/">艾星网络管理后台</a>
+                    <a class="brand" href="/admin.php">艾星网络管理后台</a>
                     <div class="row" style="margin-top:10px;">
-                        <span class="pull-right"><a href="#">欢迎您：{$Think.SESSION.username}</a><a href="__APP__/Public/logout" onclick="return confirm('您确定要退出吗？')">退出登录</a></span>
+                        <span class="pull-right"><a href="#">欢迎您：{$Think.SESSION.username}</a>&nbsp;&nbsp;<a href="__APP__/Public/logout" onclick="return confirm('您确定要退出吗？')">退出登录</a></span>
                     </div>
                 </div>
             </div>
@@ -48,33 +48,37 @@
             <div class="row-fluid">
                 <div class="span2">
                     <ul class="nav nav-pills nav-stacked ">
-                        <volist name="nav_list" id="nav" key="k">
+                        <li class="dropdown" id="menutest">
+                            <a href="{:U('index/index')}">首页
+                            </a>
+                        </li>
+                        <foreach name="nav" item="li" key="k">
                             <li class="dropdown" id="menutest">
-
-                                <a class="dropdown-toggle   " data-toggle="dropdown" href="#menutest{$k}">
-                                    {$nav.action_desc}
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#menutest{$k}">
+                                    {$li.MODULE_TITLE}
                                     <b class="caret"></b>
                                 </a>
+                                <?php unset($li['MODULE_TITLE']); ?>
                                 <ul class="dropdown-menu">
-                                    <volist name="nav.children" id="nav_children">
-                                        <li><a href="__APP__/{$nav_children.module_name}/{$nav_children.action_name}"  >{$nav_children.action_desc}</a></li>
-                                    </volist>
+                                    <?php foreach($li as $key => $val){  ?>
+                                        <li><a href="__APP__/{$k}/{$key}">{$val}</a></li>
+                                    <?php  } ?>
                                 </ul>
                             </li>
-                        </volist>
+                        </foreach>
                     </ul>
                 </div>
                 <div class="span10">
                     <!--Body content-->
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/billlist">进账单</a> <span class="divider">/</span>
+        <a href="{:U('billlist')}">进账单</a> <span class="divider">/</span>
     </li>
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/billcreate">新增单据</a> <span class="divider">/</span>
+        <a href="{:U('billcreate')}">新增单据</a> <span class="divider">/</span>
     </li>
 </ul>
-<form action="__APP__/{$Think.MODULE_NAME}/create_order" method="POST" class="form-inline">
+<form action="{:U('create_order')}" method="POST" class="form-inline">
 	<div class="control-group">
 		 <label class="control-label">单据编号：</label>
 		 <input type="text" class="input-medium" name="orderid" value="---将在提交后生成---" disabled="disabled">
@@ -83,16 +87,16 @@
                     <input size="16" type="text" value="<?php echo date("Y-m-d"); ?>" readonly>
                     <span class="add-on"><i class="icon-th"></i></span>
          </div>
-         <input type="hidden" id="dtp_input1" value="" name="orderdate" />
+         <input type="hidden" id="dtp_input1" value="<?php echo date("Y-m-d"); ?>" name="orderdate" />
 	</div>
   <div class="control-group">
     <label class="control-label">客户名称：</label>
-    <input type="text" class="input-medium" name="customerid" value="{$_GET['customerid']}" />
-    <label class="control-label">联系电话：</label>
-    <input type="text" class="input-medium" name="contacter_number"  value="{$_GET['contacter_number']}" />
+    <input type="text" class="input-medium" name="customerid" value="{$_GET['customerid']}" <php>if(isset($_GET['customerid'])) echo 'readonly';</php> />
     <label class="control-label">联系人：</label>
     <input type="text" class="input-medium" name="contacter"  value="{$_GET['contacter']}" />
-    <egt name="Think.Session.admin_type" value="1">
+    <label class="control-label">联系电话：</label>
+    <input type="text" class="input-medium" name="contacter_number"  value="{$_GET['contacter_number']}" />
+    <egt name="_bill_not_mine" value="1">
         <label class="control-label">操作人：</label>
         <select name="operater">
             <volist name="admin_list" id="li">
@@ -109,7 +113,7 @@
            <input size="16" type="text" value="<?php echo date("Y-m-d"); ?>" readonly>
            <span class="add-on"><i class="icon-th"></i></span>
     </div>
-    <input type="hidden" id="dtp_input2" value="" name="checkdate" />
+    <input type="hidden" id="dtp_input2" value="<?php echo date("Y-m-d"); ?>" name="checkdate" />
     <label class="control-label">交付地点：</label>
     <input type="text" class="input-medium" name="checkplace"  value="{$_GET['checkplace']}" />
     <label class="control-label">结算方式：</label>
@@ -207,6 +211,7 @@
         <![endif]-->
 <script type="text/javascript">
 var current_selector;
+//统计总价
 function update_sum(){
     var sum=0;
     sum+=parseFloat($("#sum1").text());
@@ -248,7 +253,7 @@ $(function () {
         temp_selector.children(".sum").html((numbers*discount*cost).toFixed(2));
     });
     $.ajax({
-        url: '__APP__/Bill/product_ajax',
+        url: "{:U('product_ajax')}",
         cache:true,
         dataType: 'json'
     }).done(function (source) {
@@ -258,7 +263,7 @@ $(function () {
 
         // Setup jQuery ajax mock:
         $.mockjax({
-            url: '__APP__/Bill/product_ajax',
+            url: "{:U('product_ajax')}",
             responseTime:  100,
             response: function (settings) {
                 var query = settings.data.query,
@@ -277,14 +282,14 @@ $(function () {
 
         // Initialize ajax autocomplete:
         $('.autocomplete').autocomplete({
-            serviceUrl: '__APP__/Bill/product_ajax',
+            serviceUrl: "{:U('product_ajax')}",
             onSelect: function(data){
                 $.ajax({
-                    url:"product_info_ajax?name="+data.value,
+                    url:"{:U('product_info_ajax')}?name="+data.value,
                     type:"get",
                     datatype:"html",
-                    success:function (data){
-                        current_selector.parents("#table_control").children(".price").html(data);
+                    success:function (thedata){
+                        current_selector.parents("#table_control").children(".price").html(thedata);
                     }
                 });
 

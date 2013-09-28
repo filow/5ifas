@@ -1,17 +1,17 @@
 <include file="Public:header"/>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/index">用户管理</a> <span class="divider">/</span>
+        <a href="{:U('index')}">用户管理</a> <span class="divider">/</span>
     </li>
     <li>
-        <a href="#">添加用户</a> <span class="divider">/</span>
+        <a>添加用户</a> <span class="divider">/</span>
     </li>
-
 </ul>
+
 <blockquote id="messagebox0"></blockquote>
 <blockquote id="messagebox1"></blockquote>
 <blockquote id="messagebox2"></blockquote>
-<form action="__APP__/{$Think.MODULE_NAME}/insert_big" method="post" class="form-horizontal">
+<form action="{:U('insert_big')}" method="post" class="form-horizontal">
     <div class="control-group">
         <label class="control-label" for="loginname">组织名（登录名）:</label>
         <div class="controls">

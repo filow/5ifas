@@ -40,9 +40,6 @@ function z() {
     echo M()->getLastSql();
 }
 
-function email($to, $name, $type, $code) {
-    
-}
 function generateId($shop_id,$sushel){
     $orderid="";
     $date=date("YmdHi",time());
@@ -143,5 +140,39 @@ function custom_output($datasource,$prefix){
     echo'</body>';
     echo'</html>';
   }
+/**
+ * 递归重组节点信息为多维数组
+ * @param  [array]  $node [要处理的节点]
+ * @param  integer $pid  [父级id]
+ * @return [array]        [多维数组]
+ */
+function node_merge($node,$pid=0){
+    $arr= array();
+    foreach($node as $v){
+        if($v['pid']==$pid){
+            $temp=node_merge($node,$v['id']);
+            if($temp) $v['child']=$temp;
+            
+            $arr[]=$v;
+        }
+    }
+
+    return $arr;
+}
+/**
+ * 包含筛选条件的URL生成函数
+ * 将根据目前的get参数和传入的新参数,组装新url
+ * 默认地址为当前页面
+ * @param array  $vars [description]
+ * @param string $url  [description]
+ */
+function UG($vars=array(),$url=''){
+    $get=$_GET;
+    unset($get['_URL_']);
+    unset($get['filter_type']);
+    $get=array_merge($get,$vars);
+    return U($url,$get);
+}
+
 
 ?>

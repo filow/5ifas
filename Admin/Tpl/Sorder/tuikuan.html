@@ -1,14 +1,14 @@
 <include file="Public:header"/>
 <ul class="breadcrumb">
     <li>
-        <a href="#">订单管理</a> <span class="divider">/</span>
+        <a href="{:U('index')}">订单管理</a> <span class="divider">/</span>
     </li>
      <li>
-        <a href="#">订单号：{$data.order_id}</a> <span class="divider">/</span>
+        <a>订单号：{$data.order_id}</a> <span class="divider">/</span>
     </li>
 </ul>
-<form action="__APP__/{$Think.MODULE_NAME}/tuikuanserver" method="post">
-<table class="table  ">
+<form action="{:U('tuikuanserver')}" method="post">
+<table class="table">
     <thead>
         <tr>
             <th>商品ID</th>
@@ -25,12 +25,12 @@
             <td>{$li.w_name}</td>
             <td>{$li.w_price}元</td>
             <td>{$li.pnum}</td>
-            <td><input name="{$li.productid}" value="{$li.pnum}"/></td>
+            <td><input type="text" name="{$li.productid}" value="{$li.pnum}"/></td>
         </tr>
     </volist>
 </tbody>
 </table>
-    <input type="submit" onclick="return confirm('您确定要退款吗？')" value="退款"/>
+    <input type="submit" class="btn btn-primary span2" onclick="return confirm('您确定要退款吗？')" value="退款"/>
    <input type="hidden" name="id" value="{$data.id}"/>
 </form>
 <include file="Public:footer"/>

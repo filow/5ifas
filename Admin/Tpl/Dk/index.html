@@ -1,10 +1,7 @@
 <include file="Public:header"/>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__">首页</a> <span class="divider">/</span>
-    </li>
-    <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/index">代扣</a> <span class="divider">/</span>
+        <a href="{:U('index')}">代扣</a> <span class="divider">/</span>
     </li>
 </ul>
  <script>
@@ -96,7 +93,7 @@
     </textarea>
     <br/>
 
-    <input value="提交" type="submit"/>
+    <input value="提交" class="btn btn-primary span3" type="submit"/>
 </form>
 
 <include file="Public:footer"/>

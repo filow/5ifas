@@ -3,24 +3,25 @@
 class UserAction extends CommonAction {
 
     function index() {
-        $user = D("user");
+        $user = M("user");
         import("ORG.Util.Page");
+        //读取筛选信息
         $query_data = getQuery();
-
         $query = $query_data["like_query"];
         $query.=" and zx=0 and is_bigcustomer=0";
         $count = $user->where($query)->count();
-// z();
+        //分页
         $page = new Page($count, 20);
         $show = $page->show();
         $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("id desc ")->limit($page->firstRow . ',' . $page->listRows)->select();
-        //	z();
+
         $export_data[] = array("用户名", "卡号", "真实姓名", "地址", "电话号码", "QQ号", "账户余额", "积分余额", "等级", "推荐人", "注册时间", "备注");
+
         foreach ($u_data as $key => $value) {
             $value["reg_time"] = date("Y-m-d", $value["reg_time"]);
             $export_data[] = $value;
         }
-        // print_r($u_data);
+
         $this->assign("data", $u_data);
         $this->assign("query", $query_data["array"]);
         $this->assign("show", $show);
@@ -35,17 +36,17 @@ class UserAction extends CommonAction {
         $query = $query_data["like_query"];
         $query.=" and zx=0 and is_bigcustomer=1";
         $count = $user->where($query)->count();
-// z();
+
         $page = new Page($count, 20);
         $show = $page->show();
         $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("id desc ")->limit($page->firstRow . ',' . $page->listRows)->select();
-        //  z();
+
         $export_data[] = array("客户名", "卡号", "联系人", "地址", "电话号码", "QQ号", "账户余额", "积分余额", "等级", "推荐人", "注册时间", "备注");
         foreach ($u_data as $key => $value) {
             $value["reg_time"] = date("Y-m-d", $value["reg_time"]);
             $export_data[] = $value;
         }
-        // print_r($u_data);
+
         $this->assign("data", $u_data);
         $this->assign("query", $query_data["array"]);
         $this->assign("show", $show);
@@ -53,7 +54,7 @@ class UserAction extends CommonAction {
         $this->display();
     }
     function add() {
-        $info = D('Info');
+        $info = M('Info');
         $sushe = $info->field("name,value")->where(array("type" => 1))->order('value')->select();
         $data = $info->where(array("type" => 3))->select();
         $this->assign("data", $data);
@@ -62,13 +63,15 @@ class UserAction extends CommonAction {
     }
 
     function insert() {
-        $user = D('User');
-        $info = d("info");
+        $user = M('User');
+        $info = M("info");
         $amountinfo = D("Amountinfo");
+
         $sushelou = $info->field('name')->where(array('type' => 1, 'value' => $_POST['sushel']))->find();
         $_POST['address'] = $sushelou['name'] . $_POST['susheh'];
         $_POST['reg_time'] = time();
         $_POST['password'] = md5(trim($_POST['password']));
+        $_POST['amount']=0;
         if (!isset($_POST['referrer'])) {
             $_POST['referrer'] = 0;
         }
@@ -82,10 +85,10 @@ class UserAction extends CommonAction {
             $amount2 = $_POST['amount2'];
             $amount1 = $_POST['amount1'];
             if ($amount2 > 0) {
-                $amountinfo->tz($id, $amount2);
+                $amountinfo->overdraw($id, $amount2);
             }
             if ($amount1 > 0) {
-                $amountinfo->cz($id, $amount1);
+                $amountinfo->recharge($id, $amount1);
             }
             $this->success("注册成功");
         } else {
@@ -120,28 +123,31 @@ class UserAction extends CommonAction {
         }else{
             $this->error('添加大客户失败'.$cardn.z());
         }
-
     }
     function mod() {
-        $id = (int) $_GET['id'];
-        $info = D('Info');
-        $sushe = $info->field("name,value")->where(array("type" => 1))->select();
-        $this->assign('sushe', $sushe);
-        $user = D('user');
+        $id = I('id',0,'intval');
+        //读取用户信息
+        $user = M('user');
         $data = $user->where(array("cardn" => $id))->find();
         $this->assign("data", $data);
+
+        //读取宿舍信息
+        $info = M('Info');
+        $sushe = $info->field("name,value")->where(array("type" => 1))->select();
+        $this->assign('sushe', $sushe);
+        
         $this->display();
     }
     function mod_big() {
-        $id = (int) $_GET['id'];
-        $user = D('user');
+        $id = I('id',0,'intval');
+        $user = M('user');
         $data = $user->where(array("cardn" => $id))->find();
         $this->assign("data", $data);
         $this->display();
     }
     function update_big() {
-        $user = D("User");
-        $id = (int) $_POST['id'];
+        $user = M("User");
+        $id = I('id',0,'intval');
 
         if ((isset($_POST['password'])) && ($_POST['password'] != "")) {
             $_POST['password'] = md5($_POST['password']);
@@ -160,10 +166,12 @@ class UserAction extends CommonAction {
         $this->redirect('list_big');
     }
     function update() {
-        $user = D("User");
-        $info = D("info");
+        $user = M("User");
+        
         $loginname = $_POST['loginname'];
-        $id = (int) $_POST['id'];
+        $id = I('id',0,'intval');
+
+        $info = M("info");
         $sushelou = $info->field('name')->where(array('type' => 1, 'value' => $_POST['sushel']))->find();
         $address = $sushelou['name'] . $_POST['susheh'];
         $susheh = $_POST['susheh'];
@@ -213,42 +221,46 @@ class UserAction extends CommonAction {
     }
 
     function zx() {
-        $id = (int) $_GET["id"];
-        $User = D("User");
-        if ($User->where("cardn=" . $id)->setField("zx", 1)) {
+        $id = I('id',0,'intval');
+        $User = M("User");
+        $data['zx']=1;
+        $data['zx_time']=time();
+        if ($User->where("cardn=" . $id)->save($data)) {
             $this->success("注销成功");
         } else {
             $this->error("注销失败");
         }
     }
- function qzx() {
-        $id = (int) $_GET["id"];
-        $User = D("User");
-        if ($User->where("cardn=" . $id)->setField("zx", 0)) {
+    function qzx() {
+        $id = I('id',0,'intval');
+        $User = M("User");
+        $data['zx']=0;
+        $data['zx_time']=0;
+        if ($User->where("cardn=" . $id)->save($data)) {
             $this->success("取消注销成功");
         } else {
             $this->error("取消注销失败");
         }
     }
     function show_zx() {
-        $user = D("user");
+        $user = M("user");
         import("ORG.Util.Page");
         $query_data = getQuery();
 
         $query = $query_data["like_query"];
         $query.=" and zx=1";
         $count = $user->where($query)->count();
-// z();
+
         $page = new Page($count, 20);
         $show = $page->show();
-        $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("id asc ")->limit($page->firstRow . ',' . $page->listRows)->select();
-        //	z();
+        $u_data = $user->field("loginname,cardn,username,address,tele,qq,amount,jf,dj,referrer,reg_time,beizhu")->where($query)->order("zx_time desc,id desc")->limit($page->firstRow . ',' . $page->listRows)->select();
+
         $export_data[] = array("用户名", "卡号", "真实姓名", "地址", "电话号码", "QQ号", "账户余额", "积分余额", "等级", "推荐人", "注册时间", "备注");
         foreach ($u_data as $key => $value) {
             $value["reg_time"] = date("Y-m-d", $value["reg_time"]);
             $export_data[] = $value;
         }
-        // print_r($u_data);
+
         $this->assign("data", $u_data);
         $this->assign("query", $query_data["array"]);
         $this->assign("show", $show);
@@ -256,7 +268,7 @@ class UserAction extends CommonAction {
         $this->display();
     }
     function output500(){
-        $user = D("user");
+        $user = M("user");
         $query_data = getQuery();
         $query = $query_data["like_query"];
         $query.=" and zx=0 and is_bigcustomer=0";
@@ -269,7 +281,7 @@ class UserAction extends CommonAction {
         custom_output(json_encode($export_data),"User");
     }
     function outputall(){
-        $user = D("user");
+        $user = M("user");
         $query_data = getQuery();
         $query = $query_data["like_query"];
         $query.=" and zx=0 and is_bigcustomer=0";
@@ -282,7 +294,7 @@ class UserAction extends CommonAction {
         custom_output(json_encode($export_data),"User");
     }
     function output500_big(){
-        $user = D("user");
+        $user = M("user");
         $query_data = getQuery();
         $query = $query_data["like_query"];
         $query.=" and zx=0 and is_bigcustomer=1";
@@ -316,6 +328,56 @@ class UserAction extends CommonAction {
         }
 
     }
+
+    //以下是宿舍管理部分
+    function dorm(){
+        $info=M('info');
+        if(!empty($_GET['action']) && !empty($_GET['id'])){
+            $item=$info->where(array('id'=>$_GET['id']))->find();
+            if($_GET['action']=="up"){
+                if($item['order']>1){
+                    $changed_data['order']=$item['value']-1;
+                }else{
+                    $changed_data['order']=1;
+                }
+                $info->where(array('id'=>$_GET['id']))->save($changed_data);
+            }
+            if($_GET['action']=="down"){
+                $changed_data['order']=$item['order']+1;
+                $info->where(array('id'=>$_GET['id']))->save($changed_data);
+            }
+            if($_GET['action']=="delete"){
+                $info->where(array('id'=>$_GET['id']))->delete();
+            }
+        }
+        $data=$info->where('type=1')->order("`order`")->field('id,name,order')->select();
+        $this->assign('data',$data);
+        $this->display();
+    }
+    function dorm_edit(){
+        $info=M('info');
+        if(!empty($_GET['dormname']) && !empty($_GET['id'])){
+            $data['name']=$this->_get('dormname');
+            $info->where(array('id' => $this->_get('id')))->save($data);
+            $this->redirect('Area/dorm');
+        }else{
+            $this->error("参数错误");
+        }
+    }
+    function dorm_add(){
+        $info=M('info');
+        if(!empty($_GET['dormname']) && !empty($_GET['order'])){
+            $data['type']=1;
+            $data['name']=$this->_get('dormname');
+            $data['order']=$this->_get('order');
+            $info->add($data);
+            $this->redirect('Area/dorm');
+        }else{
+            $this->error("你没有写全，请再试一次");
+        }
+    }
+
+
 }
 
 ?>

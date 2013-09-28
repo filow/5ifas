@@ -1,93 +1,57 @@
 <include file="Public:header"/>
 <ul class="breadcrumb">
     <li>
-        <a href="__APP__/{$Think.MODULE_NAME}/index">用户管理</a> <span class="divider">/</span>
+        <a href="{:U('index')}">用户管理</a> <span class="divider">/</span>
     </li>
     <li>
-        <a href="#">添加用户</a> <span class="divider">/</span>
+        <a>添加用户</a> <span class="divider">/</span>
     </li>
 
 </ul>
 <style>
 .error{color:white;}
 </style>
-<form action="__APP__/{$Think.MODULE_NAME}/insert" method="post"   >
+<form action="{:U('insert')}" method="post">
+    <label>用户名: </label>
+    <input type="text"  class="span5"  name="loginname"/> 
 
+    <label>姓名:</label>
+    <input type="text"  class="span5"  name="username"/> 
 
+    <label>QQ号:</label>
+    <input type="text"  class="span5"  name="qq" onchange="check_qq(this.value)"/>
+    <span class="error" id="qq">QQ号已经存在</span>
 
-   
-    <label>
-        用户名:  
-    </label>
-<input type="text"  class="span5 "  name="loginname"/> 
+    <label>电话号码</label>
+    <input type="text"  class="span5 "   name="tele"onchange="check_tele(this.value)"/>
+    <span class="error"id="tele">电话号已经存在</span>
 
+    <label>密码</label>
+    <input type="text" class="span5"  name="password"/> 
 
-    <label>
-        姓名:
-    </label>
-
-    <input type="text"  class="span5 "  name="username"/> 
-
-    <label>
-        QQ号:
-    </label>
-
-    <input type="text"  class="span5 "   name="qq" onchange="check_qq(this.value)"/> <span class="error" id="qq">QQ号已经存在</span>
-
-
-    <label>
-        电话号码 
-    </label>
-
-    <input type="text"  class="span5 "   name="tele"onchange="check_tele(this.value)"/> <span class="error"id="tele">电话号已经存在</span>
-
-    <label>
-
-        密码 
-    </label>
-
-    <input type="text" class="span5 "  name="password"/> 
-    <label>
-
-        宿舍楼
-    </label>
-
+    <label>宿舍楼</label>
     <select name="sushel">
         <volist name="sushe" id="ls">
-            <option value="{$ls.value}"   >{$ls.name}</option >
+            <option value="{$ls.value}">{$ls.name}</option >
         </volist>
     </select> 
-    <label>
 
-        宿舍号
-    </label>
-     
-     
-    <input type="text"class="span5 "    name="susheh"/> 
-	  <label>
+    <label>宿舍号</label>
+    <input type="text" class="span5" name="susheh"/> 
 
-        推荐人
-    </label>
-     
-     
-    <input type="text"class="span5 "    name="referrer"/> 
-    <label>帮用户透支 </label>
-     <select name="amount2">
-  <option value="0">不透支</option>
- <volist name="data" id="ls">
+	<label>推荐人</label>
+    <input type="text" class="span5" name="referrer"/> 
 
-  <option value="{$ls.value2}">{$ls.value2}元</option>
-  </volist>
-    </select>
-    <label> 直充（如果已经选择透支请不要填写此项，返利有返利设定选项） </label>
-     
-    <input type="text"class="span5 "    name="amount1"/>
-     <label>备注</label>
-        <textarea name="beizhu" cols="" rows="" style=" width:583px; height:110px;"></textarea>
+    <label>透支</label>
+    <input type="text" class="span5" name="amount2"/>
+
+    <label>直充</label>
+    <input type="text" class="span5" name="amount1"/>
+
+    <label>备注</label>
+    <textarea name="beizhu" style="width:583px; height:110px;"></textarea>
     <br/>
 
     <input type="submit" class="btn" value="注册"/>   
 </form>
-
-
 <include file="Public:footer"/>

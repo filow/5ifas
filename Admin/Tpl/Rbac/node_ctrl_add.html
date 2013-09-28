@@ -17,35 +17,17 @@
   </li>
   <li class="active"><a href="">增加控制器</a></li>
 </ul>
-<form action="{:U('Node_ctrl_add_handle')}" method="post" class="form-inline">
-  <table class="table table-bordered" style="width:60%;margin:auto;">
+<form action="{:U('Node_ctrl_add_handle')}" method="post" class="form-inline" name="form">
+  <table class="table table-bordered" style="width:320px;margin:auto;">
     <tbody>
       <tr>
-        <td>要添加的项目类型</td>
-        <td>
-          <label>
-            <input type="radio" name="level" value="2" />
-            控制器(Controller)
-          </label>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <label>
-            <input type="radio" name="level" value="3" />
-            动作(Action)
-          </label>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          项目名称
-        </td>
+        <td>项目名称</td>
         <td>
           <input type="text" value="" name="name" />
         </td>
       </tr>
       <tr>
-        <td>
-          项目描述
-        </td>
+        <td>项目描述</td>
         <td>
           <input type="text" value="" name="title" />
         </td>
@@ -54,19 +36,17 @@
         <td>是否开启</td>
         <td>
           <label>
-            <input type="radio" name="status" value="1" checked="checked"/>
-            是
+            <input type="radio" name="status" value="1" checked="checked"/>是
           </label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <label>
-            <input type="radio" name="status" value="0" />
-            否
+            <input type="radio" name="status" value="0" />否
           </label>
         </td>
       </tr>
       <tr>
         <td>排序</td>
-        <td><input type="text" name="sort" value="1" /></td>
+        <td><input type="text" name="sort" value="{$max|default='1'}" /></td>
       </tr>
       <tr>
         <td></td>
