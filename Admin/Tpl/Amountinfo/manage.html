@@ -13,6 +13,7 @@
 <form action="{:U('manage')}" method="get">
     检索：<input type="text" name="username" placeholder="输入目标用户的名字以检索" value="{$_GET.username}"/>
     <input type="submit" value="提交" class="btn btn-primary">
+    <a class="btn" href="{:U('manage')}">清除筛选条件</a>
 </form>
 <table class="table">
     <thead>
@@ -29,7 +30,7 @@
         <volist name="data" id="li">
         <tr <eq name="li.is_bigcustomer" value="1">class="buleword"</eq>>
             <td>{$li.orderid}</td>
-            <td>{$li.username}</td>
+            <td><a href="{:UG(array('username'=>$li['username']))}">{$li.username}</a></td>
             <td>{$li.createtime}</td>
             <td>{$li.operator}</td>
             <td>{$li.amount}</td>

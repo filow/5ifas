@@ -114,19 +114,38 @@ class AmountinfoAction extends CommonAction {
         $amtinfo=M('Amountinfo');
         $u = M("user");
         import("ORG.Util.Page");
-        $count = $amtinfo->where(array('type' => 0))->count();
-        $page = new Page($count, 20);
-        $show = $page->show();
-        $data=$amtinfo->where(array('type' => 0))->limit($page->firstRow . ',' . $page->listRows)->order('id desc')->select();
-        foreach ($data as $key => $value){
-            $userid = $u->where(array("cardn" => $value['userid']))->field('username,amount,is_bigcustomer')->find();
-            $data[$key]['username'] = $userid['username'];
-            $data[$key]['createtime'] = date("m月d日 H:i", $value['createtime']);
-            $data[$key]["yue"]=$userid["amount"];
-            $data[$key]["is_bigcustomer"]=$userid["is_bigcustomer"];
+        $query=array('type' => 0);
+        if(I('username')){
+            $userlist=$u->where(array('username'=>array('like','%'.I('username').'%')))->field('cardn,username,amount,is_bigcustomer')->select();
+            $data=array();
+            foreach($userlist as $key => $value){
+                $temp=$amtinfo->where(array('type' => 0,'userid'=>$value['cardn']))->select();
+                if($temp){
+                    foreach($temp as $t_k => $t_v){
+                        $t_v['username']=$value['username'];
+                        $t_v['createtime']=date("m月d日 H:i", $t_v['createtime']);
+                        $t_v['yue']=$value['amount'];
+                        $t_v['is_bigcustomer']=$value['is_bigcustomer'];
+                        $data[]=$t_v;
+                    }
+                }
+            }
+        }else{
+            $count = $amtinfo->where(array('type' => 0))->count();
+            $page = new Page($count, 20);
+            $show = $page->show();
+            $data=$amtinfo->where(array('type' => 0))->limit($page->firstRow . ',' . $page->listRows)->order('id desc')->select();
+            foreach ($data as $key => $value){
+                $userid = $u->where(array("cardn" => $value['userid']))->field('username,amount,is_bigcustomer')->find();
+                $data[$key]['username'] = $userid['username'];
+                $data[$key]['createtime'] = date("m月d日 H:i", $value['createtime']);
+                $data[$key]["yue"]=$userid["amount"];
+                $data[$key]["is_bigcustomer"]=$userid["is_bigcustomer"];
+            }
+            $this->assign('show',$show);
         }
+        
         $this->assign('data',$data);
-        $this->assign('show',$show);
         $this->display();
     }
     function manageserver() {
