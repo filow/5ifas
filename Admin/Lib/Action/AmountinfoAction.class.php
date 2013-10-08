@@ -75,8 +75,14 @@ class AmountinfoAction extends CommonAction {
             $_GET["userid"]=$user_data["cardn"];
             unset($_GET["username"]);
         }
-        $query_data = getQuery();
-        $query = $query_data["like_query"];
+        if(!empty($_GET["query_type"])){
+            unset($_GET["query_type"]);
+            $query_data = getQuery();
+            $query = $query_data["like_query"];
+        }else{
+            $query_data = getQuery();
+            $query = $query_data["string"];
+        }
         $query.=" and type !=3";
         $data = $amountinfo->where($query)->order("id desc ")->limit(500)->select();
         $export_data[] = array("充值订单号", "用户卡号", "用户名", "手机号", "地址", "申请充值时间", "操作人", "金额", "状态", "处理时间", "备注", "说明","余额");
@@ -117,6 +123,7 @@ class AmountinfoAction extends CommonAction {
             $data[$key]['username'] = $userid['username'];
             $data[$key]['createtime'] = date("m月d日 H:i", $value['createtime']);
             $data[$key]["yue"]=$userid["amount"];
+            $data[$key]["is_bigcustomer"]=$userid["is_bigcustomer"];
         }
         $this->assign('data',$data);
         $this->assign('show',$show);

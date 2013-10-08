@@ -8,9 +8,9 @@
         <tr>
             <th>帐单号</th>
             <th>联系人</th>
-            <th>联系电话</th>
             <th>交货日期</th>
             <th>交货地点</th>
+            <th>商品详情</th>
             <th>结算方式</th>
             <th>总价</th>
             <th>实收</th>
@@ -24,9 +24,9 @@
         <tr class="list_row">
             <td><a href="#myModal" class="showdig" data-toggle="modal">{$li.orderid}</a></td>
             <td>{$li.contacter}</td>
-            <td>{$li.customer_phone}</td>
             <td>{$li.dilivery_date|substr=5}</td>
             <td>{$li.dilivery_location}</td>
+            <td>{$li.desn}</td>
             <td><if condition="$li.settlement eq 1 ">现金结算</if>
                 <if condition="$li.settlement eq 2 ">记账客户</if>
             </td>

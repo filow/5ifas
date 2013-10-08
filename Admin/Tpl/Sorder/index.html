@@ -69,7 +69,7 @@
 <form action="{:U('Export/index')}" method="POST" >
     <input type="hidden"class="span2" name="export_data" value='{$export_data}'/>
     <input type="submit" value="导出当前页" class="btn" />
-    <a class="btn" href="__APP__/Sorder/export500?{$Think.SERVER.QUERY_STRING}">导出前500项筛选结果</a>
+    <a class="btn" href="{:UG(array(),'Sorder/export500')}">导出前500项筛选结果</a>
 </form>
 {$show}
 <script type="text/javascript">

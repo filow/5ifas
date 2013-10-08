@@ -10,6 +10,10 @@
 
 </ul>
 <h3>申请充值的订单管理</h3>
+<form action="{:U('manage')}" method="get">
+    检索：<input type="text" name="username" placeholder="输入目标用户的名字以检索" value="{$_GET.username}"/>
+    <input type="submit" value="提交" class="btn btn-primary">
+</form>
 <table class="table">
     <thead>
         <th>充值订单号</th>
@@ -17,6 +21,7 @@
         <th>申请时间</th>
         <th>操作人</th>
         <th>金额</th>
+        <th>用户余额</th>
         <th>备注</th>
         <th>操作</th>
     </thead>
@@ -28,6 +33,7 @@
             <td>{$li.createtime}</td>
             <td>{$li.operator}</td>
             <td>{$li.amount}</td>
+            <td>{$li.yue}</td>
             <td>{$li.beizhu}</td>
             <td>
                 <form action="__APP__/{$Think.MODULE_NAME}/manageserver" method="get" class="form-inline">

@@ -47,7 +47,7 @@
 </tbody>
 </table>
 <div style="float:left">
-    <form action="__APP__/{$Think.MODULE_NAME}/searchexport" method="GET" >
+    <form action="{:U('searchexport')}" method="GET" >
         <input type="hidden" name="query_type" value="like" />
         卡号：<input type="text"class="span2" name="userid" value="{$query.userid}"/> 真实姓名：<input class="span2"  type="text" name="username" value="{$query.username}" /> 操作人：<input class="span2"  type="text" name="operator" value="{$query.operator}" /> 
         状态：<select name="type">
@@ -61,10 +61,10 @@
     </form> 
 </div>
 
-<form action="__APP__/Export/index" method="POST" >
+<form action="{:U('Export/index')}" method="POST" >
     <input type="hidden" class="span2" name="export_data" id="exportdatas" value='{$export_data}'/>
     <input type="submit" class="btn" value="导出"/>
-    <a class="btn" href="__APP__/Amountinfo/export500?{$Think.SERVER.QUERY_STRING}">导出前500项筛选结果</a>
+    <a class="btn" href="{:UG(array(),'export500')}">导出前500项筛选结果</a>
     <a class="btn" onclick="export_selected()">导出选中项</a>
 </form>
 {$show}
