@@ -33,6 +33,14 @@ a.normal {color:black !important;}
     <input type="hidden" name="filter_type" value="like" />
     <input type="submit" value="查询" class="btn btn-primary">
 </form>
+<ul class="nav nav-tabs">
+  <li><a>条件筛选：</a></li>
+  <li><a href="{:U('billlist')}">全部账单</a></li>
+  <li><a href="{:U('billlist',array('check_state' => 0))}" class="red">未审核账单</a></li>
+  <li><a href="{:U('billlist',array('check_state' => 1))}" class="green">已审核账单</a></li>
+  <li><a href="{:U('billlist',array('check_state' => 1,'invoice'=>1))}"><i class="icon-asterisk"></i>已审核未开票账单</a></li>
+  <li><a href="{:U('billlist',array('check_state' => 1,'invoice'=>2))}"><i class="icon-ok"></i>已开票账单</a></li>
+</ul>
 <form action="{:U('billoutput')}" method="POST">
 <table class="table">
     <thead>

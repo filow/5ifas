@@ -122,6 +122,7 @@ class AmountinfoAction extends CommonAction {
                 $temp=$amtinfo->where(array('type' => 0,'userid'=>$value['cardn']))->select();
                 if($temp){
                     foreach($temp as $t_k => $t_v){
+                        $t_v['cardn']=$value['cardn'];
                         $t_v['username']=$value['username'];
                         $t_v['createtime']=date("m月d日 H:i", $t_v['createtime']);
                         $t_v['yue']=$value['amount'];
@@ -137,6 +138,7 @@ class AmountinfoAction extends CommonAction {
             $data=$amtinfo->where(array('type' => 0))->limit($page->firstRow . ',' . $page->listRows)->order('id desc')->select();
             foreach ($data as $key => $value){
                 $userid = $u->where(array("cardn" => $value['userid']))->field('username,amount,is_bigcustomer')->find();
+                $data[$key]['cardn']=$value['userid'];
                 $data[$key]['username'] = $userid['username'];
                 $data[$key]['createtime'] = date("m月d日 H:i", $value['createtime']);
                 $data[$key]["yue"]=$userid["amount"];

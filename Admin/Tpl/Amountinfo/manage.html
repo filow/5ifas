@@ -18,6 +18,7 @@
 <table class="table">
     <thead>
         <th>充值订单号</th>
+        <th>卡号</th>
         <th>用户名</th>
         <th>申请时间</th>
         <th>操作人</th>
@@ -30,6 +31,7 @@
         <volist name="data" id="li">
         <tr <eq name="li.is_bigcustomer" value="1">class="buleword"</eq>>
             <td>{$li.orderid}</td>
+            <td>{$li.cardn}</td>
             <td><a href="{:UG(array('username'=>$li['username']))}">{$li.username}</a></td>
             <td>{$li.createtime}</td>
             <td>{$li.operator}</td>
